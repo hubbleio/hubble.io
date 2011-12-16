@@ -1,0 +1,28 @@
+{
+  "name": "hubble.io",
+  "description": "A github based, open source documentation solution",
+  "author": "hij1nx <hij1nx@me.com>",
+  "version": "1.0.8",
+  "maintainers": [ "hij1nx <hij1nx@me.com>" ],
+  "contributors": [
+    { "name": "Paolo Fragomeni", "email": "hij1nx@nodejitsu.com" }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/hij1nx/hubble.io.git" 
+  },
+  "keywords": ["documentation", "docs", "awesome"],
+  "dependencies": {
+    "director": "*",
+    "node-static": "*",
+    "optimist": "*",
+    "async": "*",
+    "request": "*",
+    "plates": "*"
+  },
+  "main": "./server/index",
+  "engines": { "node": ">= 0.4.0" },
+  "scripts": {
+    "test": "vows --spec test/server/*/*-test.js"
+  }
+}
