@@ -1,0 +1,42 @@
+#!/usr/bin/env node
+
+var sys = require('sys'),
+    path = require('path'),
+    fs = require('fs'),
+    argv = require('optimist').argv,
+    server = require('../server/server');
+
+
+var help = [
+    "",
+    "usage:".underline,
+
+    "  start [options]                                                  ",
+    "                                                                   ",
+
+    "options:".underline,
+
+    "  -s --silent  Suppress the log messages from the output           ",
+    "  -h, --help   This is it!                                         ",
+    ""
+].join('\n');
+
+if (argv.h || argv.help) {
+  return sys.puts(help);
+}
+
+var conf = JSON.parse(fs.readFileSync('./server/conf.json'));
+
+['orgname', 'giturl', 'tagline'].forEach(function(val, index) {
+  if(!conf[val]) {
+    throw new Error('start requires `' + val + '` from the `conf.json` file.');
+  }
+});
+
+server.createServer({
+  "orgname": conf.orgname,
+  "giturl": conf.giturl,
+  "tagline": conf.tagline,
+  "port": argv.p || argv.port || 8080,
+  "host": argv.h || argv.host || '127.0.0.1'
+});
