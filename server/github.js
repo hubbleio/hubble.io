@@ -19,7 +19,7 @@ Github.prototype.request = function (url, callback) {
     uri, 
     function (error, response, body) {
       if (!error && response.statusCode == 200) {
-        callback(body) // Print the google web page.
+        callback(JSON.parse(body));
       }
     }
   );
@@ -33,4 +33,26 @@ Github.prototype.repo = function (callback) {
   this.request('/repo', callback);
 };
 
+Github.prototype.package = function (reponame, callback) {
+  
+  var url = 'https://raw.github.com/' + 
+        this.orgname + '/' + reponame + '/master/package.json';
+  
+  request(
+    url, 
+    function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        try {
+          body = JSON.parse(body)
+        }
+        catch(ex) {
+          body = { name: "[no package.json or `name` member in package.json]" };
+        }
+        callback(body);
+      }
+    }
+  );
+};
+
 module.exports = Github;
+

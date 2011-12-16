@@ -8,7 +8,7 @@ var director = require('director'),
     http = require('http'),
     static = require('node-static'),
     Templates = require('./templates'),
-    Github = require('./git'),
+    Github = require('./github'),
     postrecievehook = require('./postrecievehook');
 
 var server = exports;
@@ -25,10 +25,10 @@ server.createServer = function(conf) {
   // for transforming static content or invoking services.
   //
   var router = new director.http.Router({
-    '/index.html': {
-      get: function() {
+    '/index/:category': {
+      get: function(criteria) {
         this.res.writeHead(200, { 'Content-Type': 'text/html' });
-        this.res.end(templates.assets['/index.html'].compiled);
+        this.res.end(templates.assets['index.html'].compiled);
       }
     },
     '/postrecievehook/:repo': {
@@ -56,12 +56,12 @@ server.createServer = function(conf) {
   });
 
   //
-  // dont start the server until we have the content.
+  // dont start the server until we actually have content to serve.
   //
   var templates = new Templates(conf, github, function(assets) {
-    
+    server.listen(conf.port, conf.host);
   });
 
-  server.listen(conf.port, conf.host);
+  
 
 };
