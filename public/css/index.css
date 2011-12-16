@@ -446,7 +446,7 @@ footer {
 }
 
 #primary-buttonbar div a.selected {
-  color: #4f74bf;
+  color: #4183C4;
 }
 
 #primary-buttonbar div a:hover {
@@ -484,21 +484,26 @@ body {
 }
 
 .repo .name {
-  color: #4F74BF;
+  font: 13.34px helvetica,arial,freesans,clean,sans-serif;
+  line-height: 1.4;
+  color: #4183C4;
   font-weight: bold;
-  font-size: 20px;
-  font-family: 'OpenSansItalic';
   text-decoration: none;
+}
+
+.repo .name:hover {
+  text-decoration: underline;
 }
 
 .repo .description {
   width: 400px;
-  padding-top: 6px;
+  padding-top: 2px;
   min-height: 20px;
 }
 
 .repo .dates {
   position: relative;
+  margin-top: 4px;
   margin-bottom: 4px;
   font-size: 10px;
   text-align: right;
