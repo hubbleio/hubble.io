@@ -350,6 +350,7 @@ footer {
   margin: 50px 0 50px 0;
   border-top: 1px solid #ddd;
   min-height: 100px;
+  padding-left: 40px;
 }
 
 #logo {
@@ -479,8 +480,8 @@ body {
 
 .repo .stats {
   right: 0px;
+  top: 0px;
   position: absolute;
-  top: 10px;
 }
 
 .repo .name {
