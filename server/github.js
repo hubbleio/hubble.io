@@ -3,6 +3,7 @@
  */
 
 var request = require('request');
+var markdown = require('marked');
 
 var Github = function Github (conf) {
   if (!conf) {
@@ -31,6 +32,22 @@ Github.prototype.repos = function (callback) {
 
 Github.prototype.repo = function (callback) {
   this.request('/repo', callback);
+};
+
+Github.prototype.content = function (reponame, callback) {
+
+  var url = 'https://raw.github.com/' + 
+        this.orgname + '/' + reponame + '/master/content.md';
+
+  request(
+    url, 
+    function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        callback(marked(body));
+      }
+    }
+  );
+  
 };
 
 Github.prototype.package = function (reponame, callback) {
