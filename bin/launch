@@ -4,8 +4,9 @@ var sys = require('sys'),
     path = require('path'),
     fs = require('fs'),
     argv = require('optimist').argv,
+    cluster = require('cluster'),
+    numCPUs = require('os').cpus().length,
     server = require('../server/server');
-
 
 var help = [
     "",
@@ -33,10 +34,28 @@ var conf = JSON.parse(fs.readFileSync('./server/conf.json'));
   }
 });
 
-server.createServer({
-  "orgname": conf.orgname,
-  "giturl": conf.giturl,
-  "tagline": conf.tagline,
-  "port": argv.p || argv.port || 8080,
-  "host": argv.h || argv.host || '127.0.0.1'
-});
+
+if (cluster.isMaster) {
+  
+  for (var i = 0; i < numCPUs; i++) {
+    cluster.fork();
+  }
+
+  cluster.on('death', function(worker) {
+    //
+    // TODO: Should use winston for this.
+    //
+    console.log('worker ' + worker.pid + ' died!');
+  });
+
+} else {
+
+  server.createServer({
+    "orgname": conf.orgname,
+    "giturl": conf.giturl,
+    "tagline": conf.tagline,
+    "port": argv.p || argv.port || 8080,
+    "host": argv.h || argv.host || '127.0.0.1'
+  });
+
+}
