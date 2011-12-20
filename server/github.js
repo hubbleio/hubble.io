@@ -1,11 +1,15 @@
 /*
- * Github API abstraction.
+ *
+ * github.js
+ * A simple github API abstraction for requesting raw files 
+ * and getting general information about a repository.
+ *
  */
 
 var request = require('request');
-var markdown = require('marked');
 
 var Github = function Github (conf) {
+
   if (!conf) {
     throw new Error('No configuration provided.');
   }
@@ -15,9 +19,9 @@ var Github = function Github (conf) {
 };
 
 Github.prototype.request = function (url, callback) {
-  var uri = this.apihost + this.orgname + url;
+
   request(
-    uri, 
+    url, 
     function (error, response, body) {
       if (!error && response.statusCode == 200) {
         callback(JSON.parse(body));
@@ -27,11 +31,15 @@ Github.prototype.request = function (url, callback) {
 };
 
 Github.prototype.repos = function (callback) {
-  this.request('/repos', callback);
+
+  var url = this.apihost + this.orgname + '/repos';
+  this.request(url, callback);
 };
 
-Github.prototype.repo = function (callback) {
-  this.request('/repo', callback);
+Github.prototype.repo = function (reponame, callback) {
+
+  var url = this.apihost + this.orgname + '/repo' + reponame;
+  this.request(url, callback);
 };
 
 Github.prototype.content = function (reponame, callback) {
@@ -39,36 +47,15 @@ Github.prototype.content = function (reponame, callback) {
   var url = 'https://raw.github.com/' + 
         this.orgname + '/' + reponame + '/master/content.md';
 
-  request(
-    url, 
-    function (error, response, body) {
-      if (!error && response.statusCode == 200) {
-        callback(marked(body));
-      }
-    }
-  );
-  
+  this.request(url, callback);
 };
 
-Github.prototype.package = function (reponame, callback) {
+Github.prototype.conf = function (reponame, callback) {
   
   var url = 'https://raw.github.com/' + 
-        this.orgname + '/' + reponame + '/master/package.json';
+        this.orgname + '/' + reponame + '/master/conf.json';
   
-  request(
-    url, 
-    function (error, response, body) {
-      if (!error && response.statusCode == 200) {
-        try {
-          body = JSON.parse(body)
-        }
-        catch(ex) {
-          body = { name: "[no package.json or `name` member in package.json]" };
-        }
-        callback(body);
-      }
-    }
-  );
+  this.request(url, callback);
 };
 
 module.exports = Github;
