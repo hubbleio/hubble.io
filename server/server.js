@@ -11,7 +11,7 @@ var director = require('director'),
     static = require('node-static'),
     Templates = require('./templates'),
     Github = require('./github'),
-    postrecievehook = require('./postrecievehook');
+    postReceiveHook = require('./postreceivehook');
 
 var server = exports;
 
@@ -33,10 +33,13 @@ server.createServer = function(conf) {
         this.res.end(templates.assets['index.html'].compiled);
       }
     },
-    '/postrecievehook/:repo': {
-      post: function(repo) {
-        postrecievehook(this.req, github);
-        this.res.end(templates.assets[repo].compiled);
+    '/update/': {
+      post: function() {
+        var that = this;
+        postReceiveHook(this.req, function(composition) {
+          that.res.writeHead(200, { 'Content-Type': 'text/html' });
+          that.res.end(composition);
+        });
       }
     }
   });
