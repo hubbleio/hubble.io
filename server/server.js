@@ -1,7 +1,9 @@
 /*
+ *
  * server.js
  * creates an http server and serves the static assets 
  * it also transforms some static content by adding data to it.
+ *
  */
 
 var director = require('director'),
@@ -25,15 +27,16 @@ server.createServer = function(conf) {
   // for transforming static content or invoking services.
   //
   var router = new director.http.Router({
-    '/index/:category': {
-      get: function(criteria) {
+    '/index': {
+      get: function() {
         this.res.writeHead(200, { 'Content-Type': 'text/html' });
         this.res.end(templates.assets['index.html'].compiled);
       }
     },
     '/postrecievehook/:repo': {
-      post: function() {
+      post: function(repo) {
         postrecievehook(this.req, github);
+        this.res.end(templates.assets[repo].compiled);
       }
     }
   });
@@ -61,7 +64,5 @@ server.createServer = function(conf) {
   var templates = new Templates(conf, github, function(assets) {
     server.listen(conf.port, conf.host);
   });
-
-  
 
 };
