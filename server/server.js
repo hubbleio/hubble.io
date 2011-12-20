@@ -9,7 +9,7 @@
 var director = require('director'),
     http = require('http'),
     static = require('node-static'),
-    Templates = require('./templates'),
+    Content = require('./content'),
     Github = require('./github'),
     postReceiveHook = require('./postreceivehook');
 
@@ -27,16 +27,22 @@ server.createServer = function(conf) {
   // for transforming static content or invoking services.
   //
   var router = new director.http.Router({
-    '/index': {
+    '/index.html': {
       get: function() {
         this.res.writeHead(200, { 'Content-Type': 'text/html' });
-        this.res.end(templates.assets['index.html'].compiled);
+        this.res.end(content.assets['index.html'].compiled);
+      }
+    },
+    '/:repo': {
+      get: function(repo) {
+        this.res.writeHead(200, { 'Content-Type': 'text/html' });
+        this.res.end(content.assets['content.html'].compiled[repo]);
       }
     },
     '/update/': {
       post: function() {
         var that = this;
-        postReceiveHook(this.req, function(composition) {
+        postReceiveHook(this.req, content, function(composition) {
           that.res.writeHead(200, { 'Content-Type': 'text/html' });
           that.res.end(composition);
         });
@@ -64,7 +70,7 @@ server.createServer = function(conf) {
   //
   // dont start the server until we actually have content to serve.
   //
-  var templates = new Templates(conf, github, function(assets) {
+  var content = new Content(conf, github, function(assets) {
     server.listen(conf.port, conf.host);
   });
 

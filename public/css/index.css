@@ -484,7 +484,7 @@ body {
   position: absolute;
 }
 
-.repo .name {
+.repo .title {
   font: 13.34px helvetica,arial,freesans,clean,sans-serif;
   line-height: 1.4;
   color: #4183C4;
@@ -492,7 +492,7 @@ body {
   text-decoration: none;
 }
 
-.repo .name:hover {
+.repo .title:hover {
   text-decoration: underline;
 }
 
