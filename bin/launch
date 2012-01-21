@@ -6,6 +6,8 @@ var sys = require('sys'),
     argv = require('optimist').argv,
     cluster = require('cluster'),
     numCPUs = require('os').cpus().length,
+    Content = require('../server/content'),
+    assets = require('../server/assets'),
     server = require('../server/server');
 
 var help = [
@@ -34,28 +36,46 @@ var conf = JSON.parse(fs.readFileSync('./server/conf.json'));
   }
 });
 
+var config = {
+  "orgname": conf.orgname,
+  "giturl": conf.giturl,
+  "tagline": conf.tagline,
+  "port": argv.p || argv.port || 8080,
+  "host": argv.h || argv.host || '127.0.0.1'
+};
+
+var data;
 
 if (cluster.isMaster) {
-  
+
   for (var i = 0; i < numCPUs; i++) {
     cluster.fork();
   }
 
   cluster.on('death', function(worker) {
+
     //
     // TODO: Should use winston for this.
     //
     console.log('worker ' + worker.pid + ' died!');
   });
 
-} else {
+  console.log('Node.js server started on', config.host + ':' + config.port);
 
-  server.createServer({
-    "orgname": conf.orgname,
-    "giturl": conf.giturl,
-    "tagline": conf.tagline,
-    "port": argv.p || argv.port || 8080,
-    "host": argv.h || argv.host || '127.0.0.1'
+  //
+  // create a new instance of the github API abstraction.
+  //
+  var content = new Content();
+  content.downloadAll(function() {
+    this.use(assets);
+    this.composeAll();
+    //cluster.send({ cmd: 'ready' });
   });
 
+} 
+else {
+
+  cluster.on('ready', function(worker) {
+    server.createServer(content, config);
+  });
 }
