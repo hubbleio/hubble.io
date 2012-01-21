@@ -11,40 +11,47 @@ var director = require('director'),
     static = require('node-static'),
     cluster = require('cluster'),
     Content = require('./content'),
-    Github = require('./github'),
     postReceiveHook = require('./postreceivehook');
 
 var server = exports;
 
+function getArticle(name) {
+  this.res.writeHead(200, { 'Content-Type': 'text/html' });
+  this.res.end(content.getArticle(name));
+}
+
+function getIndex() {
+  this.res.writeHead(200, { 'Content-Type': 'text/html' });
+  this.res.end(content.getIndex());
+}
+
+function postReeive() {
+  var that = this;
+  postReceiveHook(this.req, content, function(composition) {
+    that.res.writeHead(200, { 'Content-Type': 'text/html' });
+    that.res.end(composition);
+  });
+}
+
 server.createServer = function(conf, cb) {
-   console.log(conf)
+
   //
   // define a routing table that will contain methods
   // for transforming static content or invoking services.
   //
-  var router = new director.http.Router({
+  var routes = {
     '/index.html': {
-      get: function() {
-        this.res.writeHead(200, { 'Content-Type': 'text/html' });
-        this.res.end(content.get('index.html'));
-      }
+      on: getIndex
     },
-    '/:repo': {
-      get: function(repo) {
-        this.res.writeHead(200, { 'Content-Type': 'text/html' });
-        this.res.end(content.get(repo + '/content.html'));
-      }
+    '/:name': {
+      on: getArticle
     },
     '/update/': {
-      post: function() {
-        var that = this;
-        postReceiveHook(this.req, content, function(composition) {
-          that.res.writeHead(200, { 'Content-Type': 'text/html' });
-          that.res.end(composition);
-        });
-      }
+      post: postReceive
     }
-  });
+  };
+
+  var router = new director.http.Router(routes);
 
   //
   // create a static file server for any generic requests
