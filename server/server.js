@@ -9,19 +9,15 @@
 var director = require('director'),
     http = require('http'),
     static = require('node-static'),
+    cluster = require('cluster'),
     Content = require('./content'),
     Github = require('./github'),
     postReceiveHook = require('./postreceivehook');
 
 var server = exports;
 
-server.createServer = function(conf) {
-
-  //
-  // create a new instance of the github API abstraction.
-  //
-  var github = new Github(conf);
-
+server.createServer = function(conf, cb) {
+   console.log(conf)
   //
   // define a routing table that will contain methods
   // for transforming static content or invoking services.
@@ -30,13 +26,13 @@ server.createServer = function(conf) {
     '/index.html': {
       get: function() {
         this.res.writeHead(200, { 'Content-Type': 'text/html' });
-        this.res.end(content.assets['index.html'].compiled);
+        this.res.end(content.get('index.html'));
       }
     },
     '/:repo': {
       get: function(repo) {
         this.res.writeHead(200, { 'Content-Type': 'text/html' });
-        this.res.end(content.assets['content.html'].compiled[repo]);
+        this.res.end(content.get(repo + '/content.html'));
       }
     },
     '/update/': {
@@ -67,11 +63,6 @@ server.createServer = function(conf) {
     });
   });
 
-  //
-  // dont start the server until we actually have content to serve.
-  //
-  var content = new Content(conf, github, function(assets) {
-    server.listen(conf.port, conf.host);
-  });
+  server.listen(conf.port, conf.host);
 
 };
