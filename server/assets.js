@@ -1,36 +1,82 @@
 
 var fs = require('fs');
+var Plates = require('plates');
 var assets = module.exports;
 
-assets['articles.html'] = {
-  primary: false,
-  raw: fs.readFileSync('./public/templates/listing.html').toString(),
-  compiled: '',
-  compose: function(callback) {
+//
+// each asset contains two members. One is a `composer` function with special 
+// instructions on what to do with the other property, the raw html value.
+//
+
+assets['article.html'] = {
+  raw: '/public/assets/listing.html',
+  compose: function(json) {
 
     var asset = this;
     var html = asset.raw;
-    var err = null;
+    var output = '';
 
-    //
-    // get all the repos for the specified org and iterate over them
-    // in order to build some markup that represents them to the user.
-    //
-    asset.cache.forEach(function(repo) {
+    // //
+    // // get all the repos for the specified org and iterate over them
+    // // in order to build some markup that represents them to the user.
+    // //      
+    // var data = {
+    //   "description": json.description,
+    //   "fork": json.meta.forks,
+    //   "like": json.meta.watchers,
+    //   "created": json.meta.created_at,
+    //   "updated": json.meta.updated_at,
+    //   "name": '/' + json.name,
+    //   "title": cfg.title
+    // };
+
+    //   //
+    //   // map our data to the html
+    //   //
+    //   var m = new Plates.Map();
       
-      var data = {
-        "description": cfg.description,
-        "fork": repo.forks,
-        "like": repo.watchers,
-        "created": repo.created_at,
-        "updated": repo.updated_at,
-        "name": '/' + repo.name,
-        "title": cfg.title
+    //   m.class('description').to('description');
+    //   m.class('fork').to('fork');
+    //   m.class('like').to('like');
+    //   m.class('created').to('created');
+    //   m.class('updated').to('updated');
+    //   m.class('name').to('name').as('href');
+    //   m.class('title').to('class');
+
+    //   output += Plates.bind(html, data, m);
+
+    return output;
+    // });
+
+  }
+};
+
+assets['contributors.html'] = {
+  raw: '/public/assets/contributers.html',
+  compose: function(json) {
+    var output = '';
+    return output;
+  }
+};
+
+assets['listing.html'] = {
+  raw: '/public/assets/listing.html',
+  compose: function(json) {
+    var data = {};
+    var output = '';
+
+    for (var i = 0, l = json.length; i<l; i++) {
+
+      data = {
+        "description": json[i].description,
+        "fork": json[i].meta.forks,
+        "like": json[i].meta.watchers,
+        "created": json[i].meta.created_at,
+        "updated": json[i].meta.updated_at,
+        "name": '/' + json[i].name,
+        "title": json[i].title
       };
 
-      //
-      // map our data to the html
-      //
       var m = new Plates.Map();
       
       m.class('description').to('description');
@@ -41,123 +87,28 @@ assets['articles.html'] = {
       m.class('name').to('name').as('href');
       m.class('title').to('class');
 
-      asset.compiled += Plates.bind(html, data, m);
+      output += Plates.bind(html, data, m);
+    }
 
-    });
-
-    callback();
-
+    return output;
   }
 };
 
-// assets['index.html'] = {
-//   primary: true,
-//   raw: fs.readFileSync('./public/templates/index.html').toString(),
-//   compiled: '',
-//   compose: function(cb) {
+assets['index.html'] = {
+  raw: '/public/assets/index.html',
+  compose: function(json) {
 
-//     var asset = this;
-//     var html = this.raw;
-//     var err = null;
+    var asset = this;
+    var html = this.raw;
 
-//     // lets pull some things out of the main configuration
-//     // and use them to populate the index.html page.
-//     //
+    var data = {
+      "orgname": 'Orgname', // conf['orgname']
+      "breadcrumbs": 'Tagline', // conf['tagline']
+      "main": assets['listing.html'].compose(json)//,
+      //"contributors": assets['contributors.html'].compose(json)
+    };
 
-//     that.assets['listing.html'].compose(function(err, listing) {
+    return Plates.bind(html, data);
 
-//       var data = {
-//         "orgname": conf['orgname'],
-//         "breadcrumbs": conf['tagline'],
-//         "main": listing
-//       };
-
-//       asset.compiled = Plates.bind(html, data);
-
-//       if (cb) {
-//         return cb(err, asset.compiled);
-//       }
-//       return asset.compiled;
-
-//     });
-
-//   }
-// };
-
-// assets['content.html'] = {
-//   primary: true,
-//   raw: fs.readFileSync('./public/templates/content.html').toString(),
-//   compiled: {},
-//   compose: function(reponame, cb) {
-
-//     var asset = this;
-//     var html = this.raw;
-//     var err = null;
-
-//     //
-//     // in the case where there is a post recieve hook, this function will
-//     // be called with a specific reponame and a callback, but in the launch
-//     // case, there will be no specific repo name provided. In that case we
-//     // want to iterate over all the repos and generate all the content.
-//     //
-
-//     if (reponame) {
-      
-//       github.repo(reponame, function(repo) {
-//         github.conf(reponame, function(cfg) {
-//           github.content(reponame, function(content) {
-
-//             var data = {
-//               "orgname": conf['orgname'],
-//               "breadcrumbs": cfg.title,
-//               "main": content
-//             };
-
-//             asset.compiled[reponame] = Plates.bind(html, data);
-
-//             if (cb) {
-//               return cb(err, asset.compiled[reponame]);
-//             }
-//             return asset.compiled;
-
-//           });
-//         });
-//       });
-
-//     }
-//     else {
-
-//       github.repos(function(response) {
-
-//         async.forEach(
-//           response,
-//           function(repo, next) {
-
-//             github.conf(reponame, function(cfg) {
-//               github.content(repo.name, function(content) {
-
-//                 var data = {
-//                   "orgname": conf['orgname'],
-//                   "breadcrumbs": cfg.title,
-//                   "main": content
-//                 };
-
-//                 asset.compiled[repo.name] = Plates.bind(html, data);
-//                 next();
-//               });
-//             });
-
-//           },
-//           function(err) {
-
-//             if (err) {
-//               throw new Error(err);
-//             }
-//             return cb(err, asset.compiled);
-//           }
-//         );
-
-//       });
-//     }
-//   }
-// };
+  }
+};

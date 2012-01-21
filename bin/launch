@@ -67,15 +67,11 @@ if (cluster.isMaster) {
   //
   var content = new Content();
   content.downloadAll(function() {
-    this.use(assets);
-    this.composeAll();
-    //cluster.send({ cmd: 'ready' });
+    this.uses(assets);
+    this.compose();
   });
 
 } 
 else {
-
-  cluster.on('ready', function(worker) {
-    server.createServer(content, config);
-  });
+  server.createServer(content, config);
 }
