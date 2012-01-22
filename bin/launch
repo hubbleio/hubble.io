@@ -4,8 +4,6 @@ var sys = require('sys'),
     path = require('path'),
     fs = require('fs'),
     argv = require('optimist').argv,
-    cluster = require('cluster'),
-    numCPUs = require('os').cpus().length,
     Content = require('../server/content'),
     assets = require('../server/assets'),
     server = require('../server/server');
@@ -44,34 +42,11 @@ var config = {
   "host": argv.h || argv.host || '127.0.0.1'
 };
 
-var data;
+var content = new Content();;
 
-if (cluster.isMaster) {
-
-  for (var i = 0; i < numCPUs; i++) {
-    cluster.fork();
-  }
-
-  cluster.on('death', function(worker) {
-
-    //
-    // TODO: Should use winston for this.
-    //
-    console.log('worker ' + worker.pid + ' died!');
-  });
-
-  console.log('Node.js server started on', config.host + ':' + config.port);
-
-  //
-  // create a new instance of the github API abstraction.
-  //
-  var content = new Content();
-  content.downloadAll(function() {
-    this.uses(assets);
-    this.compose();
-  });
-
-} 
-else {
+content.downloadAll(function() {
+  this.uses(assets);
+  this.compose();
   server.createServer(content, config);
-}
+});
+
