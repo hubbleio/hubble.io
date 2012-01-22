@@ -98,8 +98,11 @@ assets['index.html'] = {
   raw: '/public/assets/index.html',
   compose: function(json) {
 
+    console.log(this)
+
     var asset = this;
     var html = this.raw;
+    var output = '';
 
     var data = {
       "orgname": 'Orgname', // conf['orgname']
@@ -108,7 +111,9 @@ assets['index.html'] = {
       //"contributors": assets['contributors.html'].compose(json)
     };
 
-    return Plates.bind(html, data);
+    output = Plates.bind(html, data);
+
+    return output
 
   }
 };

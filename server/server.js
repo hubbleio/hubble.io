@@ -15,25 +15,7 @@ var director = require('director'),
 
 var server = exports;
 
-function getArticle(name) {
-  this.res.writeHead(200, { 'Content-Type': 'text/html' });
-  this.res.end(content.getArticle(name));
-}
-
-function getIndex() {
-  this.res.writeHead(200, { 'Content-Type': 'text/html' });
-  this.res.end(content.getIndex());
-}
-
-function postReeive() {
-  var that = this;
-  postReceiveHook(this.req, content, function(composition) {
-    that.res.writeHead(200, { 'Content-Type': 'text/html' });
-    that.res.end(composition);
-  });
-}
-
-server.createServer = function(conf, cb) {
+server.createServer = function(content, conf) {
 
   //
   // define a routing table that will contain methods
@@ -41,13 +23,25 @@ server.createServer = function(conf, cb) {
   //
   var routes = {
     '/index.html': {
-      on: getIndex
+      get: function() {
+        this.res.writeHead(200, { 'Content-Type': 'text/html' });
+        this.res.end(content.getIndex());
+      }
     },
     '/:name': {
-      on: getArticle
+      get: function(name) {
+        this.res.writeHead(200, { 'Content-Type': 'text/html' });
+        this.res.end(content.getArticle(name));
+      }
     },
     '/update/': {
-      post: postReceive
+      post: function() {
+        var that = this;
+        postReceiveHook(this.req, content, function(composition) {
+          that.res.writeHead(200, { 'Content-Type': 'text/html' });
+          that.res.end(composition);
+        });
+      }
     }
   };
 

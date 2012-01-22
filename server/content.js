@@ -20,12 +20,13 @@ var Content = function(conf, callback) {
   conf = conf || {};
 
   this.cache = {
-    'repository-index': ''
+    'repository-index': { 
+      composed: ''
+    }
   };
 
-  this.apihost = conf.apihost || 'https://api.github.com/orgs/';
-  this.host = 'https://api.github.com/'
-  this.orgname = 'hubbleio';
+  this.apihost = conf.apihost || 'https://api.github.com';
+  this.orgname = conf.orgname || 'hubbleio';
 
   this.assets = {};
 
@@ -45,15 +46,13 @@ Content.prototype.uses = function(assets) {
 
   Object.keys(assets).forEach(function(assetname) {
 
-    var asset = assets[assetname];
+    var asset = that.assets[assetname] = {};
 
-    that.assets[assetname] = {
-      raw: fs.readFileSync(__dirname + '/..' + asset.raw).toString(),
-      composed: '',
-      compose: compose = function(cachedasset) {
-        cachedasset.composed = asset.compose(cachedasset);
-      }
-    };
+    asset.raw = fs.readFileSync(__dirname + '/..' + assets[assetname].raw).toString();
+    asset.composed = '';
+    asset.compose = function(cachedasset) {
+      cachedasset.composed = assets[assetname].compose.call(asset, cachedasset);
+    }
 
   });
 };
@@ -73,10 +72,13 @@ Content.prototype.compose = function (name) {
   // if there is no name compose for all items in the cache.
   //
   if (name) {
+
     assets['article.html'].compose(that.cache[name]);
   }
   else {
+
     Object.keys(this.cache).forEach(function(name) {
+
       //
       // re/build the index page that lists the repos.
       //
@@ -99,7 +101,7 @@ Content.prototype.compose = function (name) {
 Content.prototype.downloadAll = function (callback) {
 
   var that = this;
-  var url = this.apihost + this.orgname + '/repos';
+  var url = this.apihost + '/orgs/' + this.orgname + '/repos';
 
   request(
     url, 
@@ -227,7 +229,7 @@ Content.prototype.getJSON = function (name, filename, callback) {
       that.cache[name].json = JSON.parse(data);
     }
     
-    var url = that.host + 'repos/' + that.orgname + '/' + name;
+    var url = that.apihost + '/repos/' + that.orgname + '/' + name;
 
     //
     // add the repo meta data to the json for the repo.
