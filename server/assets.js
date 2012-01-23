@@ -7,113 +7,97 @@ var assets = module.exports;
 // each asset contains two members. One is a `composer` function with special 
 // instructions on what to do with the other property, the raw html value.
 //
-
 assets['article.html'] = {
-  raw: '/public/assets/listing.html',
-  compose: function(json) {
+  raw: fs.readFileSync('./public/assets/article.html').toString(),
+  compose: function(cache) {
 
-    var asset = this;
-    var html = asset.raw;
+    var html = this.raw;
     var output = '';
+ 
+    if (cache.meta) {
 
-    // //
-    // // get all the repos for the specified org and iterate over them
-    // // in order to build some markup that represents them to the user.
-    // //      
-    // var data = {
-    //   "description": json.description,
-    //   "fork": json.meta.forks,
-    //   "like": json.meta.watchers,
-    //   "created": json.meta.created_at,
-    //   "updated": json.meta.updated_at,
-    //   "name": '/' + json.name,
-    //   "title": cfg.title
-    // };
+      var data = {
+        "orgname": 'Orgname', // conf['orgname']
+        "title": cache.meta.title,
+        "main": cache.markup
+      };
 
-    //   //
-    //   // map our data to the html
-    //   //
-    //   var m = new Plates.Map();
-      
-    //   m.class('description').to('description');
-    //   m.class('fork').to('fork');
-    //   m.class('like').to('like');
-    //   m.class('created').to('created');
-    //   m.class('updated').to('updated');
-    //   m.class('name').to('name').as('href');
-    //   m.class('title').to('class');
+    }
 
-    //   output += Plates.bind(html, data, m);
-
-    return output;
-    // });
-
+    return cache.composed = Plates.bind(html, data);
   }
 };
 
 assets['contributors.html'] = {
-  raw: '/public/assets/contributers.html',
-  compose: function(json) {
+  raw: fs.readFileSync('./public/assets/contributers.html').toString(),
+  compose: function(cache) {
     var output = '';
     return output;
   }
 };
 
 assets['listing.html'] = {
-  raw: '/public/assets/listing.html',
-  compose: function(json) {
+  raw: fs.readFileSync('./public/assets/listing.html').toString(),
+  compose: function(cache) {
+
+    var html = this.raw;
+
     var data = {};
     var output = '';
 
-    for (var i = 0, l = json.length; i<l; i++) {
+    Object.keys(cache).forEach(function(name, index) {
 
-      data = {
-        "description": json[i].description,
-        "fork": json[i].meta.forks,
-        "like": json[i].meta.watchers,
-        "created": json[i].meta.created_at,
-        "updated": json[i].meta.updated_at,
-        "name": '/' + json[i].name,
-        "title": json[i].title
-      };
+      if (cache[name].meta) {
 
-      var m = new Plates.Map();
-      
-      m.class('description').to('description');
-      m.class('fork').to('fork');
-      m.class('like').to('like');
-      m.class('created').to('created');
-      m.class('updated').to('updated');
-      m.class('name').to('name').as('href');
-      m.class('title').to('class');
+        data = {
+          "description": cache[name].meta.description,
+          "fork": cache[name].meta.repo.forks,
+          "like": cache[name].meta.repo.watchers,
+          "created": cache[name].meta.repo.created_at,
+          "updated": cache[name].meta.repo.updated_at,
+          "name": '/article/' + cache[name].meta.repo.name,
+          "title": cache[name].meta.title
+        };
 
-      output += Plates.bind(html, data, m);
-    }
+        var m = new Plates.Map();
+
+        m.class('description').to('description');
+        //m.class('repo').to
+        m.class('fork').to('fork');
+        m.class('like').to('like');
+        m.class('created').to('created');
+        m.class('updated').to('updated');
+        m.class('name').to('name').as('href');
+        m.class('title').to('title');
+
+        output += Plates.bind(html, data, m);
+      }
+          
+    });
 
     return output;
   }
 };
 
 assets['index.html'] = {
-  raw: '/public/assets/index.html',
-  compose: function(json) {
+  raw: fs.readFileSync('./public/assets/index.html').toString(),
+  compose: function(cache) {
 
-    console.log(this)
-
-    var asset = this;
+    //
+    // this comp function takes the entire cache because the index
+    // should be built considering all of the repos in the org.
+    //
     var html = this.raw;
-    var output = '';
+    var listing = assets['listing.html'];
 
     var data = {
       "orgname": 'Orgname', // conf['orgname']
-      "breadcrumbs": 'Tagline', // conf['tagline']
-      "main": assets['listing.html'].compose(json)//,
+      "title": 'Tagline', // conf['tagline']
+      "articles": listing.compose(cache),
       //"contributors": assets['contributors.html'].compose(json)
     };
 
-    output = Plates.bind(html, data);
-
-    return output
+    return cache['repository-index'].composed = Plates.bind(html, data);
 
   }
 };

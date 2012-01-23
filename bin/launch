@@ -23,7 +23,7 @@ var help = [
 ].join('\n');
 
 if (argv.h || argv.help) {
-  return sys.puts(help);
+  return console.log(help);
 }
 
 var conf = JSON.parse(fs.readFileSync('./server/conf.json'));
@@ -45,8 +45,7 @@ var config = {
 var content = new Content();;
 
 content.downloadAll(function() {
-  this.uses(assets);
-  this.compose();
+  this.compose(assets, content.cache);
   server.createServer(content, config);
 });
 
