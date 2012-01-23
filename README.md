@@ -2,10 +2,23 @@
 <img src="https://github.com/hij1nx/hubble.io/raw/master/logo.png">
 
 ## Synopsis
-A simple Node.js project that leverages github's public APIs in order to provide a simplified `Social Documentation Experience`.
+Hubble is a simplified presentation layer on top of github.
 
 ## Motivation
-Github has excellent wiki's and markdown integration, but all of github's awesome features are simply noise in the context of pure documentation.
+Socially-centric open source documentation.
+
+## Features
+
+ - Uses post recieve hooks to refresh its cache
+ - Uses github as the central system of record, so each artcile has
+  - Watchers
+  - Forks
+  - Commit history
+  - Contributers
+  - Pull requests
+ - SEO friendly
+ - Easy to customize
+
 
 ## Installation
 `npm install hubbleio`

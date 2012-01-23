@@ -28,7 +28,7 @@ server.createServer = function(content, conf) {
         this.res.end(content.getIndex());
       }
     },
-    '/:name': {
+    '/article/:name': {
       get: function(name) {
         this.res.writeHead(200, { 'Content-Type': 'text/html' });
         this.res.end(content.getArticle(name));
@@ -64,6 +64,7 @@ server.createServer = function(content, conf) {
     });
   });
 
+  console.log('[hubble] Starting http server on ', conf.host + ':' + conf.port);
   server.listen(conf.port, conf.host);
 
 };
