@@ -22,6 +22,12 @@ server.createServer = function(content, conf) {
   // for transforming static content or invoking services.
   //
   var routes = {
+    '/': {
+      get: function() {
+        this.res.writeHead(200, { 'Content-Type': 'text/html' });
+        this.res.end(content.getIndex());
+      }      
+    },
     '/index.html': {
       get: function() {
         this.res.writeHead(200, { 'Content-Type': 'text/html' });

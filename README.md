@@ -9,7 +9,7 @@ Socially-centric open source documentation.
 
 ## Features
 
- - Uses post recieve hooks to refresh its cache
+ - Uses post recieve hooks to refresh its repos
  - Uses github as the central system of record, so each artcile has
   - Watchers
   - Forks

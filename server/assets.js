@@ -9,28 +9,26 @@ var assets = module.exports;
 //
 assets['article.html'] = {
   raw: fs.readFileSync('./public/assets/article.html').toString(),
-  compose: function(cache) {
+  compose: function(repos) {
 
     var html = this.raw;
     var output = '';
  
-    if (cache.meta) {
-
+    if (repos.meta) {
       var data = {
         "orgname": 'Orgname', // conf['orgname']
-        "title": cache.meta.title,
-        "main": cache.markup
+        "title": repos.meta.title,
+        "main": repos.markup
       };
-
     }
-
-    return cache.composed = Plates.bind(html, data);
+    
+    return repos.composed = Plates.bind(html, data);
   }
 };
 
 assets['contributors.html'] = {
   raw: fs.readFileSync('./public/assets/contributers.html').toString(),
-  compose: function(cache) {
+  compose: function(repos) {
     var output = '';
     return output;
   }
@@ -38,27 +36,28 @@ assets['contributors.html'] = {
 
 assets['listing.html'] = {
   raw: fs.readFileSync('./public/assets/listing.html').toString(),
-  compose: function(cache) {
+  compose: function(repos) {
 
     var html = this.raw;
 
     var data = {};
     var output = '';
 
-    Object.keys(cache).forEach(function(name, index) {
+    Object.keys(repos).forEach(function(name, index) {
 
-      if (cache[name].meta) {
+      if (repos[name].forks) {
 
         data = {
-          "description": cache[name].meta.description,
-          "fork": cache[name].meta.repo.forks,
-          "like": cache[name].meta.repo.watchers,
-          "created": cache[name].meta.repo.created_at,
-          "updated": cache[name].meta.repo.updated_at,
-          "name": '/article/' + cache[name].meta.repo.name,
-          "title": cache[name].meta.title
+          "description": repos[name].description,
+          "fork": repos[name].forks,
+          "like": repos[name].watchers,
+          "created": repos[name].created_at,
+          "updated": repos[name].updated_at,
+          "name": '/article/' + repos[name].name,
+          "title": repos[name].title
         };
 
+        console.dir(Plates);
         var m = new Plates.Map();
 
         m.class('description').to('description');
@@ -70,6 +69,7 @@ assets['listing.html'] = {
         m.class('name').to('name').as('href');
         m.class('title').to('title');
 
+        console.dir(data);
         output += Plates.bind(html, data, m);
       }
           
@@ -81,10 +81,10 @@ assets['listing.html'] = {
 
 assets['index.html'] = {
   raw: fs.readFileSync('./public/assets/index.html').toString(),
-  compose: function(cache) {
+  compose: function(repos) {
 
     //
-    // this comp function takes the entire cache because the index
+    // this comp function takes the entire repos because the index
     // should be built considering all of the repos in the org.
     //
     var html = this.raw;
@@ -93,11 +93,13 @@ assets['index.html'] = {
     var data = {
       "orgname": 'Orgname', // conf['orgname']
       "title": 'Tagline', // conf['tagline']
-      "articles": listing.compose(cache),
+      "articles": listing.compose(repos),
       //"contributors": assets['contributors.html'].compose(json)
     };
+    
+    console.dir(data.articles);
 
-    return cache['repository-index'].composed = Plates.bind(html, data);
+    return repos['repository-index'].composed = Plates.bind(html, data);
 
   }
 };
