@@ -45,7 +45,7 @@ var config = {
 var content = new Content();;
 
 content.downloadAll(function() {
-  this.compose(assets, content.cache);
+  content.compose(assets, content.repos);
   server.createServer(content, config);
 });
 
