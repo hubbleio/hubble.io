@@ -1,5 +1,5 @@
 <br/>
-<img src="https://github.com/hij1nx/hubble.io/raw/master/logo.png">
+<img src="https://github.com/hubbleio/hubble.io/raw/master/logo.png">
 
 ## Synopsis
 Hubble is a simplified presentation layer on top of github.
