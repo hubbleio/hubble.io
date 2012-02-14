@@ -18,7 +18,7 @@ var help = [
     "options:".underline,
 
     "  -s --silent    Suppress the log messages from the output           ",
-    "  -d --download  Download the hole org                               ",
+    "  -d --download  Download the hole org before launching server       ",
     "  -h, --help     This is it!                                         ",
     ""
 ].join('\n');
@@ -46,8 +46,14 @@ var config = {
 var content = new Content();
 
 function afterDownload() {
-  content.compose(assets, content.repos);
-  server.createServer(content, config);
+  content.loadRepos(function(err) {
+    Object.keys(content.repos).forEach(function(repoName) {
+      console.log('meta for %s: %j', repoName, content.repos[repoName].meta);
+    })
+    if (err) { throw err; }
+    content.compose(assets, content.repos);
+    server.createServer(content, config);
+  });
 }
 
 if (argv.d) {
