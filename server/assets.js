@@ -1,6 +1,7 @@
 
 var fs = require('fs');
 var Plates = require('plates');
+var marked = require('marked');
 var assets = module.exports;
 
 //
@@ -9,20 +10,24 @@ var assets = module.exports;
 //
 assets['article.html'] = {
   raw: fs.readFileSync('./public/assets/article.html').toString(),
-  compose: function(repos) {
+  compose: function(repo) {
 
     var html = this.raw;
     var output = '';
+
+    console.log('composing article.html. repo:', repo);
  
-    if (repos.meta) {
+    if (repo.markup) {
+      console.log('composing.');
+
       var data = {
         "orgname": 'Orgname', // conf['orgname']
-        "title": repos.meta.title,
-        "main": repos.markup
+        "title": repo.meta.title,
+        "main": marked(repo.markup)
       };
     }
     
-    return repos.composed = Plates.bind(html, data);
+    return repo.composed = Plates.bind(html, data);
   }
 };
 
@@ -60,8 +65,6 @@ assets['listing.html'] = {
 
       if (repo.meta) {
 
-        console.log('repo.meta:', repo.meta);
-
         data = {
           "description": repo.meta.description || repo.description,
           "fork": repo.forks,
@@ -72,8 +75,6 @@ assets['listing.html'] = {
           "title": repo.meta.title || repo.title
         };
 
-
-        console.dir(data);
         output += Plates.bind(html, data, map);
       }
           
@@ -101,8 +102,6 @@ assets['index.html'] = {
       //"contributors": assets['contributors.html'].compose(json)
     };
     
-    console.dir(data.articles);
-
     return repos['repository-index'].composed = Plates.bind(html, data);
 
   }

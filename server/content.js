@@ -32,6 +32,7 @@ var Content = module.exports = function(conf, callback) {
 };
 
 Content.prototype.getArticle = function(name) {
+  console.log('composed:', this.repos[name].composed);
   return this.repos[name].composed;
 };
 
@@ -50,15 +51,11 @@ Content.prototype.compose = function (assets, repos) {
   //
   // Compose for all items in the repos.
   //
-  Object.keys(that.repos).forEach(function (repo) {
-    if (repo.files) {
-      that.repos[repo].files.forEach(function (file) {
-        //
-        // re/build the index page that lists the repos.
-        //
-        assets['article.html'].compose(that.repos[repo].files[file]);
-      });
-    }
+  Object.keys(that.repos).forEach(function (name) {
+    var repo = that.repos[name];
+    console.log('composing', name);
+    console.log('repo.files', repo.files);
+    assets['article.html'].compose(repo);
   });
 
   //
@@ -213,7 +210,8 @@ Content.prototype.getMETA = function (repo, filename, next) {
 //
 // get the content from the directory.
 //
-Content.prototype.getMarkup = function (repo, filename, next) {
+Content.prototype.getMarkup = function (repoName, filename, next) {
+  var repo = this.repos[repoName];
   var that = this;
   fs.readFile(filename, 'utf8', function (err, data) {
     if (err) {
@@ -221,13 +219,14 @@ Content.prototype.getMarkup = function (repo, filename, next) {
     }
 
     console.log('[hubble] Transforming markdown from `' + filename + '`.');
-    that.repos[repo].files = that.repos[repo].files || {};
+    repo.files = repo.files || {};
   
-    if (!that.repos[repo].files[filename]) {
-      that.repos[repo].files[filename] = {};
+    if (!repo.files[filename]) {
+      repo.files[filename] = {};
     }
     
-    that.repos[repo].files[filename].markup = data;
+    repo.files[filename].markup = data;
+    repo.markup = data;
     next();
   });
 };
