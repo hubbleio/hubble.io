@@ -17,8 +17,9 @@ var help = [
 
     "options:".underline,
 
-    "  -s --silent  Suppress the log messages from the output           ",
-    "  -h, --help   This is it!                                         ",
+    "  -s --silent    Suppress the log messages from the output           ",
+    "  -d --download  Download the hole org                               ",
+    "  -h, --help     This is it!                                         ",
     ""
 ].join('\n');
 
@@ -42,10 +43,15 @@ var config = {
   "host": argv.h || argv.host || '127.0.0.1'
 };
 
-var content = new Content();;
+var content = new Content();
 
-content.downloadAll(function() {
+function afterDownload() {
   content.compose(assets, content.repos);
   server.createServer(content, config);
-});
+}
 
+if (argv.d) {
+  content.downloadAll(afterDownload);
+} else {
+  afterDownload();
+}
