@@ -40,37 +40,41 @@ assets['listing.html'] = {
 
     var html = this.raw;
 
+
+    var map = new Plates.Map();
+
+    map.class('description').to('description');
+    //m.class('repo').to
+    map.class('fork').to('fork');
+    map.class('like').to('like');
+    map.class('created').to('created');
+    map.class('updated').to('updated');
+    map.class('name').to('name').as('href');
+    map.class('title').to('title');
+
     var data = {};
     var output = '';
 
     Object.keys(repos).forEach(function(name, index) {
+      var repo = repos[name];
 
-      if (repos[name].forks) {
+      if (repo.meta) {
+
+        console.log('repo.meta:', repo.meta);
 
         data = {
-          "description": repos[name].description,
-          "fork": repos[name].forks,
-          "like": repos[name].watchers,
-          "created": repos[name].created_at,
-          "updated": repos[name].updated_at,
-          "name": '/article/' + repos[name].name,
-          "title": repos[name].title
+          "description": repo.meta.description || repo.description,
+          "fork": repo.forks,
+          "like": repo.watchers,
+          "created": repo.created_at,
+          "updated": repo.updated_at,
+          "name": '/article/' + repo.name,
+          "title": repo.meta.title || repo.title
         };
 
-        console.dir(Plates);
-        var m = new Plates.Map();
-
-        m.class('description').to('description');
-        //m.class('repo').to
-        m.class('fork').to('fork');
-        m.class('like').to('like');
-        m.class('created').to('created');
-        m.class('updated').to('updated');
-        m.class('name').to('name').as('href');
-        m.class('title').to('title');
 
         console.dir(data);
-        output += Plates.bind(html, data, m);
+        output += Plates.bind(html, data, map);
       }
           
     });

@@ -183,6 +183,8 @@ Content.prototype.download = function (repo, callback) {
 Content.prototype.getMETA = function (repo, filename, next) {
   var that = this;
   fs.readFile(filename, 'utf8', function (err, data) {
+    var meta;
+
     if (err) {
       return next(err);
     }
@@ -193,8 +195,11 @@ Content.prototype.getMETA = function (repo, filename, next) {
     if (!that.repos[repo].files[filename]) {
       that.repos[repo].files[filename] = {};
     }
-    
-    that.repos[repo].files[filename].meta = JSON.parse(data);
+
+    meta = JSON.parse(data);
+    that.repos[repo].meta = meta;    
+    that.repos[repo].files[filename].meta = meta;
+
     next();
   }); 
 
