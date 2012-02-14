@@ -15,14 +15,10 @@ assets['article.html'] = {
     var html = this.raw;
     var output = '';
 
-    console.log('composing article.html. repo:', repo);
- 
     if (repo.markup) {
-      console.log('composing.');
-
       var data = {
         "orgname": 'Orgname', // conf['orgname']
-        "title": repo.meta.title,
+        "title": repo.meta.title || repo.github.title,
         "main": marked(repo.markup)
       };
     }
@@ -63,16 +59,16 @@ assets['listing.html'] = {
     Object.keys(repos).forEach(function(name, index) {
       var repo = repos[name];
 
-      if (repo.meta) {
+      if (repo.meta && repo.github) {
 
         data = {
-          "description": repo.meta.description || repo.description,
-          "fork": repo.forks,
-          "like": repo.watchers,
-          "created": repo.created_at,
-          "updated": repo.updated_at,
-          "name": '/article/' + repo.name,
-          "title": repo.meta.title || repo.title
+          "description": repo.meta.description || repo.github.description,
+          "fork": repo.github.forks,
+          "like": repo.github.watchers,
+          "created": repo.github.created_at,
+          "updated": repo.github.updated_at,
+          "name": '/article/' + repo.github.name,
+          "title": repo.meta.title || repo.github.title
         };
 
         output += Plates.bind(html, data, map);
