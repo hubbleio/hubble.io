@@ -36,6 +36,7 @@ server.createServer = function(content, conf) {
     },
     '/article/:name': {
       get: function(name) {
+        console.log('getting article', name);
         this.res.writeHead(200, { 'Content-Type': 'text/html' });
         this.res.end(content.getArticle(name));
       }
