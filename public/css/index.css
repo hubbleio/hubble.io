@@ -3069,6 +3069,11 @@ header, footer {
   margin: 50px 10% 0 10%;
 }
 
+#contributors {
+  position: relative;
+  margin: 50px 10% 0 10%;
+}
+
 footer {
   margin: 50px 0 50px 0;
   border-top: 1px solid #ddd;
