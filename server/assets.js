@@ -19,7 +19,8 @@ assets['article.html'] = {
       var data = {
         "orgname": 'Orgname', // conf['orgname']
         "title": repo.meta.title || repo.github.title,
-        "main": marked(repo.markup)
+        "main": marked(repo.markup),
+        "contributorlist": assets['contributors.html'].compose(repo)
       };
     }
     
@@ -28,9 +29,22 @@ assets['article.html'] = {
 };
 
 assets['contributors.html'] = {
-  raw: fs.readFileSync('./public/assets/contributers.html').toString(),
-  compose: function(repos) {
-    var output = '';
+  raw: fs.readFileSync('./public/assets/contributor.html').toString(),
+  compose: function(repo) {
+
+    var authors = repo.meta.authors,
+        output = '',
+        that = this;
+
+    var map = new Plates.Map();
+    map.class('name').to('name');
+    map.class('name').to('url').as('href');
+
+    if (authors) {
+      authors.forEach(function(author) {
+        output += Plates.bind(that.raw, author, map);
+      });
+    }
     return output;
   }
 };
