@@ -60,7 +60,7 @@ Content.prototype.compose = function (assets, repos) {
   //
   // if there are any updates, refresh the index.
   //
-  assets['index.html'].compose(that.repos);
+  assets['index.html'].compose(that.repos, that.contributors, that.tags);
 };
 
 
@@ -171,7 +171,7 @@ Content.prototype.download = function (repo, callback) {
 //
 // get the configuration from the directory.
 //
-Content.prototype.loadRepos = function(callback) {
+Content.prototype.loadRepos = function (callback) {
   var that = this;
 
   //
@@ -179,13 +179,11 @@ Content.prototype.loadRepos = function(callback) {
   // this function checks to see which one was updated the latest,
   // which would mean it's the latest version.
   //
-  function determineOldestRepoVersion(repoPath, done) {
+  function determineOldestRepoVersion (repoPath, done) {
     var latestVersion;
 
     fs.readdir(repoPath, function(err, repoFiles) {
       if (err) { return done(err); }
-
-      console.log('repoFiles', repoFiles);
 
       async.forEach(repoFiles, function(version, next) {
         var versionPath = repoPath + '/' + version;
@@ -206,20 +204,15 @@ Content.prototype.loadRepos = function(callback) {
   //
   // loadRepo actually loads the repo markup and metadata into memory
   //
-  function loadRepo(repoName, done) {
-    console.log('loading repoName:', repoName);
+  function loadRepo (repoName, done) {
     //that.repos[repoName] = {};
     var repoPath = dir + '/' + repoName;
     determineOldestRepoVersion(repoPath, function(err, latestVersionPath) {
       if (err) { return next(err); }
       if (! latestVersionPath) { return done(); }
 
-      console.log('latest version of %s: %s', repoName, latestVersionPath);
-      
       fs.readdir(latestVersionPath, function(err, repoFiles) {
         if (err) { return next(err); }
-
-        console.log('repo files for repo %s: %j', repoName, repoFiles);
 
         //
         // iterate over all of the files that were found in the
@@ -228,11 +221,9 @@ Content.prototype.loadRepos = function(callback) {
 
         async.forEach(repoFiles, function (path, next) {
           if (~path.indexOf('article.md')) {
-            console.log('getting markup');
             that.getMarkup(repoName, latestVersionPath + '/' + path, next);
           }
           else if (~path.indexOf('article.json')) {
-            console.log('getting meta');
             that.getMETA(repoName, latestVersionPath+ '/' + path, next);
           } else {
             next();
@@ -319,4 +310,61 @@ Content.prototype.getMarkup = function (repoName, filename, next) {
     repo.markup = data;
     next();
   });
+};
+
+//
+// function reduceContributors()
+//
+// Aggregate on meta authors
+//
+Content.prototype.reduceContributors = function () {
+  var repoNames = Object.keys(this.repos),
+      that = this;
+  
+  this.contributors = repoNames.reduce(function(contributors, repoName) {
+    var repo = that.repos[repoName];
+
+    if (repo.meta && repo.meta.authors) {
+      repo.meta.authors.forEach(function(contributor) {
+        if (! contributors[contributor.name]) {
+          contributors[contributor.name] = contributor;
+          contributor.repos = [];
+        }
+        contributor.repos.push(repo);
+      });
+    }
+    return contributors;
+  }, {});
+};
+
+//
+// function reduceTags()
+//
+// Aggregate on meta tags
+//
+Content.prototype.reduceTags = function () {
+  var repoNames = Object.keys(this.repos),
+      that = this;
+  
+  this.tags = repoNames.reduce(function(tags, repoName) {
+    var repo = that.repos[repoName];
+
+    if (repo.meta && repo.meta.tags) {
+      repo.meta.tags.forEach(function(tag) {
+        if (! tags[tag]) { tags[tag] = []; }
+        tags[tag].push(repo);
+      });
+    }
+    return tags;
+  }, {});
+};
+
+//
+// function aggregate()
+//
+// Aggregate on meta tags and categories
+//
+Content.prototype.aggregate = function () {
+  this.reduceContributors();
+  this.reduceTags();
 };

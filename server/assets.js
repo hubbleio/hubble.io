@@ -20,7 +20,7 @@ assets['article.html'] = {
         "orgname": 'Orgname', // conf['orgname']
         "title": repo.meta.title || repo.github.title,
         "main": marked(repo.markup),
-        "contributorlist": assets['contributors.html'].compose(repo)
+        "contributorlist": assets['article_contributors.html'].compose(repo)
       };
     }
     
@@ -28,7 +28,7 @@ assets['article.html'] = {
   }
 };
 
-assets['contributors.html'] = {
+assets['article_contributors.html'] = {
   raw: fs.readFileSync('./public/assets/contributor.html').toString(),
   compose: function(repo) {
 
@@ -43,6 +43,51 @@ assets['contributors.html'] = {
     if (authors) {
       authors.forEach(function(author) {
         output += Plates.bind(that.raw, author, map);
+      });
+    }
+    return output;
+  }
+};
+
+assets['contributors.html'] = {
+  raw: fs.readFileSync('./public/assets/contributor.html').toString(),
+  compose: function(repos, contributors) {
+
+    var output = '',
+        that = this;
+
+    var map = new Plates.Map();
+    map.class('name').to('name');
+    map.class('name').to('url').as('href');
+
+    if (contributors) {
+      Object.keys(contributors).forEach(function(contributorName) {
+        var contributor = contributors[contributorName];
+        output += Plates.bind(that.raw, contributor, map);
+      });
+    }
+    return output;
+  }
+};
+
+assets['tags.html'] = {
+  raw: fs.readFileSync('./public/assets/tag.html').toString(),
+  compose: function(tags) {
+
+    var output = '',
+        that = this;
+
+    var map = new Plates.Map();
+    map.class('tag').to('name');
+    map.class('tag').to('url').as('href');
+
+    if (tags) {
+      Object.keys(tags).forEach(function(tag) {
+        var data = {
+          "name": tag,
+          "url": "/tags/" + encodeURIComponent(tag)
+        };
+        output += Plates.bind(that.raw, data, map);
       });
     }
     return output;
@@ -96,7 +141,7 @@ assets['listing.html'] = {
 
 assets['index.html'] = {
   raw: fs.readFileSync('./public/assets/index.html').toString(),
-  compose: function(repos) {
+  compose: function(repos, contributors, tags) {
 
     //
     // this comp function takes the entire repos because the index
@@ -109,9 +154,10 @@ assets['index.html'] = {
       "orgname": 'Orgname', // conf['orgname']
       "title": 'Tagline', // conf['tagline']
       "articles": listing.compose(repos),
-      //"contributors": assets['contributors.html'].compose(json)
+      "contributors": assets['contributors.html'].compose(repos, contributors),
+      "tags": assets["tags.html"].compose(tags)
     };
-    
+
     return repos['repository-index'].composed = Plates.bind(html, data);
 
   }

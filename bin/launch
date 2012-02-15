@@ -47,10 +47,8 @@ var content = new Content();
 
 function afterDownload() {
   content.loadRepos(function(err) {
-    Object.keys(content.repos).forEach(function(repoName) {
-      console.log('meta for %s: %j', repoName, content.repos[repoName].meta);
-    })
     if (err) { throw err; }
+    content.aggregate();
     content.compose(assets, content.repos);
     server.createServer(content, config);
   });
