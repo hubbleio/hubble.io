@@ -3071,7 +3071,12 @@ header, footer {
 
 #contributors {
   position: relative;
-  margin: 50px 10% 0 10%;
+  margin: 0 10% 0 10%;
+}
+
+#tags {
+  position: relative;
+  margin: 0 10% 0 10%;
 }
 
 footer {
