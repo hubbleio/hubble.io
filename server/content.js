@@ -31,6 +31,7 @@ var Content = module.exports = function(conf, callback) {
   this.orgname = conf.orgname || 'hubbleio';
 
   this.assets = {};
+  this.categories = {};
 };
 
 Content.prototype.getArticle = function(name) {
@@ -47,12 +48,13 @@ Content.prototype.getIndex = function() {
 // compose everything once when we start the server.
 //
 Content.prototype.compose = function (assets, repos) {
+
   var that = this;
 
   //
   // Compose for all items in the repos.
   //
-  Object.keys(that.repos).forEach(function (name) {
+  Object.keys(this.repos).forEach(function (name) {
     var repo = that.repos[name];
     assets['article.html'].compose(repo);
   });
@@ -60,7 +62,7 @@ Content.prototype.compose = function (assets, repos) {
   //
   // if there are any updates, refresh the index.
   //
-  assets['index.html'].compose(that.repos, that.contributors, that.tags);
+  assets['index.html'].compose(this.repos, this.contributors, this.tags, this.categories);
 };
 
 
@@ -312,6 +314,44 @@ Content.prototype.getMarkup = function (repoName, filename, next) {
   });
 };
 
+
+//
+// function reduceCategories()
+//
+// Aggregate on meta categories
+//
+Content.prototype.reduceCategories = function () {
+  var repoNames = Object.keys(this.repos),
+      that = this;
+  
+  repoNames.forEach(function(repoName) {
+    var repo = that.repos[repoName];
+
+    if (repo.meta && repo.meta.categories) {
+      if (! Array.isArray(repo.meta.categories)) { repo.meta.categories = [repo.meta.categories]; }
+      
+      repo.meta.categories.forEach(function(categoryChain) {
+        if (! Array.isArray(categoryChain)) { categoryChain = [categoryChain]; }
+        var currentCategoryChildren = that.categories;
+        var categoryId = [];
+        
+        categoryChain.forEach(function(category) {
+          categoryId.push(category);
+          if (! currentCategoryChildren[category]) { currentCategoryChildren[category] =
+            {
+              id: categoryId.join('-'),
+              name: category,
+              children: {}
+            };
+          }
+          currentCategoryChildren = currentCategoryChildren[category].children;
+        });
+      });
+    }
+  });
+};
+
+
 //
 // function reduceContributors()
 //
@@ -367,4 +407,5 @@ Content.prototype.reduceTags = function () {
 Content.prototype.aggregate = function () {
   this.reduceContributors();
   this.reduceTags();
+  this.reduceCategories();
 };
