@@ -10,7 +10,7 @@ var assets = module.exports;
 //
 assets['article.html'] = {
   raw: fs.readFileSync('./public/assets/article.html').toString(),
-  compose: function(repo) {
+  compose: function(repo, categories) {
 
     var html = this.raw;
     var output = '';
@@ -20,7 +20,8 @@ assets['article.html'] = {
         "orgname": 'Orgname', // conf['orgname']
         "title": repo.meta.title || repo.github.title,
         "main": marked(repo.markup),
-        "contributorlist": assets['article_contributors.html'].compose(repo)
+        "contributorlist": assets['article_contributors.html'].compose(repo),
+        "categories": assets['categories.html'].compose(categories)
       };
     }
     

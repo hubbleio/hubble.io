@@ -56,7 +56,7 @@ Content.prototype.compose = function (assets, repos) {
   //
   Object.keys(this.repos).forEach(function (name) {
     var repo = that.repos[name];
-    assets['article.html'].compose(repo);
+    assets['article.html'].compose(repo, that.categories);
   });
 
   //
