@@ -139,9 +139,43 @@ assets['listing.html'] = {
   }
 };
 
+assets['categories.html'] = {
+  raw: fs.readFileSync('./public/assets/category.html').toString(),
+  compose: function(categories) {
+
+    var output = '',
+        that = this;
+
+    var map = new Plates.Map();
+    map.class('category').to('name');
+    map.class('category').to('url').as('href');
+    map.class('subcategories').to('subcategories');
+
+    function printCategory(cat) {
+      var data = {
+        "name": cat.name,
+        "url": "/categories/" + encodeURIComponent(cat.id),
+        "subcategories": printCategories(cat.children)
+      };
+      return Plates.bind(that.raw, data, map);
+    }
+    
+    
+    function printCategories(categories) {
+      return Object.keys(categories).map(function(catName) {
+        var cat = categories[catName];
+        return printCategory(cat);
+      }).join("");
+    }
+
+    return printCategories(categories);
+  }
+};
+
+
 assets['index.html'] = {
   raw: fs.readFileSync('./public/assets/index.html').toString(),
-  compose: function(repos, contributors, tags) {
+  compose: function(repos, contributors, tags, categories) {
 
     //
     // this comp function takes the entire repos because the index
@@ -155,7 +189,8 @@ assets['index.html'] = {
       "title": 'Tagline', // conf['tagline']
       "articles": listing.compose(repos),
       "contributors": assets['contributors.html'].compose(repos, contributors),
-      "tags": assets["tags.html"].compose(tags)
+      "tags": assets["tags.html"].compose(tags),
+      "categories": assets["categories.html"].compose(categories)
     };
 
     return repos['repository-index'].composed = Plates.bind(html, data);
