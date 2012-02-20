@@ -46,8 +46,23 @@ Content.prototype.getIndex = function() {
   return this.repos['repository-index'].composed;
 };
 
-Content.prototype.getTag = function(tag) {
-  return this.tags[tag].composed;
+Content.prototype.getTag = function(tagName) {
+  var tag = this.tags[tagName];
+  return tag && tag.composed;
+}
+
+Content.prototype.getCategory = function(categoryName) {
+  var children  = this.categories,
+      catChain = categoryName.split('--'),
+      comp, cat;
+  
+  while(catChain.length) {
+    comp = catChain.shift();
+    cat = children[comp];
+    if (! cat) { return; }
+    children = cat.children;
+  }
+  return cat && cat.composed;
 }
 
 //
@@ -74,6 +89,18 @@ Content.prototype.compose = function (assets, repos) {
     var tag = that.tags[name];
     assets['tag.html'].compose(tag);
   });
+
+  //
+  // Compose for all the categories in the repos.
+  //
+
+  (function composeCategory(categories) {
+    Object.keys(categories).forEach(function (name) {
+      var cat = categories[name];
+      assets['category_page.html'].compose(cat);
+      composeCategory(cat.children);
+    });
+  }(this.categories));
 
   //
   // if there are any updates, refresh the index.
@@ -340,6 +367,8 @@ Content.prototype.reduceCategories = function () {
   var repoNames = Object.keys(this.repos),
       that = this;
   
+  var escape = encodeURIComponent;
+
   repoNames.forEach(function(repoName) {
     var repo = that.repos[repoName];
 
@@ -352,14 +381,16 @@ Content.prototype.reduceCategories = function () {
         var categoryId = [];
         
         categoryChain.forEach(function(category) {
-          categoryId.push(category);
+          categoryId.push(escape(category));
           if (! currentCategoryChildren[category]) { currentCategoryChildren[category] =
             {
-              id: categoryId.join('-'),
+              id: categoryId.join('--'),
               name: category,
-              children: {}
+              children: {},
+              repos: []
             };
           }
+          currentCategoryChildren[category].repos.push(repo);
           currentCategoryChildren = currentCategoryChildren[category].children;
         });
       });

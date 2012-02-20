@@ -46,6 +46,12 @@ server.createServer = function(content, conf) {
         this.res.end(content.getTag(tag));
       }
     },
+    '/categories/:category': {
+      get: function(category) {
+        this.res.writeHead(200, { 'Content-Type': 'text/html' });
+        this.res.end(content.getCategory(category));
+      }
+    },
     '/update/': {
       post: function() {
         var that = this;

@@ -228,3 +228,21 @@ assets['tag.html'] = {
 
   }
 };
+
+assets['category_page.html'] = {
+  raw: fs.readFileSync('./public/assets/category_page.html').toString(),
+  compose: function(category) {
+
+    var listing = assets['listing.html'];
+
+    var data = {
+      "orgname": 'Orgname', // conf['orgname']
+      "title": 'Tagline', // conf['tagline']
+      "category": "Category \"" + category.name + "\"",
+      "articles": listing.compose(category.repos),
+    };
+
+    return category.composed = Plates.bind(this.raw, data);
+    
+  }
+};
