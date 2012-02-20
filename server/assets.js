@@ -35,6 +35,8 @@ assets['article.html'] = {
   }
 };
 
+
+
 assets['article_contributors.html'] = {
   raw: fs.readFileSync('./public/assets/contributor.html').toString(),
   compose: function(repo) {
@@ -192,7 +194,6 @@ assets['index.html'] = {
     // this comp function takes the entire repos because the index
     // should be built considering all of the repos in the org.
     //
-    var html = this.raw;
     var listing = assets['listing.html'];
 
     var data = {
@@ -204,7 +205,26 @@ assets['index.html'] = {
       "categories": assets["categories.html"].compose(categories)
     };
 
-    return repos['repository-index'].composed = Plates.bind(html, data);
+    return repos['repository-index'].composed = Plates.bind(this.raw, data);
+
+  }
+};
+
+
+assets['tag.html'] = {
+  raw: fs.readFileSync('./public/assets/tag_page.html').toString(),
+  compose: function(tag) {
+
+    var listing = assets['listing.html'];
+
+    var data = {
+      "orgname": 'Orgname', // conf['orgname']
+      "title": 'Tagline', // conf['tagline']
+      "tag": "Tag \"" + tag.name + "\"",
+      "articles": listing.compose(tag.repos),
+    };
+
+    return tag.composed = Plates.bind(this.raw, data);
 
   }
 };

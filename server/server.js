@@ -40,6 +40,12 @@ server.createServer = function(content, conf) {
         this.res.end(content.getArticle(name));
       }
     },
+    '/tags/:tag': {
+      get: function(tag) {
+        this.res.writeHead(200, { 'Content-Type': 'text/html' });
+        this.res.end(content.getTag(tag));
+      }
+    },
     '/update/': {
       post: function() {
         var that = this;
