@@ -21,10 +21,21 @@ Socially-centric open source documentation.
 
 
 ## Installation
-`npm install hubbleio`
+
+```bash
+  $npm install hubbleio
+```
 
 ## Usage
 
+Starting up the server but downloading the repos first:
+
 ```bash
-  bin/launch
+  $ bin/launch -d
+```
+
+If you don't want this to download the repos, you can omit the "-d" flag:
+
+```bash
+  $ bin/launch
 ```

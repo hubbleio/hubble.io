@@ -315,11 +315,17 @@ Content.prototype.getMETA = function (repo, filename, next) {
       that.repos[repo].files[filename] = {};
     }
 
-    meta = JSON.parse(data);
+    try {
+      meta = JSON.parse(data);
+    } catch (err) {
+      console.error('Error parsing repo data:' + data);
+      return next();
+    }
+
     that.repos[repo].meta = meta;    
     that.repos[repo].files[filename].meta = meta;
-
     next();
+
   }); 
 
 };
@@ -409,16 +415,24 @@ Content.prototype.reduceContributors = function () {
       that = this;
   
   this.contributors = repoNames.reduce(function(contributors, repoName) {
-    var repo = that.repos[repoName];
+    var repo = that.repos[repoName],
+        i, contributor;
 
     if (repo.meta && repo.meta.authors) {
-      repo.meta.authors.forEach(function(contributor) {
+      for(i  in repo.meta.authors) {
+        contributor = repo.meta.authors[i];
+        if (typeof(contributor) !== 'object') {
+          contributor = {name: contributor};
+          repo.meta.authors[i] = contributor;
+        }
         if (! contributors[contributor.name]) {
           contributors[contributor.name] = contributor;
+        }
+        if (! contributor.repos) {
           contributor.repos = [];
         }
         contributor.repos.push(repo);
-      });
+      }
     }
     return contributors;
   }, {});

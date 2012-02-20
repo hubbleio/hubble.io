@@ -1,5 +1,4 @@
 {
-  "orgname": "hubble.io",
-  "tagline": "open source documentation",
-  "giturl": "http://github.com/hubbleio"
+  "orgname": "nodedocs",
+  "tagline": "Node.js Docs"
 }
