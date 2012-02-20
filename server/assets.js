@@ -27,7 +27,8 @@ assets['article.html'] = {
         "created": repo.github.created_at,
         "updated": repo.github.updated_at,
         "contributorlist": assets['article_contributors.html'].compose(repo),
-        "categories": assets['categories.html'].compose(categories)
+        "categories": assets['categories.html'].compose(categories),
+        "tags": assets['tags.html'].compose(repo.meta.tags)
       };
       return repo.composed = Plates.bind(html, data);
     }
@@ -90,15 +91,26 @@ assets['tags.html'] = {
     map.class('tag').to('name');
     map.class('tag').to('url').as('href');
 
-    if (tags) {
-      Object.keys(tags).forEach(function(tag) {
-        var data = {
-          "name": tag,
-          "url": "/tags/" + escape(tag)
-        };
-        output += Plates.bind(that.raw, data, map);
-      });
+    function renderTag(tag) {
+      var data = {
+        "name": tag,
+        "url": "/tags/" + escape(tag)
+      };
+      output += Plates.bind(that.raw, data, map);
     }
+
+    if (Array.isArray(tags)) {
+      tags.forEach(function(tag) {
+        console.log('tag in array:', tag);
+        if (typeof(tag) === 'object') {
+          tag = tag.name
+        }
+        renderTag(tag);
+      });
+    } else if (typeof(tags) === 'object') {
+      Object.keys(tags).forEach(renderTag);
+    }
+
     return output;
   }
 };
