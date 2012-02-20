@@ -101,7 +101,6 @@ assets['tags.html'] = {
 
     if (Array.isArray(tags)) {
       tags.forEach(function(tag) {
-        console.log('tag in array:', tag);
         if (typeof(tag) === 'object') {
           tag = tag.name
         }
