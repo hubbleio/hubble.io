@@ -4,6 +4,9 @@ var Plates = require('plates');
 var marked = require('marked');
 var assets = module.exports;
 
+
+var escape = encodeURIComponent;
+
 //
 // each asset contains two members. One is a `composer` function with special 
 // instructions on what to do with the other property, the raw html value.
@@ -20,6 +23,9 @@ assets['article.html'] = {
         "orgname": 'Orgname', // conf['orgname']
         "title": repo.meta.title || repo.github.title,
         "main": marked(repo.markup),
+        "difficulty": repo.meta.difficultyLabel || 'Unknown',
+        "created": repo.github.created_at,
+        "updated": repo.github.updated_at,
         "contributorlist": assets['article_contributors.html'].compose(repo),
         "categories": assets['categories.html'].compose(categories)
       };
@@ -86,7 +92,7 @@ assets['tags.html'] = {
       Object.keys(tags).forEach(function(tag) {
         var data = {
           "name": tag,
-          "url": "/tags/" + encodeURIComponent(tag)
+          "url": "/tags/" + escape(tag)
         };
         output += Plates.bind(that.raw, data, map);
       });
@@ -112,6 +118,8 @@ assets['listing.html'] = {
     map.class('updated').to('updated');
     map.class('name').to('name').as('href');
     map.class('title').to('title');
+    map.class('difficulty').to('difficulty');
+    map.class('difficulty').to('difficultyURL').as('href');
 
     var data = {};
     var output = '';
@@ -127,8 +135,10 @@ assets['listing.html'] = {
           "like": repo.github.watchers,
           "created": repo.github.created_at,
           "updated": repo.github.updated_at,
-          "name": '/article/' + repo.github.name,
-          "title": repo.meta.title || repo.github.title
+          "name": '/article/' + escape(repo.github.name),
+          "title": repo.meta.title || repo.github.title,
+          "difficulty": repo.meta.difficultyLabel || 'Unknown',
+          "difficultyURL": '/difficulties/' + escape(repo.meta.difficultyLabel)
         };
 
         output += Plates.bind(html, data, map);
