@@ -6,7 +6,8 @@ var sys = require('sys'),
     argv = require('optimist').argv,
     Content = require('../server/content'),
     assets = require('../server/assets'),
-    server = require('../server/server');
+    server = require('../server/server'),
+    conf = require('../server/conf.json');
 
 var help = [
     "",
@@ -29,7 +30,7 @@ if (argv.h || argv.help) {
 
 var conf = JSON.parse(fs.readFileSync('./server/conf.json'));
 
-['orgname', 'giturl', 'tagline'].forEach(function(val, index) {
+['orgname', 'tagline'].forEach(function(val, index) {
   if(!conf[val]) {
     throw new Error('start requires `' + val + '` from the `conf.json` file.');
   }
@@ -37,13 +38,12 @@ var conf = JSON.parse(fs.readFileSync('./server/conf.json'));
 
 var config = {
   "orgname": conf.orgname,
-  "giturl": conf.giturl,
   "tagline": conf.tagline,
   "port": argv.p || argv.port || 8080,
   "host": argv.h || argv.host || '127.0.0.1'
 };
 
-var content = new Content();
+var content = new Content(conf);
 
 function afterDownload() {
   content.loadRepos(function(err) {

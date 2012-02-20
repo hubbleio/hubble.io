@@ -18,7 +18,7 @@ assets['article.html'] = {
     var html = this.raw;
     var output = '';
 
-    if (repo.markup) {
+    if (repo.markup && repo.github) {
       var data = {
         "orgname": 'Orgname', // conf['orgname']
         "title": repo.meta.title || repo.github.title,
@@ -29,9 +29,9 @@ assets['article.html'] = {
         "contributorlist": assets['article_contributors.html'].compose(repo),
         "categories": assets['categories.html'].compose(categories)
       };
+      return repo.composed = Plates.bind(html, data);
     }
     
-    return repo.composed = Plates.bind(html, data);
   }
 };
 
