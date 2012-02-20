@@ -46,6 +46,10 @@ Content.prototype.getIndex = function() {
   return this.repos['repository-index'].composed;
 };
 
+Content.prototype.getTag = function(tag) {
+  return this.tags[tag].composed;
+}
+
 //
 // function compose()
 //
@@ -61,6 +65,14 @@ Content.prototype.compose = function (assets, repos) {
   Object.keys(this.repos).forEach(function (name) {
     var repo = that.repos[name];
     assets['article.html'].compose(repo, that.categories);
+  });
+
+  //
+  // Compose for all the tags in the repos.
+  //
+  Object.keys(this.tags).forEach(function (name) {
+    var tag = that.tags[name];
+    assets['tag.html'].compose(tag);
   });
 
   //
@@ -395,8 +407,13 @@ Content.prototype.reduceTags = function () {
 
     if (repo.meta && repo.meta.tags) {
       repo.meta.tags.forEach(function(tag) {
-        if (! tags[tag]) { tags[tag] = []; }
-        tags[tag].push(repo);
+        if (! tags[tag]) { tags[tag] =
+          {
+            name: tag,
+            repos: []
+          };
+        }
+        tags[tag].repos.push(repo);
       });
     }
     return tags;
