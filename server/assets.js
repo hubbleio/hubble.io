@@ -1,4 +1,3 @@
-
 var fs = require('fs');
 var Plates = require('plates');
 var marked = require('marked');
@@ -36,8 +35,6 @@ assets['article.html'] = {
   }
 };
 
-
-
 assets['article_contributors.html'] = {
   raw: fs.readFileSync('./public/assets/contributor.html').toString(),
   compose: function(repo) {
@@ -71,7 +68,7 @@ assets['contributors.html'] = {
     map.class('name').to('url').as('href');
 
     if (contributors) {
-      Object.keys(contributors).forEach(function(contributorName) {
+      Object.keys(contributors).sort().forEach(function(contributorName) {
         var contributor = contributors[contributorName];
         output += Plates.bind(that.raw, contributor, map);
       });
