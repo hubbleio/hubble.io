@@ -85,7 +85,8 @@ assets['tags.html'] = {
   compose: function(tags) {
 
     var output = '',
-        that = this;
+        that = this,
+        sortedTags = [];
 
     var map = new Plates.Map();
     map.class('tag').to('name');
@@ -104,11 +105,13 @@ assets['tags.html'] = {
         if (typeof(tag) === 'object') {
           tag = tag.name
         }
-        renderTag(tag);
+        sortedTags.push(tag);
       });
     } else if (typeof(tags) === 'object') {
-      Object.keys(tags).forEach(renderTag);
+      sortedTags = Object.keys(tags);
     }
+
+    sortedTags.sort().map(renderTag);
 
     return output;
   }
