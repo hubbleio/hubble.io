@@ -3069,17 +3069,7 @@ header, footer {
   margin: 50px 10% 0 10%;
 }
 
-#contributors {
-  position: relative;
-  margin: 0 10% 0 10%;
-}
-
-#tags {
-  position: relative;
-  margin: 0 10% 0 10%;
-}
-
-#categorylist {
+#meta {
   position: relative;
   margin: 0 10% 0 10%;
 }
@@ -3243,7 +3233,7 @@ body {
   min-height: 20px;
 }
 
-.repo .dates {
+.repo .meta {
   position: relative;
   margin-top: 4px;
   margin-bottom: 4px;
@@ -3252,6 +3242,10 @@ body {
   color: #222;
 }
 
-.repo .dates .date {
+.repo .meta .value {
   color: #888;
+}
+
+#meta .value {
+  color: #888;  
 }

@@ -12,7 +12,8 @@ var fs = require('fs'),
     tar = require('tar'),
     marked = require('marked'),
     request = require('request'),
-    Plates = require('plates');
+    Plates = require('plates'),
+    difficulty = require('./difficulty');
 
 var dir = __dirname + '/tmp';
 
@@ -32,6 +33,9 @@ var Content = module.exports = function(conf, callback) {
 
   this.assets = {};
   this.categories = {};
+  this.contributors = {};
+  this.tags = {};
+  this.difficulties = {};
 };
 
 Content.prototype.getArticle = function(name) {
@@ -400,6 +404,28 @@ Content.prototype.reduceTags = function () {
 };
 
 //
+// function reduceDifficulties()
+//
+// Aggregate on meta.difficulty
+//
+Content.prototype.reduceDifficulties = function () {
+    var repoNames = Object.keys(this.repos),
+      that = this;
+  
+  repoNames.map(function(repoName) {
+    var repo = that.repos[repoName],
+        difficultyLabel;
+
+    if (repo.meta && repo.meta.difficulty) {
+      repo.meta.difficultyLabel = difficultyLabel = difficulty(repo.meta.difficulty);
+      if (! that.difficulties[difficultyLabel]) { that.difficulties[difficultyLabel] = []; }
+      that.difficulties[difficultyLabel].push(repo);
+    }
+  });
+
+}
+
+//
 // function aggregate()
 //
 // Aggregate on meta tags and categories
@@ -408,4 +434,6 @@ Content.prototype.aggregate = function () {
   this.reduceContributors();
   this.reduceTags();
   this.reduceCategories();
+  this.reduceDifficulties();
 };
+
