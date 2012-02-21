@@ -2,8 +2,8 @@ var fs     = require('fs'),
     Plates = require('plates'),
     marked = require('marked'),
     assets = module.exports,
+    _      = require('underscore'),
     sort   = require('./sort');
-
 
 var escape = encodeURIComponent;
 
@@ -206,7 +206,7 @@ assets['categories.html'] = {
 
 assets['index.html'] = {
   raw: fs.readFileSync('./public/assets/index.html').toString(),
-  compose: function(repos, contributors, tags, categories) {
+  compose: function(repos, contributors, tags, categories, articleCount) {
 
     //
     // this comp function takes the entire repos because the index
@@ -214,10 +214,23 @@ assets['index.html'] = {
     //
     var listing = assets['listing.html'];
 
+    var reposCopy = repos;
+
+    if (typeof reposCopy === 'object') {
+      reposCopy = Object.keys(reposCopy).map(function(repoName) { return reposCopy[repoName]; });
+    }
+
+    function filter(repo) {
+      return repo.meta && repo.meta.title !== 'index';
+    }
+
+    var composableRepos = _.first(reposCopy.sort(sort.repos.byRecency).filter(filter), articleCount || 5);
+    console.log('composableRepos.length:', composableRepos.length);
+
     var data = {
       "orgname": 'Orgname', // conf['orgname']
       "title": 'Tagline', // conf['tagline']
-      "articles": listing.compose(repos),
+      "articles": listing.compose(composableRepos),
       "contributors": assets['contributors.html'].compose(repos, contributors),
       "tags": assets["tags.html"].compose(tags),
       "categories": assets["categories.html"].compose(categories)
