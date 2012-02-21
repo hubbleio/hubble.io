@@ -28,6 +28,15 @@ Socially-centric open source documentation.
 
 ## Usage
 
+### Setup configuration
+
+Copy the `server/conf.json.example' into `server/conf.json` and edit at will.
+
+    $ cp server/conf.json.example server/conf.json
+    $ edit server/conf.json
+
+### Start the server
+
 Starting up the server but downloading the repos first:
 
 ```bash
@@ -39,3 +48,5 @@ If you don't want this to download the repos, you can omit the "-d" flag:
 ```bash
   $ bin/launch
 ```
+
+Access via browser to [http://localhost:8080](http://localhost:8080).
