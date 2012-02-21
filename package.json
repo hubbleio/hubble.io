@@ -27,7 +27,8 @@
     "request": "*",
     "plates": "*",
     "marked": "*",
-    "tar": "*"
+    "tar": "*",
+    "underscore": "*"
   },
   "main": "./server/index",
   "engines": { "node": ">= 0.4.0" },
