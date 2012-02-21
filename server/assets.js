@@ -17,7 +17,7 @@ assets['article.html'] = {
     var html = this.raw;
     var output = '';
 
-    if (repo.markup && repo.github) {
+    if (repo.markup && repo.github && repo.meta) {
       var data = {
         "orgname": 'Orgname', // conf['orgname']
         "title": repo.meta.title || repo.github.title,

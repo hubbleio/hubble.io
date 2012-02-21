@@ -123,6 +123,10 @@ Content.prototype.downloadReposGithubInfo = function (callback) {
     if (err) {
       return callback(err);
     }
+
+    if (res.statusCode > 299) {
+      return callback(new Error('Github returned status:' + res.statusCode));
+    }
     
     var cfg = JSON.parse(body);
 
@@ -268,8 +272,14 @@ Content.prototype.loadRepos = function (callback) {
           if (~path.indexOf('article.md')) {
             that.getMarkup(repoName, latestVersionPath + '/' + path, next);
           }
-          else if (~path.indexOf('article.json') || ~path.indexOf('index.json')) {
+          else if (~path.indexOf('article.json')) {
             that.getMETA(repoName, latestVersionPath+ '/' + path, next);
+          }  else if (~path.indexOf('index.json')) {
+            that.getMETA(repoName, latestVersionPath+ '/' + path, function(err, meta) {
+              if (err) { return next(err); }
+              if (meta) { meta.title = 'index'; }
+              return next();
+            });
           } else {
             next();
           }
@@ -324,7 +334,7 @@ Content.prototype.getMETA = function (repo, filename, next) {
 
     that.repos[repo].meta = meta;    
     that.repos[repo].files[filename].meta = meta;
-    next();
+    next(null, meta);
 
   }); 
 
@@ -374,7 +384,7 @@ Content.prototype.createCategoryIndex = function () {
            that = this,
          escape = encodeURIComponent;
 
-  if (indexRepo && indexRepo.meta.categories) {
+  if (indexRepo && indexRepo.meta && indexRepo.meta.categories) {
     this.categoryIndex = indexRepo.meta.categories;
   }
 
@@ -391,6 +401,7 @@ Content.prototype.createCategoryIndex = function () {
 
   // Put each repo inside the respective index category
   repoNames.forEach(function(repoName) {
+    if (repoName === 'index') { return; }
     var repo = that.repos[repoName];
     if (repo.meta && repo.meta.categories) {
       (repo.meta.categories || []).forEach(function(categories) {
@@ -400,17 +411,42 @@ Content.prototype.createCategoryIndex = function () {
             categoryId = [],
             category;
 
+        if (! Array.isArray(categories)) { categories = [categories]; }
         for(var i = 0; i < categories.length; i += 1) {
           category = categories[i];
+          
+          //
+          // Composing the path for debugging
+          //
           path.push(category);
+
+          //
+          // Find the child category of current category by name
+          //
           child = findChildCategory(child, category);
           if (! child) {
-            console.log('Warning: could not find %s in category index under %s', category.name, path.join(' > '));
+            console.log(
+              'Warning: problem parsing repo %s: could not find %s in category index under %s',
+              repo.github.name,
+              category, path.join(' > '));
             break;
           }
+
+          //
+          // Add to category id so we can later compose URLs for this
+          //
           categoryId.push(escape(category));
-          if (! child.id) { child.id = categoryId.join('--'); }
+          
           if (! child.repos) { child.repos = []; }
+          
+          //
+          // Compose child.id if there is none
+          //
+          if (! child.id) { child.id = categoryId.join('--'); }
+
+          //
+          // Push repo into category repos
+          //
           child.repos.push(repo);
         }
       });
