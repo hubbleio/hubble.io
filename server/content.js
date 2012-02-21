@@ -79,7 +79,7 @@ Content.prototype.compose = function (assets, repos) {
   //
   Object.keys(this.repos).forEach(function (name) {
     var repo = that.repos[name];
-    assets['article.html'].compose(repo, that.categories);
+    assets['article.html'].compose(repo, that.categoryIndex);
   });
 
   //
@@ -105,7 +105,7 @@ Content.prototype.compose = function (assets, repos) {
   //
   // if there are any updates, refresh the index.
   //
-  assets['index.html'].compose(this.repos, this.contributors, this.tags, this.categories);
+  assets['index.html'].compose(this.repos, this.contributors, this.tags, this.categoryIndex);
 };
 
 
@@ -268,7 +268,7 @@ Content.prototype.loadRepos = function (callback) {
           if (~path.indexOf('article.md')) {
             that.getMarkup(repoName, latestVersionPath + '/' + path, next);
           }
-          else if (~path.indexOf('article.json')) {
+          else if (~path.indexOf('article.json') || ~path.indexOf('index.json')) {
             that.getMETA(repoName, latestVersionPath+ '/' + path, next);
           } else {
             next();
@@ -363,6 +363,63 @@ Content.prototype.getMarkup = function (repoName, filename, next) {
   });
 };
 
+//
+// function createCategoryIndex()
+//
+// Create a category index based on the "index" repo
+//
+Content.prototype.createCategoryIndex = function () {
+  var indexRepo = this.repos['index'],
+      repoNames = Object.keys(this.repos),
+           that = this,
+         escape = encodeURIComponent;
+
+  if (indexRepo && indexRepo.meta.categories) {
+    this.categoryIndex = indexRepo.meta.categories;
+  }
+
+  function findChildCategory(parentCategory, categoryName) {
+    var children = (parentCategory.children || []);
+    for(var i = 0; i < children.length; i += 1) {
+      var child = children[i];
+      if (child.name === categoryName) {
+        return child;
+      }
+    }
+  }
+
+
+  // Put each repo inside the respective index category
+  repoNames.forEach(function(repoName) {
+    var repo = that.repos[repoName];
+    if (repo.meta && repo.meta.categories) {
+      (repo.meta.categories || []).forEach(function(categories) {
+        var currentIndexCategory = that.categoryIndex,
+            path = [],
+            child = {children: that.categoryIndex},
+            categoryId = [],
+            category;
+
+        for(var i = 0; i < categories.length; i += 1) {
+          category = categories[i];
+          path.push(category);
+          child = findChildCategory(child, category);
+          if (! child) {
+            console.log('Warning: could not find %s in category index under %s', category.name, path.join(' > '));
+            break;
+          }
+          categoryId.push(escape(category));
+          if (! child.id) { child.id = categoryId.join('--'); }
+          if (! child.repos) { child.repos = []; }
+          child.repos.push(repo);
+        }
+      });
+    }
+
+  })
+
+  console.log('global category index:', this.categoryIndex);
+}
 
 //
 // function reduceCategories()
@@ -493,9 +550,10 @@ Content.prototype.reduceDifficulties = function () {
 // Aggregate on meta tags and categories
 //
 Content.prototype.aggregate = function () {
+  this.createCategoryIndex();
+  this.reduceCategories();
   this.reduceContributors();
   this.reduceTags();
-  this.reduceCategories();
   this.reduceDifficulties();
 };
 

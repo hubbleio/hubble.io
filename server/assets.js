@@ -176,9 +176,12 @@ assets['categories.html'] = {
     map.class('subcategories').to('subcategories');
 
     function printCategory(cat) {
+      if (! cat.id) { return ''; }
+      var name = cat.name;
+      if (! cat.children) { name += ' (' + (cat.repos || []).length + ')'; }
       var data = {
-        "name": cat.name,
-        "url": "/categories/" + encodeURIComponent(cat.id),
+        "name": name,
+        "url": "/categories/" + cat.id,
         "subcategories": printCategories(cat.children)
       };
       return Plates.bind(that.raw, data, map);
@@ -186,10 +189,13 @@ assets['categories.html'] = {
     
     
     function printCategories(categories) {
-      return Object.keys(categories).map(function(catName) {
-        var cat = categories[catName];
-        return printCategory(cat);
-      }).join("");
+      if (! categories) { return ""; }
+      if (! Array.isArray(categories)) {
+        categories = Object.keys(categories).map(function(catName) {
+          return categories[catName];
+        });
+      }
+      return categories.map(printCategory).join('');
     }
 
     return printCategories(categories);
