@@ -1,7 +1,8 @@
-var fs = require('fs');
-var Plates = require('plates');
-var marked = require('marked');
-var assets = module.exports;
+var fs     = require('fs'),
+    Plates = require('plates'),
+    marked = require('marked'),
+    assets = module.exports,
+    sort   = require('./sort');
 
 
 var escape = encodeURIComponent;
@@ -256,7 +257,7 @@ assets['category_page.html'] = {
       "orgname": 'Orgname', // conf['orgname']
       "title": 'Tagline', // conf['tagline']
       "category": "Category \"" + category.name + "\"",
-      "articles": listing.compose(category.repos),
+      "articles": listing.compose(category.repos.sort(sort.repos.byDifficulty)),
     };
 
     return category.composed = Plates.bind(this.raw, data);
