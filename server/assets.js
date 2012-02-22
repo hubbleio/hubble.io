@@ -91,25 +91,25 @@ assets['tags.html'] = {
     map.class('tag').to('url').as('href');
 
     function renderTag(tag) {
+      var name = tag.name || tag;
+      var presentName = name;
+      if (tag.repos) { presentName += ' (' + tag.repos.length + ')'; }
       var data = {
-        "name": tag,
-        "url": "/tags/" + escape(tag)
+        "name": presentName,
+        "url": "/tags/" + escape(name)
       };
       output += Plates.bind(that.raw, data, map);
     }
 
     if (Array.isArray(tags)) {
       tags.forEach(function(tag) {
-        if (typeof(tag) === 'object') {
-          tag = tag.name
-        }
         sortedTags.push(tag);
       });
     } else if (typeof(tags) === 'object') {
-      sortedTags = Object.keys(tags);
+      sortedTags = Object.keys(tags).map(function(tagName) { return tags[tagName]; })
     }
 
-    sortedTags.sort().map(renderTag);
+    sortedTags.sort(sort.tags.byRepoCount).map(renderTag);
 
     return output;
   }
