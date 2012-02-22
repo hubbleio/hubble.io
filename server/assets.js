@@ -13,12 +13,18 @@ var escape = encodeURIComponent;
 //
 assets['article.html'] = {
   raw: fs.readFileSync('./public/assets/article.html', 'utf8'),
-  compose: function(repo, categories) {
+  compose: function(repo, categories, suggestions) {
 
     var html = this.raw;
     var output = '';
 
     if (repo.markup && repo.github && repo.meta) {
+
+      if (! suggestions) { suggestions = []; }
+
+      var suggestionMarkup = assets['listing.html'].compose(suggestions);
+      if (suggestions.length) { suggestionMarkup = '<h3>Suggestions for further reading:</h3>' + suggestionMarkup; } // HACK
+
       var data = {
         "orgname": 'Orgname', // conf['orgname']
         "title": repo.meta.title || repo.github.title,
@@ -28,7 +34,8 @@ assets['article.html'] = {
         "updated": repo.github.updated_at,
         "contributorlist": assets['article_contributors.html'].compose(repo),
         "categories": assets['categories.html'].compose(categories),
-        "tags": assets['tags.html'].compose(repo.meta.tags)
+        "tags": assets['tags.html'].compose(repo.meta.tags),
+        "suggestions": suggestionMarkup
       };
       return repo.composed = Plates.bind(html, data);
     }

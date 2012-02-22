@@ -3069,7 +3069,7 @@ header, footer {
   margin: 50px 10% 0 10%;
 }
 
-#meta {
+.meta, #meta, #suggestions {
   position: relative;
   margin: 0 10% 0 10%;
 }
@@ -3246,6 +3246,7 @@ body {
   color: #888;
 }
 
+.meta .value,
 #meta .value {
   color: #888;  
 }
