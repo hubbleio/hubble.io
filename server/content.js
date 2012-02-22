@@ -130,8 +130,6 @@ Content.prototype.downloadReposGithubInfo = function (callback) {
     
     var cfg = JSON.parse(body);
 
-    console.log('github:', cfg);
-
     cfg.forEach(function(repo) {
       if (! that.repos[repo.name]) {
         that.repos[repo.name] = {};
@@ -455,8 +453,6 @@ Content.prototype.createCategoryIndex = function () {
     }
 
   })
-
-  console.log('global category index:', this.categoryIndex);
 }
 
 //
