@@ -115,7 +115,7 @@ Content.prototype.compose = function (assets, repos) {
 Content.prototype.downloadReposGithubInfo = function (callback) {
 
   var that = this;
-  var url = this.apihost + '/orgs/' + this.orgname + '/repos';
+  var url = this.apihost + '/orgs/' + encodeURIComponent(this.orgname) + '/repos';
 
   console.log('[hubble] Putting hubble in orbit around `' + url + '`.');
 
@@ -129,6 +129,8 @@ Content.prototype.downloadReposGithubInfo = function (callback) {
     }
     
     var cfg = JSON.parse(body);
+
+    console.log('github:', cfg);
 
     cfg.forEach(function(repo) {
       if (! that.repos[repo.name]) {

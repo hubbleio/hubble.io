@@ -127,6 +127,7 @@ assets['listing.html'] = {
     map.class('description').to('description');
     //m.class('repo').to
     map.class('fork').to('fork');
+    map.class('fork').to('forkURL').as('href');
     map.class('like').to('like');
     map.class('created').to('created');
     map.class('updated').to('updated');
@@ -146,6 +147,7 @@ assets['listing.html'] = {
         data = {
           "description": repo.meta.description || repo.github.description,
           "fork": repo.github.forks,
+          "forkURL": repo.github.html_url,
           "like": repo.github.watchers,
           "created": repo.github.created_at,
           "updated": repo.github.updated_at,
