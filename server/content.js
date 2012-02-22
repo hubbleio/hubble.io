@@ -6,14 +6,15 @@
  *
  */
 
-var fs = require('fs'),
-    async = require('async'),
-    zlib = require('zlib'),
-    tar = require('tar'),
-    marked = require('marked'),
-    request = require('request'),
-    Plates = require('plates'),
-    difficulty = require('./difficulty');
+var        fs  = require('fs'),
+         async = require('async'),
+          zlib = require('zlib'),
+           tar = require('tar'),
+        marked = require('marked'),
+       request = require('request'),
+        Plates = require('plates'),
+    difficulty = require('./difficulty'),
+       Suggest = require('./suggest');
 
 var dir = __dirname + '/tmp';
 
@@ -73,13 +74,14 @@ Content.prototype.getCategory = function(categoryName) {
 Content.prototype.compose = function (assets, repos) {
 
   var that = this;
+  var suggest = Suggest(this.repos, this.tags, this.categories);
 
   //
   // Compose for all items in the repos.
   //
   Object.keys(this.repos).forEach(function (name) {
     var repo = that.repos[name];
-    assets['article.html'].compose(repo, that.categoryIndex);
+    assets['article.html'].compose(repo, that.categoryIndex, suggest(repo, 5));
   });
 
   //
