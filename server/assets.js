@@ -12,7 +12,7 @@ var escape = encodeURIComponent;
 // instructions on what to do with the other property, the raw html value.
 //
 assets['article.html'] = {
-  raw: fs.readFileSync('./public/assets/article.html').toString(),
+  raw: fs.readFileSync('./public/assets/article.html', 'utf8'),
   compose: function(repo, categories) {
 
     var html = this.raw;
@@ -37,7 +37,7 @@ assets['article.html'] = {
 };
 
 assets['article_contributors.html'] = {
-  raw: fs.readFileSync('./public/assets/contributor.html').toString(),
+  raw: fs.readFileSync('./public/assets/contributor.html', 'utf8'),
   compose: function(repo) {
 
     var authors = repo.meta.authors,
@@ -58,7 +58,7 @@ assets['article_contributors.html'] = {
 };
 
 assets['contributors.html'] = {
-  raw: fs.readFileSync('./public/assets/contributor.html').toString(),
+  raw: fs.readFileSync('./public/assets/contributor.html', 'utf8'),
   compose: function(repos, contributors) {
 
     var output = '',
@@ -79,7 +79,7 @@ assets['contributors.html'] = {
 };
 
 assets['tags.html'] = {
-  raw: fs.readFileSync('./public/assets/tag.html').toString(),
+  raw: fs.readFileSync('./public/assets/tag.html', 'utf8'),
   compose: function(tags) {
 
     var output = '',
@@ -116,7 +116,7 @@ assets['tags.html'] = {
 };
 
 assets['listing.html'] = {
-  raw: fs.readFileSync('./public/assets/listing.html').toString(),
+  raw: fs.readFileSync('./public/assets/listing.html', 'utf8'),
   compose: function(repos) {
 
     var html = this.raw;
@@ -125,14 +125,13 @@ assets['listing.html'] = {
     var map = new Plates.Map();
 
     map.class('description').to('description');
-    //m.class('repo').to
     map.class('fork').to('fork');
     map.class('fork').to('forkURL').as('href');
+    map.class('title').to('title');
+    map.class('title').to('url').as('href');
     map.class('like').to('like');
     map.class('created').to('created');
     map.class('updated').to('updated');
-    map.class('name').to('name').as('href');
-    map.class('title').to('title');
     map.class('difficulty').to('difficulty');
     map.class('difficulty').to('difficultyURL').as('href');
 
@@ -151,7 +150,7 @@ assets['listing.html'] = {
           "like": repo.github.watchers,
           "created": repo.github.created_at,
           "updated": repo.github.updated_at,
-          "name": '/article/' + escape(repo.github.name),
+          "url": '/article/' + escape(repo.github.name),
           "title": repo.meta.title || repo.github.title,
           "difficulty": repo.meta.difficultyLabel || 'Unknown',
           "difficultyURL": '/difficulties/' + escape(repo.meta.difficultyLabel)
@@ -167,7 +166,7 @@ assets['listing.html'] = {
 };
 
 assets['categories.html'] = {
-  raw: fs.readFileSync('./public/assets/category.html').toString(),
+  raw: fs.readFileSync('./public/assets/category.html', 'utf8'),
   compose: function(categories) {
 
     var output = '',
@@ -207,7 +206,7 @@ assets['categories.html'] = {
 
 
 assets['index.html'] = {
-  raw: fs.readFileSync('./public/assets/index.html').toString(),
+  raw: fs.readFileSync('./public/assets/index.html', 'utf8'),
   compose: function(repos, contributors, tags, categories, articleCount) {
 
     //
@@ -227,7 +226,6 @@ assets['index.html'] = {
     }
 
     var composableRepos = _.first(reposCopy.sort(sort.repos.byRecency).filter(filter), articleCount || 5);
-    console.log('composableRepos.length:', composableRepos.length);
 
     var data = {
       "orgname": 'Orgname', // conf['orgname']
@@ -245,7 +243,7 @@ assets['index.html'] = {
 
 
 assets['tag.html'] = {
-  raw: fs.readFileSync('./public/assets/tag_page.html').toString(),
+  raw: fs.readFileSync('./public/assets/tag_page.html', 'utf8'),
   compose: function(tag) {
 
     var listing = assets['listing.html'];
