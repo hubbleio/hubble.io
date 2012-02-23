@@ -81,7 +81,7 @@ Content.prototype.compose = function (assets, repos) {
   //
   Object.keys(this.repos).forEach(function (name) {
     var repo = that.repos[name];
-    assets['article.html'].compose(repo, that.categoryIndex, suggest(repo, 5));
+    assets['article.html'].compose(repo, that.categoryIndex, suggest(repo, 5)); // TODO: 5 should not be hardcoded
   });
 
   //
@@ -476,8 +476,9 @@ Content.prototype.reduceCategories = function () {
       
       repo.meta.categories.forEach(function(categoryChain) {
         if (! Array.isArray(categoryChain)) { categoryChain = [categoryChain]; }
-        var currentCategoryChildren = that.categories;
-        var categoryId = [];
+        var currentCategoryChildren = that.categories,
+            categoryId = [],
+            parent;
         
         categoryChain.forEach(function(category) {
           categoryId.push(escape(category));
@@ -486,11 +487,13 @@ Content.prototype.reduceCategories = function () {
               id: categoryId.join('--'),
               name: category,
               children: {},
+              parent: parent,
               repos: []
             };
           }
-          currentCategoryChildren[category].repos.push(repo);
-          currentCategoryChildren = currentCategoryChildren[category].children;
+          parent = currentCategoryChildren[category];
+          parent.repos.push(repo);
+          currentCategoryChildren = parent.children;
         });
       });
     }
@@ -530,6 +533,7 @@ Content.prototype.reduceContributors = function () {
     return contributors;
   }, {});
 };
+
 
 //
 // function reduceTags()

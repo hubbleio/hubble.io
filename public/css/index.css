@@ -3069,7 +3069,7 @@ header, footer {
   margin: 50px 10% 0 10%;
 }
 
-.meta, #meta, #suggestions {
+.meta, #meta, #suggestions, #articleCategoryList {
   position: relative;
   margin: 0 10% 0 10%;
 }
@@ -3254,5 +3254,17 @@ body {
 #meta #taglist ul li {
   float: left;
   margin-right: 1em;
+  list-style-type: none;
+}
+#articleCategoryList {
+  font-size: 125%;
+  color: #659134;
+}
+#articleCategoryList ul {
+  margin-left: 0;
+  margin-top: 1em;
+}
+
+#articleCategoryList ul li {
   list-style-type: none;
 }
