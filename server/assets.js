@@ -288,13 +288,11 @@ assets['category_page.html'] = {
     categoryChain.push(currentNode.name);
     
     while (currentNode.parent) {
-      console.log('parent of %j is %s', categoryChain, currentNode.parent.name);
       currentNode = currentNode.parent;
       categoryChain.push(currentNode.name);
     } 
 
     categoryChain = categoryChain.reverse();
-    console.log('categoryChain:', categoryChain);
 
     var data = {
       "orgname": 'Orgname', // conf['orgname']
