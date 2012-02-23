@@ -25,6 +25,10 @@ assets['article.html'] = {
       var suggestionMarkup = assets['listing.html'].compose(suggestions);
       if (suggestions.length) { suggestionMarkup = '<h3>Suggestions for further reading:</h3>' + suggestionMarkup; } // HACK
 
+      var articleCategories = (repo.meta.categories || []).map(function(categoryChain) {
+        return assets['category_chain_link.html'].compose(categoryChain);
+      }).join('');
+
       var data = {
         "orgname": 'Orgname', // conf['orgname']
         "title": repo.meta.title || repo.github.title,
@@ -33,6 +37,7 @@ assets['article.html'] = {
         "created": repo.github.created_at,
         "updated": repo.github.updated_at,
         "contributorlist": assets['article_contributors.html'].compose(repo),
+        "articleCategories": articleCategories,
         "categories": assets['categories.html'].compose(categories),
         "tags": assets['tags.html'].compose(repo.meta.tags),
         "suggestions": suggestionMarkup
@@ -186,13 +191,17 @@ assets['categories.html'] = {
 
     function printCategory(cat) {
       if (! cat.id) { return ''; }
+      
       var name = cat.name;
+      
       if (! cat.children) { name += ' (' + (cat.repos || []).length + ')'; }
+      
       var data = {
         "name": name,
         "url": "/categories/" + cat.id,
         "subcategories": printCategories(cat.children)
       };
+
       return Plates.bind(that.raw, data, map);
     }
     
@@ -268,19 +277,78 @@ assets['tag.html'] = {
 };
 
 assets['category_page.html'] = {
-  raw: fs.readFileSync('./public/assets/category_page.html').toString(),
+  raw: fs.readFileSync('./public/assets/category_page.html', 'utf8'),
   compose: function(category) {
 
     var listing = assets['listing.html'];
 
+    var categoryChain = [],
+        currentNode = category;
+
+    categoryChain.push(currentNode.name);
+    
+    while (currentNode.parent) {
+      console.log('parent of %j is %s', categoryChain, currentNode.parent.name);
+      currentNode = currentNode.parent;
+      categoryChain.push(currentNode.name);
+    } 
+
+    categoryChain = categoryChain.reverse();
+    console.log('categoryChain:', categoryChain);
+
     var data = {
       "orgname": 'Orgname', // conf['orgname']
       "title": 'Tagline', // conf['tagline']
-      "category": "Category \"" + category.name + "\"",
+      "category": assets['category_chain_link.html'].compose(categoryChain),
       "articles": listing.compose(category.repos.sort(sort.repos.byDifficulty)),
     };
 
     return category.composed = Plates.bind(this.raw, data);
     
+  }
+};
+
+assets['category_chain_link.html'] = {
+  raw: fs.readFileSync('./public/assets/category_chain_link.html', 'utf8'),
+  compose: function(categoryChain) {
+
+    var categoryLink = assets['category_link.html'];
+    var index = 0;
+
+    var map = new Plates.Map();
+    map.class('category').to('name');
+
+    if (! Array.isArray(categoryChain)) { categoryChain = [categoryChain]; }
+
+    var id = [];
+    var name = categoryChain.map(function(category) {
+      index += 1;
+      id.push(escape(category));
+      return categoryLink.compose(category, id, categoryChain.length === index);
+    }).join(' > ');
+
+    var data = {
+      "name": name
+    };
+
+    return Plates.bind(this.raw, data, map);
+  }
+};
+
+assets['category_link.html'] = {
+  raw: fs.readFileSync('./public/assets/category_link.html', 'utf8'),
+  compose: function(category, id, last) {
+    if (! last) { return category;}
+
+    var map = new Plates.Map();
+    map.class('category').to('name');
+    map.class('category').to('url').as('href');
+    
+    var data = {
+      "name": category,
+      "url": "/categories/" + escape(id.join('--'))
+    };
+
+    return Plates.bind(this.raw, data, map);
   }
 };
