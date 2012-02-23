@@ -25,8 +25,8 @@ module.exports = function(repos, tags, index) {
 
   function suggest(repo, max) {
   	return _.first(_.without(reduce(
-  		tagBasedSuggestion(repo),
-  		indexBasedSuggestion(repo)
+  		indexBasedSuggestion(repo),
+  		tagBasedSuggestion(repo)
   	), repo), max);
   }
 
