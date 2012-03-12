@@ -81,7 +81,7 @@ Content.prototype.compose = function (assets, repos) {
   //
   Object.keys(this.repos).forEach(function (name) {
     var repo = that.repos[name];
-    assets['article.html'].compose(repo, that.categoryIndex, suggest(repo, 5)); // TODO: 5 should not be hardcoded
+    assets['pages/article.html'].compose(repo, that.categoryIndex, suggest(repo, 5)); // TODO: 5 should not be hardcoded
   });
 
   //
@@ -89,7 +89,7 @@ Content.prototype.compose = function (assets, repos) {
   //
   Object.keys(this.tags).forEach(function (name) {
     var tag = that.tags[name];
-    assets['tag.html'].compose(tag);
+    assets['pages/tag.html'].compose(tag);
   });
 
   //
@@ -99,7 +99,7 @@ Content.prototype.compose = function (assets, repos) {
   (function composeCategory(categories) {
     Object.keys(categories).forEach(function (name) {
       var cat = categories[name];
-      assets['category_page.html'].compose(cat);
+      assets['pages/category.html'].compose(cat);
       composeCategory(cat.children);
     });
   }(this.categories));
@@ -107,7 +107,7 @@ Content.prototype.compose = function (assets, repos) {
   //
   // if there are any updates, refresh the index.
   //
-  assets['index.html'].compose(this.repos, this.contributors, this.tags, this.categoryIndex);
+  assets['pages/index.html'].compose(this.repos, this.contributors, this.tags, this.categoryIndex);
 };
 
 
