@@ -7,7 +7,7 @@
  */
 
 var director = require('director'),
-    http = require('http'),
+    union    = require('union'),
     static = require('node-static'),
     cluster = require('cluster'),
     Content = require('./content'),
@@ -75,11 +75,19 @@ server.createServer = function(content, conf) {
   // stup a server and when there is a request, dispatch the
   // route that was requestd in the request object.
   //
-  var server = http.createServer(function (req, res) {
-    req.addListener('end', function () {
-      router.dispatch(req, res);
-      file.serve(req, res);
-    });
+  var server = union.createServer({
+    before: [
+      require('./middleware/favicon')(__dirname + '/../public/favicon.png'),
+      require('./middleware/cookie_parser')('e09uwadlkjadkl21ei91elkjsads'),
+      require('./middleware/session')(),
+      function (req, res) {
+        var found = router.dispatch(req, res);
+        if (! found) {
+          file.serve(req, res);
+          // res.emit('next');
+        }
+      },
+    ]
   });
 
   console.log('[hubble] Starting http server on ', conf.host + ':' + conf.port);
