@@ -11,8 +11,19 @@ var escape = encodeURIComponent;
 // each asset contains two members. One is a `composer` function with special 
 // instructions on what to do with the other property, the raw html value.
 //
-assets['article.html'] = {
-  raw: fs.readFileSync('./public/assets/article.html', 'utf8'),
+
+assets['layout.html'] = {
+  raw: fs.readFileSync('./public/assets/layout.html', 'utf8'),
+  compose: function(main) {
+    var data = {
+      main: main
+    }
+    return Plates.bind(this.raw, data);
+  }
+}
+
+assets['pages/article.html'] = {
+  raw: fs.readFileSync('./public/assets/pages/article.html', 'utf8'),
   compose: function(repo, categories, suggestions) {
 
     var html = this.raw;
@@ -32,7 +43,7 @@ assets['article.html'] = {
       var data = {
         "orgname": 'Orgname', // conf['orgname']
         "title": repo.meta.title || repo.github.title,
-        "main": marked(repo.markup),
+        "body": marked(repo.markup),
         "difficulty": repo.meta.difficultyLabel || 'Unknown',
         "created": repo.github.created_at,
         "updated": repo.github.updated_at,
@@ -42,7 +53,7 @@ assets['article.html'] = {
         "tags": assets['tags.html'].compose(repo.meta.tags),
         "suggestions": suggestionMarkup
       };
-      return repo.composed = Plates.bind(html, data);
+      return repo.composed = assets['layout.html'].compose(Plates.bind(html, data));
     }
     
   }
@@ -221,8 +232,8 @@ assets['categories.html'] = {
 };
 
 
-assets['index.html'] = {
-  raw: fs.readFileSync('./public/assets/index.html', 'utf8'),
+assets['pages/index.html'] = {
+  raw: fs.readFileSync('./public/assets/pages/index.html', 'utf8'),
   compose: function(repos, contributors, tags, categories, articleCount) {
 
     //
@@ -252,14 +263,14 @@ assets['index.html'] = {
       "categories": assets["categories.html"].compose(categories)
     };
 
-    return repos['repository-index'].composed = Plates.bind(this.raw, data);
+    return repos['repository-index'].composed = assets['layout.html'].compose(Plates.bind(this.raw, data));
 
   }
 };
 
 
-assets['tag.html'] = {
-  raw: fs.readFileSync('./public/assets/tag_page.html', 'utf8'),
+assets['pages/tag.html'] = {
+  raw: fs.readFileSync('./public/assets/pages/tag.html', 'utf8'),
   compose: function(tag) {
 
     var listing = assets['listing.html'];
@@ -271,13 +282,13 @@ assets['tag.html'] = {
       "articles": listing.compose(tag.repos),
     };
 
-    return tag.composed = Plates.bind(this.raw, data);
+    return tag.composed = assets['layout.html'].compose(Plates.bind(this.raw, data));
 
   }
 };
 
-assets['category_page.html'] = {
-  raw: fs.readFileSync('./public/assets/category_page.html', 'utf8'),
+assets['pages/category.html'] = {
+  raw: fs.readFileSync('./public/assets/pages/category.html', 'utf8'),
   compose: function(category) {
 
     var listing = assets['listing.html'];
@@ -301,7 +312,7 @@ assets['category_page.html'] = {
       "articles": listing.compose(category.repos.sort(sort.repos.byDifficulty)),
     };
 
-    return category.composed = Plates.bind(this.raw, data);
+    return category.composed = assets['layout.html'].compose(Plates.bind(this.raw, data));
     
   }
 };
