@@ -1,4 +1,10 @@
 {
   "orgname": "hubble.io",
-  "tagline": "Documentation powered by GitHub and Node.js"
+  "tagline": "Documentation powered by GitHub and Node.js",
+  "auth": {
+    "github": {
+      "client_id": "----client id----",
+      "secret": "----secret-----"
+    }
+  }
 }
