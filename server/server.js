@@ -11,7 +11,9 @@ var director = require('director'),
     static = require('node-static'),
     cluster = require('cluster'),
     Content = require('./content'),
-    postReceiveHook = require('./postreceivehook');
+    postReceiveHook = require('./postreceivehook'),
+    githubAuth = require('./auth/github'),
+    personalize = require('./personalize');
 
 var server = exports;
 
@@ -25,31 +27,31 @@ server.createServer = function(content, conf) {
     '/': {
       get: function() {
         this.res.writeHead(200, { 'Content-Type': 'text/html' });
-        this.res.end(content.getIndex());
+        this.res.end(personalize.call(this, content.getIndex()));
       }      
     },
     '/index.html': {
       get: function() {
         this.res.writeHead(200, { 'Content-Type': 'text/html' });
-        this.res.end(content.getIndex());
+        this.res.end(personalize.call(this, content.getIndex()));
       }
     },
     '/article/:name': {
       get: function(name) {
         this.res.writeHead(200, { 'Content-Type': 'text/html' });
-        this.res.end(content.getArticle(name));
+        this.res.end(personalize.call(this, content.getArticle(name)));
       }
     },
     '/tags/:tag': {
       get: function(tag) {
         this.res.writeHead(200, { 'Content-Type': 'text/html' });
-        this.res.end(content.getTag(tag));
+        this.res.end(personalize.call(this, content.getTag(tag)));
       }
     },
     '/categories/:category': {
       get: function(category) {
         this.res.writeHead(200, { 'Content-Type': 'text/html' });
-        this.res.end(content.getCategory(category));
+        this.res.end(personalize.call(this, content.getCategory(category)));
       }
     },
     '/update/': {
@@ -60,7 +62,20 @@ server.createServer = function(content, conf) {
           that.res.end(composition);
         });
       }
-    }
+    },
+    '/auth/github/callback': {
+      get: function() {
+        githubAuth(conf.auth.github, this.req, this.res).end();
+      },
+      post: function() {
+        githubAuth(conf.auth.github, this.req, this.res).end();
+      }
+    },
+    '/auth/github': {
+      get: function() {
+        githubAuth(conf.auth.github, this.req, this.res).begin();
+      }
+    },
   };
 
   var router = new director.http.Router(routes);
@@ -78,7 +93,7 @@ server.createServer = function(content, conf) {
   var server = union.createServer({
     before: [
       require('./middleware/favicon')(__dirname + '/../public/favicon.png'),
-      require('./middleware/cookie_parser')('e09uwadlkjadkl21ei91elkjsads'),
+      require('./middleware/cookie_parser')(),
       require('./middleware/session')(),
       function (req, res) {
         var found = router.dispatch(req, res);

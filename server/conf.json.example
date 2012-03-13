@@ -3,6 +3,7 @@
   "tagline": "Documentation powered by GitHub and Node.js",
   "auth": {
     "github": {
+      "callback_uri": "http://localhost:8080/auth/github/callback", 
       "client_id": "----client id----",
       "secret": "----secret-----"
     }
