@@ -12,7 +12,7 @@
 
 var Session = require('./session/session')
   , noop = function() {}
-  , debug = noop
+  , debug = console.log
   , MemoryStore = require('./session/memory')
   , Cookie = require('./session/cookie')
   , Store = require('./session/store')
@@ -254,18 +254,16 @@ function session(options){
     req.sessionStore = store;
 
     // set-cookie
-    res.on('header', function(){
+      console.log('AAAA');
+    process.nextTick(function(){
       if (!req.session) return;
       var cookie = req.session.cookie
         , proto = (req.headers['x-forwarded-proto'] || '').toLowerCase()
-        , tls = req.connection.encrypted || (trustProxy && 'https' == proto)
-        , secured = cookie.secure && tls;
+        //, tls = req.connection.encrypted || (trustProxy && 'https' == proto)
+        //, secured = cookie.secure && tls;
 
       // browser-session cookies only set-cookie once
       if (null == cookie.expires && !sessionIsNew) return;
-
-      // only send secure cookies via https
-      if (cookie.secure && !secured) return debug('not secured');
 
       debug('set %s to %s', key, req.sessionID);
       res.setHeader('Set-Cookie', cookie.serialize(key, req.sessionID));
