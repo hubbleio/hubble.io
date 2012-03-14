@@ -18,7 +18,7 @@ function personalize(output) {
     user: userSnippet
   };
 
-  return (Plates.bind(output, data));
+  return Plates.bind(output, data);
 }
 
 module.exports = personalize;
