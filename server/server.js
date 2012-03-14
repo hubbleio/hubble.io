@@ -13,11 +13,14 @@ var director = require('director'),
     Content = require('./content'),
     postReceiveHook = require('./postreceivehook'),
     githubAuth = require('./auth/github'),
-    personalize = require('./personalize');
+    personalize = require('./personalize'),
+    Like = require('./like');
 
 var server = exports;
 
 server.createServer = function(content, conf) {
+
+  var like = Like(conf);
 
   //
   // define a routing table that will contain methods
@@ -34,6 +37,16 @@ server.createServer = function(content, conf) {
       get: function() {
         this.res.writeHead(200, { 'Content-Type': 'text/html' });
         this.res.end(personalize.call(this, content.getIndex()));
+      }
+    },
+    '/article/:name/like': {
+      post: function(name) {
+        var repo = content.getRepo(name);
+        if (! repo) {
+          this.res.setHeader(404);
+          return this.res.end('Not Found');
+        }
+        like.call(this, repo);
       }
     },
     '/article/:name': {
@@ -80,7 +93,7 @@ server.createServer = function(content, conf) {
       get: function() {
         githubAuth(conf.auth.github, this.req, this.res).begin();
       }
-    },
+    }
   };
 
   var router = new director.http.Router(routes);

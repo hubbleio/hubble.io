@@ -153,6 +153,7 @@ assets['listing.html'] = {
     map.class('title').to('title');
     map.class('title').to('url').as('href');
     map.class('like').to('like');
+    map.class('like').to('like-action').as('data-action');
     map.class('created').to('created');
     map.class('updated').to('updated');
     map.class('difficulty').to('difficulty');
@@ -171,6 +172,7 @@ assets['listing.html'] = {
           "fork": repo.github.forks,
           "forkURL": repo.github.html_url,
           "like": repo.github.watchers,
+          "like-action": '/article/' + escape(repo.github.name) + '/like',
           "created": repo.github.created_at,
           "updated": repo.github.updated_at,
           "url": '/article/' + escape(repo.github.name),

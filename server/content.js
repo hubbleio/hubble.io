@@ -66,6 +66,10 @@ Content.prototype.getCategory = function(categoryName) {
   return cat && cat.composed;
 }
 
+Content.prototype.getRepo = function(name) {
+  return this.repos[name];
+}
+
 //
 // function compose()
 //
