@@ -22,7 +22,8 @@ function githubOauth(conf, req, res) {
     res.writeHead(302, {"Location": buildURI(
         GITHUB_OAUTH_URI_BASE + '/authorize?',
         'client_id', conf.client_id,
-        'redirect_uri', conf.callback_uri
+        'redirect_uri', conf.callback_uri,
+        'scope', 'public_repo'
     )});
     res.end();
   }
@@ -59,6 +60,7 @@ function githubOauth(conf, req, res) {
         try { var user = JSON.parse(body); } catch (err) { return error(err); }
         console.log('user:', user);
         req.session.user = user.user;
+        req.session.github = {accessToken: accessToken};
         res.writeHead(302, {"Location": '/'});
         res.end();
       });
