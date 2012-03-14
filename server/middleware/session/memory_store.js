@@ -1,16 +1,36 @@
 var debug = console.log;
 
+var ONE_HOUR = 60 * 60 * 1000;
+
 function clone(o) {
   return JSON.parse(JSON.stringify(o));
 }
 
-function MemoryStore() {
+function MemoryStore(timeout) {
+
+  timeout || (timeout = ONE_HOUR);
   var store = {};
+  var timeouts = {};
+
+  function clear(id, callback) {
+    var timeout = timeouts[id];
+    if (timeout) {
+      clearTimeout(timeout);
+      delete timeouts[id];
+    }
+    delete store[id];
+    process.nextTick(callback);
+  }
 
   function set(id, value, callback) {
     debug('setting %s to %j', id, value);
     store[id] = clone(value);
     process.nextTick(callback);
+    timeouts[id] = setTimeout(function() {
+      clear(id, function(err) {
+        if (err) { console.error(err); }
+      });
+    }, timeout);
   }
 
   function get(id, callback) {
