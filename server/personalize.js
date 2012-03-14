@@ -15,7 +15,7 @@ function personalize(output) {
   var userSnippet = Plates.bind(template, user);
   
   var data = {
-    user: userSnippet
+    signin: userSnippet
   };
 
   return Plates.bind(output, data);

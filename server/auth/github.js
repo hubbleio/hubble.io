@@ -65,9 +65,16 @@ function githubOauth(conf, req, res) {
     });
   }
 
+  function logout() {
+    req.session.clear();
+    res.writeHead(302, {"Location": '/'});
+    res.end();
+  }
+
   return {
     begin: begin,
-    end: end
+    end: end,
+    logout: logout
   }
 
 }

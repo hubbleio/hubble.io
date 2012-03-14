@@ -3186,6 +3186,11 @@ footer {
   left: 5%;
 }
 
+#signin .user {
+  color: white;
+  padding-top: 1em;
+}
+
 #edit {
   right: 5%;
 }

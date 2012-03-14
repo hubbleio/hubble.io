@@ -14,6 +14,12 @@ function newSessionId() {
   return uid(24);
 }
 
+function clear() {
+  for(var i in this) {
+    if (i !== 'id') { delete this[i]; }
+  }
+}
+
 function Session(sessionCookieName, store) {
 
   sessionCookieName || (sessionCookieName = 'sid');
@@ -32,6 +38,7 @@ function Session(sessionCookieName, store) {
           id: sessionId
         });
 
+      session.clear = clear;
       req.session = session;
 
       res.emit('next');
@@ -39,6 +46,7 @@ function Session(sessionCookieName, store) {
     });
 
     res.on('end', function() {
+      delete req.session.clear;
       store(sessionId, req.session, function(err) {
         if (err) { console.error('Error storing session:' + inspect(err)); }
       });
