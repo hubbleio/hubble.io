@@ -63,6 +63,11 @@ server.createServer = function(content, conf) {
         });
       }
     },
+    '/auth/logout': {
+      get: function() {
+        githubAuth(conf.auth.github, this.req, this.res).logout();
+      }
+    },
     '/auth/github/callback': {
       get: function() {
         githubAuth(conf.auth.github, this.req, this.res).end();
