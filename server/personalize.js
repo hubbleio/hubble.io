@@ -8,8 +8,6 @@ function personalize(output) {
 
   var user = this.req.session.user;
 
-  console.log('personalize user:', user);
-
   if (! user) { return output; }
 
   var userSnippet = Plates.bind(template, user);

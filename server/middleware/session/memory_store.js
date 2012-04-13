@@ -1,4 +1,5 @@
-var debug = console.log;
+function noop() {};
+var debug = noop;
 
 var ONE_HOUR = 60 * 60 * 1000;
 

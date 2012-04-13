@@ -85,7 +85,7 @@ Content.prototype.compose = function (assets, repos) {
   //
   Object.keys(this.repos).forEach(function (name) {
     var repo = that.repos[name];
-    assets['pages/article.html'].compose(repo, that.categoryIndex, suggest(repo, 5)); // TODO: 5 should not be hardcoded
+    assets['pages/article.html'].compose(that.categoryIndex, repo, that.categoryIndex, suggest(repo, 5)); // TODO: 5 should not be hardcoded
   });
 
   //
@@ -93,7 +93,7 @@ Content.prototype.compose = function (assets, repos) {
   //
   Object.keys(this.tags).forEach(function (name) {
     var tag = that.tags[name];
-    assets['pages/tag.html'].compose(tag);
+    assets['pages/tag.html'].compose(that.categoryIndex, tag);
   });
 
   //
@@ -103,7 +103,7 @@ Content.prototype.compose = function (assets, repos) {
   (function composeCategory(categories) {
     Object.keys(categories).forEach(function (name) {
       var cat = categories[name];
-      assets['pages/category.html'].compose(cat);
+      assets['pages/category.html'].compose(cat, that.categoryIndex);
       composeCategory(cat.children);
     });
   }(this.categories));

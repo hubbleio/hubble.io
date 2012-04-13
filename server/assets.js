@@ -14,8 +14,9 @@ var escape = encodeURIComponent;
 
 assets['layout.html'] = {
   raw: fs.readFileSync('./public/assets/layout.html', 'utf8'),
-  compose: function(main) {
+  compose: function(categories, main) {
     var data = {
+      menu: assets['categories.html'].compose(categories),
       main: main
     }
     return Plates.bind(this.raw, data);
@@ -24,7 +25,7 @@ assets['layout.html'] = {
 
 assets['pages/article.html'] = {
   raw: fs.readFileSync('./public/assets/pages/article.html', 'utf8'),
-  compose: function(repo, categories, suggestions) {
+  compose: function(categories, repo, articleCategories, suggestions) {
 
     var html = this.raw;
     var output = '';
@@ -49,11 +50,11 @@ assets['pages/article.html'] = {
         "updated": repo.github.updated_at,
         "contributorlist": assets['article_contributors.html'].compose(repo),
         "articleCategories": articleCategories,
-        "categories": assets['categories.html'].compose(categories),
+        //"categories": assets['categories.html'].compose(categories),
         "tags": assets['tags.html'].compose(repo.meta.tags),
         "suggestions": suggestionMarkup
       };
-      return repo.composed = assets['layout.html'].compose(Plates.bind(html, data));
+      return repo.composed = assets['layout.html'].compose(categories, Plates.bind(html, data));
     }
     
   }
@@ -190,46 +191,51 @@ assets['listing.html'] = {
   }
 };
 
-assets['categories.html'] = {
+assets['category.html'] = {
   raw: fs.readFileSync('./public/assets/category.html', 'utf8'),
-  compose: function(categories) {
-
-    var output = '',
-        that = this;
-
-    var map = new Plates.Map();
-    map.class('category').to('name');
-    map.class('category').to('url').as('href');
-    map.class('subcategories').to('subcategories');
-
-    function printCategory(cat) {
+  rawTerminal: fs.readFileSync('./public/assets/category_terminal.html', 'utf8'),
+  compose: function(cat) {
       if (! cat.id) { return ''; }
       
       var name = cat.name;
       
       if (! cat.children) { name += ' (' + (cat.repos || []).length + ')'; }
+
+      var map = new Plates.Map();
+      map.class('category').to('name');
+      map.class('category').to('url').as('href');
+      map.class('subcategories').to('subcategories');
       
       var data = {
         "name": name,
         "url": "/categories/" + cat.id,
-        "subcategories": printCategories(cat.children)
+        "subcategories": assets['categories.html'].compose(cat.children)
       };
 
-      return Plates.bind(that.raw, data, map);
-    }
-    
-    
-    function printCategories(categories) {
-      if (! categories) { return ""; }
-      if (! Array.isArray(categories)) {
-        categories = Object.keys(categories).map(function(catName) {
-          return categories[catName];
-        });
-      }
-      return categories.map(printCategory).join('');
+      return Plates.bind(cat.children ? this.raw : this.rawTerminal, data, map);
+  }
+};
+
+assets['categories.html'] = {
+  raw: fs.readFileSync('./public/assets/categories.html', 'utf8'),
+  compose: function(categories) {
+
+    if (! categories) { return ""; }
+
+    if (! Array.isArray(categories)) {
+      categories = Object.keys(categories).map(function(catName) {
+        return categories[catName];
+      });
     }
 
-    return printCategories(categories);
+    var composedCategories = categories.map(function(cat) {
+      return assets['category.html'].compose(cat);
+    }).join('');
+
+    var map = new Plates.Map();
+    map.class('categories').to('categories');
+
+    return Plates.bind(this.raw, {categories: composedCategories}, map);
   }
 };
 
@@ -265,7 +271,7 @@ assets['pages/index.html'] = {
       "categories": assets["categories.html"].compose(categories)
     };
 
-    return repos['repository-index'].composed = assets['layout.html'].compose(Plates.bind(this.raw, data));
+    return repos['repository-index'].composed = assets['layout.html'].compose(categories, Plates.bind(this.raw, data));
 
   }
 };
@@ -273,7 +279,7 @@ assets['pages/index.html'] = {
 
 assets['pages/tag.html'] = {
   raw: fs.readFileSync('./public/assets/pages/tag.html', 'utf8'),
-  compose: function(tag) {
+  compose: function(categories, tag) {
 
     var listing = assets['listing.html'];
 
@@ -284,14 +290,14 @@ assets['pages/tag.html'] = {
       "articles": listing.compose(tag.repos),
     };
 
-    return tag.composed = assets['layout.html'].compose(Plates.bind(this.raw, data));
+    return tag.composed = assets['layout.html'].compose(categories, Plates.bind(this.raw, data));
 
   }
 };
 
 assets['pages/category.html'] = {
   raw: fs.readFileSync('./public/assets/pages/category.html', 'utf8'),
-  compose: function(category) {
+  compose: function(category, categories) {
 
     var listing = assets['listing.html'];
 
@@ -314,7 +320,7 @@ assets['pages/category.html'] = {
       "articles": listing.compose(category.repos.sort(sort.repos.byDifficulty)),
     };
 
-    return category.composed = assets['layout.html'].compose(Plates.bind(this.raw, data));
+    return category.composed = assets['layout.html'].compose(categories, Plates.bind(this.raw, data));
     
   }
 };
