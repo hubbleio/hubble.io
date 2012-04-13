@@ -11,6 +11,7 @@ var        fs  = require('fs'),
           zlib = require('zlib'),
            tar = require('tar'),
         marked = require('github-flavored-markdown').parse,
+        hl     = require("highlight").Highlight,
        request = require('request'),
         Plates = require('plates'),
     difficulty = require('./difficulty'),
@@ -373,8 +374,8 @@ Content.prototype.getMarkup = function (repoName, filename, next) {
       repo.files[filename] = {};
     }
     
-    repo.files[filename].markup = marked(data);
-    repo.markup = data;
+    //repo.files[filename].markup = data;
+    repo.markup = hl(marked(data), false, true);;
     next();
   });
 };
