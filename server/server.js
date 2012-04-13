@@ -114,7 +114,7 @@ server.createServer = function(content, conf) {
       require('./middleware/cookie_parser')(),
       require('./middleware/session')(),
       function (req, res) {
-        req.url = req.url.replace('%20', ' ');
+        req.url = req.url.replace(/%20/g, ' ');
         var found = router.dispatch(req, res);
         if (! found) {
           file.serve(req, res);
