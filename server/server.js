@@ -61,7 +61,7 @@ server.createServer = function(content, conf) {
         this.res.end(personalize.call(this, content.getTag(tag)));
       }
     },
-    '/categories/:category': {
+    '/categories/([\\w|\\s|-]+)': {
       get: function(category) {
         this.res.writeHead(200, { 'Content-Type': 'text/html' });
         this.res.end(personalize.call(this, content.getCategory(category)));
@@ -114,6 +114,7 @@ server.createServer = function(content, conf) {
       require('./middleware/cookie_parser')(),
       require('./middleware/session')(),
       function (req, res) {
+        req.url = req.url.replace('%20', ' ');
         var found = router.dispatch(req, res);
         if (! found) {
           file.serve(req, res);
