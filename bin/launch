@@ -5,9 +5,9 @@ var sys = require('sys'),
     fs = require('fs'),
     argv = require('optimist').argv,
     Content = require('../server/content'),
-    assets = require('../server/assets'),
     server = require('../server/server'),
-    conf = require('../server/conf.json');
+    conf = require('../server/conf.json')
+    assets = require('../server/assets')(conf);
 
 var help = [
     "",
