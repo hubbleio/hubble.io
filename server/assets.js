@@ -14,10 +14,12 @@ var escape = encodeURIComponent;
 
 assets['layout.html'] = {
   raw: fs.readFileSync('./public/assets/layout.html', 'utf8'),
-  compose: function(categories, main) {
+  compose: function(categories, main, orgname, title) {
     var data = {
       menu: assets['categories.html'].compose(categories),
-      main: main
+      main: main,
+      orgname: orgname,
+      title: title
     }
     return Plates.bind(this.raw, data);
   }
@@ -25,7 +27,7 @@ assets['layout.html'] = {
 
 assets['pages/article.html'] = {
   raw: fs.readFileSync('./public/assets/pages/article.html', 'utf8'),
-  compose: function(categories, repo, articleCategories, suggestions) {
+  compose: function(categories, repo, articleCategories, suggestions, orgname) {
 
     var html = this.raw;
     var output = '';
@@ -42,8 +44,6 @@ assets['pages/article.html'] = {
       }).join('');
 
       var data = {
-        "orgname": 'Orgname', // conf['orgname']
-        "title": repo.meta.title || repo.github.title,
         "body": marked(repo.markup),
         "difficulty": repo.meta.difficultyLabel || 'Unknown',
         "created": repo.github.created_at,
@@ -54,7 +54,10 @@ assets['pages/article.html'] = {
         "tags": assets['tags.html'].compose(repo.meta.tags),
         "suggestions": suggestionMarkup
       };
-      return repo.composed = assets['layout.html'].compose(categories, Plates.bind(html, data));
+      orgname || (orgname = 'Orgname');
+      var title = repo.meta.title || repo.github.title;
+
+      return repo.composed = assets['layout.html'].compose(categories, Plates.bind(html, data), orgname, title);
     }
     
   }
@@ -242,7 +245,7 @@ assets['categories.html'] = {
 
 assets['pages/index.html'] = {
   raw: fs.readFileSync('./public/assets/pages/index.html', 'utf8'),
-  compose: function(repos, contributors, tags, categories, articleCount) {
+  compose: function(repos, contributors, tags, categories, articleCount, orgname, title) {
 
     //
     // this comp function takes the entire repos because the index
@@ -271,7 +274,7 @@ assets['pages/index.html'] = {
       "categories": assets["categories.html"].compose(categories)
     };
 
-    return repos['repository-index'].composed = assets['layout.html'].compose(categories, Plates.bind(this.raw, data));
+    return repos['repository-index'].composed = assets['layout.html'].compose(categories, Plates.bind(this.raw, data), orgname, title);
 
   }
 };
@@ -279,7 +282,7 @@ assets['pages/index.html'] = {
 
 assets['pages/tag.html'] = {
   raw: fs.readFileSync('./public/assets/pages/tag.html', 'utf8'),
-  compose: function(categories, tag) {
+  compose: function(categories, tag, orgname) {
 
     var listing = assets['listing.html'];
 
@@ -290,14 +293,14 @@ assets['pages/tag.html'] = {
       "articles": listing.compose(tag.repos),
     };
 
-    return tag.composed = assets['layout.html'].compose(categories, Plates.bind(this.raw, data));
+    return tag.composed = assets['layout.html'].compose(categories, Plates.bind(this.raw, data), orgname, tag.name);
 
   }
 };
 
 assets['pages/category.html'] = {
   raw: fs.readFileSync('./public/assets/pages/category.html', 'utf8'),
-  compose: function(category, categories) {
+  compose: function(category, categories, orgname) {
 
     var listing = assets['listing.html'];
 
@@ -314,13 +317,11 @@ assets['pages/category.html'] = {
     categoryChain = categoryChain.reverse();
 
     var data = {
-      "orgname": 'Orgname', // conf['orgname']
-      "title": 'Tagline', // conf['tagline']
       "category": assets['category_chain_link.html'].compose(categoryChain),
       "articles": listing.compose(category.repos.sort(sort.repos.byDifficulty)),
     };
 
-    return category.composed = assets['layout.html'].compose(categories, Plates.bind(this.raw, data));
+    return category.composed = assets['layout.html'].compose(categories, Plates.bind(this.raw, data), orgname, category.name);
     
   }
 };
