@@ -346,7 +346,7 @@ assets['category_chain_link.html'] = {
     }).join(' > ');
 
     var data = {
-      "name": name
+      "name": "In " + name
     };
 
     return Plates.bind(this.raw, data, map);
