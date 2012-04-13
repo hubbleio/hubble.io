@@ -1,6 +1,6 @@
 var fs     = require('fs'),
     Plates = require('plates'),
-    marked = require('marked'),
+    marked = require('github-flavored-markdown').parse,
     assets = module.exports,
     _      = require('underscore'),
     sort   = require('./sort');
@@ -334,7 +334,7 @@ assets['category_chain_link.html'] = {
     var index = 0;
 
     var map = new Plates.Map();
-    map.class('category').to('name');
+    map.class('categoryChain').to('name');
 
     if (! Array.isArray(categoryChain)) { categoryChain = [categoryChain]; }
 
@@ -343,10 +343,10 @@ assets['category_chain_link.html'] = {
       index += 1;
       id.push(escape(category));
       return categoryLink.compose(category, id, categoryChain.length === index);
-    }).join(' > ');
+    }).join('');
 
     var data = {
-      "name": "In " + name
+      "name": name
     };
 
     return Plates.bind(this.raw, data, map);
@@ -355,9 +355,8 @@ assets['category_chain_link.html'] = {
 
 assets['category_link.html'] = {
   raw: fs.readFileSync('./public/assets/category_link.html', 'utf8'),
+  rawUnlinked: fs.readFileSync('./public/assets/category_raw.html', 'utf8'),
   compose: function(category, id, last) {
-    if (! last) { return category;}
-
     var map = new Plates.Map();
     map.class('category').to('name');
     map.class('category').to('url').as('href');
@@ -367,6 +366,6 @@ assets['category_link.html'] = {
       "url": "/categories/" + escape(id.join('--'))
     };
 
-    return Plates.bind(this.raw, data, map);
+    return Plates.bind(last ? this.raw : this.rawUnlinked, data, map);
   }
 };

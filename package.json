@@ -27,7 +27,7 @@
     "async": "*",
     "request": "*",
     "plates": "*",
-    "marked": "*",
+    "github-flavored-markdown": "*",
     "tar": "*",
     "underscore": "*"
   },
