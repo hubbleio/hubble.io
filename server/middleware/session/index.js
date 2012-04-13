@@ -26,7 +26,6 @@ function Session(sessionCookieName, store) {
   store || (store = MemoryStore());
 
   return function handleRequest(req, res) {
-    console.log('handle request');
     var sessionId = req.cookies && req.cookies[sessionCookieName];
     if (! sessionId) { sessionId = newSessionId(); }
 

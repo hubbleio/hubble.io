@@ -667,7 +667,6 @@ code, pre {
   border-radius: 3px;
 }
 code {
-  background-color: #fee9cc;
   color: rgba(0, 0, 0, 0.75);
   padding: 1px 3px;
 }
@@ -3268,3 +3267,50 @@ body {
 #articleCategoryList ul li {
   list-style-type: none;
 }
+
+/**** Nav Menu *****/
+
+#menu {
+  z-index: 10;
+  position: absolute;
+  top: 226px;
+  margin-bottom: 5px;
+  border-bottom: 1px solid #CCC;
+  border-right: 1px solid #CCC;
+  background: #F1F1F1;
+  -webkit-box-shadow: rgba(0,0,0,0.15) 0 0 5px;
+  -moz-box-shadow: rgba(0,0,0,0.15) 0 0 5px;
+  box-shadow: rgba(0,0,0,0.15) 0 0 5px;
+}
+
+#menu ul {
+  margin-left: 1em;  
+}
+
+#menu > ul {
+  margin-left: 0;
+  margin-bottom: 5px;
+  border-bottom: 1px solid #CCC;
+  background: #F1F1F1;
+  -webkit-box-shadow: rgba(0,0,0,0.15) 0 0 5px;
+  -moz-box-shadow: rgba(0,0,0,0.15) 0 0 5px;
+  box-shadow: rgba(0,0,0,0.15) 0 0 5px;
+}
+
+#menu li {
+  list-style-type: none;
+  line-height: 18px;
+  padding: 0.5em 1em;
+  color: gray;
+}
+
+#menu > ul > li {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.50);
+}
+
+#menu li,
+#menu li a {
+  white-space: nowrap;
+}
+
