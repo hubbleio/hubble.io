@@ -22,24 +22,36 @@
     var menu = $('#menu');
     var moving = false;
     var hidden = false;
+    var needsHiding = false;
+    var needsShowing = false;
 
     function hide() {
       if (! moving && ! hidden) {
         moving = true;
+        needsShowing = false;
         menu.animate({'left': "-=" + (menu.width() -20)}, 750, function() {
           moving = false;
           hidden = true;
+          if (needsShowing) { show(); }
         });
+      } else {
+        needsHiding = true;
+        needsShowing = false;
       }
     }
 
     function show() {
       if (! moving && hidden) {
         moving = true;
-        menu.animate({'left': "0"}, 750, function() {
+        needsHiding = false;
+        menu.animate({'left': "0"}, 300, function() {
           moving = false;
           hidden = false;
+          if (needsHiding) { hide(); }
         });
+      } else {
+        needsHiding = false;
+        needsShowing = true;
       }
     }
 
