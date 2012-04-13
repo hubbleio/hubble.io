@@ -1,6 +1,5 @@
 var fs     = require('fs'),
     Plates = require('plates'),
-    marked = require('github-flavored-markdown').parse,
     assets = module.exports,
     _      = require('underscore'),
     sort   = require('./sort');
@@ -44,13 +43,12 @@ assets['pages/article.html'] = {
       }).join('');
 
       var data = {
-        "body": marked(repo.markup),
+        "body": repo.markup,
         "difficulty": repo.meta.difficultyLabel || 'Unknown',
         "created": repo.github.created_at,
         "updated": repo.github.updated_at,
         "contributorlist": assets['article_contributors.html'].compose(repo),
         "articleCategories": articleCategories,
-        //"categories": assets['categories.html'].compose(categories),
         "tags": assets['tags.html'].compose(repo.meta.tags),
         "suggestions": suggestionMarkup
       };

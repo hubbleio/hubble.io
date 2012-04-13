@@ -28,6 +28,7 @@
     "request": "*",
     "plates": "*",
     "github-flavored-markdown": "*",
+    "highlight": "*",    
     "tar": "*",
     "underscore": "*"
   },

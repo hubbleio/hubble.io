@@ -670,7 +670,7 @@ code {
   color: rgba(0, 0, 0, 0.75);
   padding: 1px 3px;
 }
-pre {
+/*pre {
   background-color: #f5f5f5;
   display: block;
   padding: 8.5px;
@@ -686,7 +686,7 @@ pre {
   white-space: pre-wrap;
   word-wrap: break-word;
 }
-/* Forms.less
+*//* Forms.less
  * Base styles for various input types, form layouts, and states
  * ------------------------------------------------------------- */
 form {
@@ -3256,7 +3256,7 @@ body {
   list-style-type: none;
 }
 #articleCategoryList {
-  font-size: 125%;
+˙  font-size: 125%;
   color: #659134;
 }
 
