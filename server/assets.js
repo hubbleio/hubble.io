@@ -161,6 +161,7 @@ module.exports = function(conf) {
       map.class('title').to('url').as('href');
       map.class('like').to('like');
       map.where('href').is('/like').use('like-action').as('data-action');
+      map.where('href').is('/fork').use('fork-action').as('data-action');
       map.class('created').to('created');
       map.class('updated').to('updated');
       map.class('difficulty').to('difficulty');
@@ -180,6 +181,7 @@ module.exports = function(conf) {
             "forkURL": repo.github.html_url,
             "like": repo.github.watchers,
             "like-action": '/article/' + escape(repo.github.name) + '/like',
+            "fork-action": '/article/' + escape(repo.github.name) + '/fork',
             "created": repo.github.created_at,
             "updated": repo.github.updated_at,
             "url": '/article/' + escape(repo.github.name),
