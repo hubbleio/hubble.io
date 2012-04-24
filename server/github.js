@@ -15,8 +15,6 @@ function Github(conf) {
       url += '?access_token=' + escape(session.github.accessToken);
     }
 
-    console.log('url:', url);
-
     return url;
   }
 
