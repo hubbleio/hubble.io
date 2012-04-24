@@ -14,13 +14,13 @@ var director = require('director'),
     postReceiveHook = require('./postreceivehook'),
     githubAuth = require('./auth/github'),
     personalize = require('./personalize'),
-    Like = require('./like');
+    Github = require('./github');
 
 var server = exports;
 
 server.createServer = function(content, conf) {
 
-  var like = Like(conf);
+  var github = Github(conf);
 
   //
   // define a routing table that will contain methods
@@ -46,7 +46,17 @@ server.createServer = function(content, conf) {
           this.res.setHeader(404);
           return this.res.end('Not Found');
         }
-        like.call(this, repo);
+        github.like.call(this, repo);
+      }
+    },
+    '/article/:name/fork': {
+      post: function(name) {
+        var repo = content.getRepo(name);
+        if (! repo) {
+          this.res.setHeader(404);
+          return this.res.end('Not Found');
+        }
+        github.fork.call(this, repo);
       }
     },
     '/article/:name': {

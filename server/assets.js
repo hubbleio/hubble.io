@@ -58,7 +58,7 @@ module.exports = function(conf) {
           "suggestions": suggestionMarkup
         };
         var title = repo.meta.title || repo.github.title;
-        var nav = assets['nav/article.html'].compose();
+        var nav = assets['nav/article.html'].compose(repo.github.name);
 
         return repo.composed = assets['layout.html'].compose(nav, categories, Plates.bind(html, data), title);
       }
@@ -160,11 +160,11 @@ module.exports = function(conf) {
       map.class('title').to('title');
       map.class('title').to('url').as('href');
       map.class('like').to('like');
-      map.class('like').to('like-action').as('data-action');
+      map.where('href').is('/like').use('like-action').as('data-action');
       map.class('created').to('created');
       map.class('updated').to('updated');
       map.class('difficulty').to('difficulty');
-      map.class('difficulty').to('difficultyURL').as('href');
+      map.where('href').is('/difficulty').use('difficultyURL').as('href');
 
       var data = {};
       var output = '';
@@ -393,8 +393,17 @@ module.exports = function(conf) {
 
   assets['nav/article.html'] = {
     raw: fs.readFileSync('./public/assets/nav/article.html', 'utf8'),
-    compose: function() {
-      return this.raw;
+    compose: function(repoName) {
+      var map = new Plates.Map({create: true});
+      map.where('href').is('/watch').use('likeURL').as('data-action');
+      map.where('href').is('/fork').use('forkURL').as('data-action');
+
+      var data = {
+        likeURL: '/article/' + escape(repoName) + '/like',
+        forkURL: '/article/' + escape(repoName) + '/fork'
+      };
+
+      return Plates.bind(this.raw, data, map);
     }
   };
 
@@ -406,4 +415,4 @@ module.exports = function(conf) {
   };
 
   return assets;
-}
+};
