@@ -16,12 +16,14 @@ module.exports = function(conf) {
 
   assets['layout.html'] = {
     raw: fs.readFileSync('./public/assets/layout.html', 'utf8'),
-    compose: function(categories, main, title) {
+    compose: function(nav, categories, main, title) {
       var data = {
         menu: assets['categories.html'].compose(categories),
         main: main,
         orgname: conf.orgname || 'Orgname',
-        title: title
+        title: title,
+        toptitle: title,
+        'primary-nav': nav
       }
       return Plates.bind(this.raw, data);
     }
@@ -56,8 +58,9 @@ module.exports = function(conf) {
           "suggestions": suggestionMarkup
         };
         var title = repo.meta.title || repo.github.title;
+        var nav = assets['nav/article.html'].compose();
 
-        return repo.composed = assets['layout.html'].compose(categories, Plates.bind(html, data), title);
+        return repo.composed = assets['layout.html'].compose(nav, categories, Plates.bind(html, data), title);
       }
       
     }
@@ -272,7 +275,10 @@ module.exports = function(conf) {
         "categories": assets["categories.html"].compose(categories)
       };
 
-      return repos['repository-index'].composed = assets['layout.html'].compose(categories, Plates.bind(this.raw, data), title);
+      var nav = assets['nav/home.html'].compose();
+
+      return repos['repository-index'].composed = assets['layout.html']
+               .compose(nav, categories, Plates.bind(this.raw, data), title);
 
     }
   };
@@ -291,7 +297,10 @@ module.exports = function(conf) {
         "articles": listing.compose(tag.repos),
       };
 
-      return tag.composed = assets['layout.html'].compose(categories, Plates.bind(this.raw, data), tag.name);
+      var nav = assets['nav/dir.html'].compose();
+
+      return tag.composed = assets['layout.html']
+               .compose(nav, categories, Plates.bind(this.raw, data), tag.name);
 
     }
   };
@@ -319,7 +328,10 @@ module.exports = function(conf) {
         "articles": listing.compose(category.repos.sort(sort.repos.byDifficulty)),
       };
 
-      return category.composed = assets['layout.html'].compose(categories, Plates.bind(this.raw, data), category.name);
+      var nav = assets['nav/dir.html'].compose();
+
+      return category.composed = assets['layout.html']
+               .compose(nav, categories, Plates.bind(this.raw, data), category.name);
       
     }
   };
@@ -365,6 +377,31 @@ module.exports = function(conf) {
       };
 
       return Plates.bind(last ? this.raw : this.rawUnlinked, data, map);
+    }
+  };
+
+  /*******************
+   * Navigation
+   *******************/
+
+  assets['nav/home.html'] = {
+    raw: fs.readFileSync('./public/assets/nav/home.html', 'utf8'),
+    compose: function() {
+      return this.raw;
+    }
+  };
+
+  assets['nav/article.html'] = {
+    raw: fs.readFileSync('./public/assets/nav/article.html', 'utf8'),
+    compose: function() {
+      return this.raw;
+    }
+  };
+
+  assets['nav/dir.html'] = {
+    raw: fs.readFileSync('./public/assets/nav/dir.html', 'utf8'),
+    compose: function() {
+      return this.raw;
     }
   };
 
