@@ -35,7 +35,7 @@ function Github(conf) {
         that.res.end(err.message);
       } else {
         that.res.writeHead(201);
-        that.res.end(repo.github.watchers.toString());
+        that.res.end(JSON.stringify({watchers: repo.github.watchers}));
       }
     });
 
@@ -84,12 +84,15 @@ function Github(conf) {
         that.res.end(err.message);
       } else {
         that.res.writeHead(201);
-        that.res.end(repo.github.forks.toString());
+        var resp = {
+          forks: repo.github.forks,
+          url: 'https://github.com/' + escape(that.req.session.user.login) + '/' + escape(repo.github.name)
+        };
+        that.res.end(JSON.stringify(resp));
       }
     });
 
     var url = githubRepoActionURL(['repos', conf.orgname, repo.github.name, 'forks'], this.req.session);
-    //url += '&org=' + escape(this.req.session.user.login);
 
     request.post(url, b(function(response) {
       if (response.statusCode < 200 || response.statusCode >= 300) {

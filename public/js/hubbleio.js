@@ -9,7 +9,7 @@
       type: method,
       url: url,
       success: function(data) {
-        callback(null, data);
+        callback(null, JSON.parse(data));
       },
       error: function(request, text, error) {
         var message = request.responseText || text || '';
@@ -48,26 +48,40 @@
    * Action buttons
    *********************/
 
+  function actionButtonClickHandler(callback) {
+    return function(ev) {
+      ev.preventDefault();
 
-  $('.like, .fork').click(function(ev) {
-    ev.preventDefault();
+      var button = $(this);
+      var action = button.attr('data-action');
+      if (! action) { return; }
+      var previousContent = button.html();
+      var done = waiting(button);
 
-    var button = $(this);
-    var action = button.attr('data-action');
-    if (! action) { return; }
-    var previousContent = button.html();
-    var done = waiting(button);
+      post(action, function(err, result) {
+        if (err) {
+          alert(err.message);
+          button.html(previousContent);
+          return;
+        }
+        callback(result, done);
+      });
 
-    var noun = button.hasClass('like') ? 'watchers' : 'forks';
+    }
+  }
 
-    post(action, function(err, watchers) {
-      var content = previousContent;
-      if (err) { alert(err.message); }
-      else { content = watchers + ' ' + noun; }
-      done(content);
-    });
+  $('.like').click(actionButtonClickHandler(function(response, done) {
+    done(response.watchers.toString() + ' watchers');
+    ui.dialog('You\'re now watching this repo.').closable().show().hide(3000);
+  }));
 
-  });
+
+  $('.fork').click(actionButtonClickHandler(function(response, done) {
+    done(response.forks.toString() + ' forks');
+    ui.dialog('Forked repo', 'This repo has been successfully forked into your github account. ' + 
+                             'Visit it <a href="' + response.url + '">here</a>.')
+              .closable().show();
+  }));
 
 
   /*********************
