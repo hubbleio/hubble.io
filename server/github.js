@@ -97,7 +97,21 @@ function Github(conf) {
         throw new Error('Reply to github fork was status code:' + response.statusCode);
       }
 
-      var url = githubRepoActionURL([ 'repos', conf.orgname, repo.github.name]);
+      var b = bubble(function(err) {
+        if (err) {
+          console.error(err);
+          that.res.writeHead(500);
+          that.res.end(err.message);
+        } else {
+          that.res.writeHead(201);
+          var resp = {
+            forks: repo.github.forks,
+            url: 'https://github.com/' + escape(that.req.session.user.login) + '/' + escape(repo.github.name)
+          };
+          that.res.end(JSON.stringify(resp));
+        }
+      });
+
 
       request.get(url, b(function(resp, body) {
         if (response.statusCode < 200 || response.statusCode >= 300) {
@@ -113,9 +127,73 @@ function Github(conf) {
 
   }
 
+  /******************
+   * Issues
+   ******************/
+
+  var issues = (function() {
+
+    function get(repo, callback) {
+      request.get(githubRepoActionURL([ 'repos', conf.orgname, repo.github.name, 'issues']), function(err, resp, body) {
+        if (err) { return callback(err); }
+        try { body = JSON.parse(body); }
+        catch(error) { err = error; }
+        callback(err, body);
+      });
+    }
+
+    function create(repo, title, body, callback) {
+      var options = {
+        uri: githubRepoActionURL(['repos', conf.orgname, repo.github.name, 'issues'], this.req.session),
+        qs: {
+          title: title,
+          body: body
+        }
+      };
+
+      request.post(options, function(err, resp, body) {
+        if (err) { return callback(err); }
+        if (resp.statusCode !== 201) {
+          err = new Error('Github issue create returned status code ' + resp.statusCode);
+        }
+        callback(err);
+      });
+    }
+
+    function issues(issue) {
+
+      function createComment(body, callback) {
+        var url = githubRepoActionURL([ 'repos',
+                                        conf.orgname,
+                                        repo.github.name,
+                                        'issues',
+                                        issue,
+                                        'comments'],
+                                      this.req.session);
+        
+        request.post(url, function(err, resp, body) {
+          if (err) { return callback(err); }
+          if (res.statusCode !== 201) { err = new Error('Error creating comment on github. status code: ' + resp.statusCode); }
+          callback(err);
+        });
+      }
+
+      return {
+        comments: {
+          create: createComment
+        }
+      }
+    };
+
+    issues.get = get;
+    issues.create = create;
+    return issues;
+  })();
+
   return {
     like: like,
-    fork: fork
+    fork: fork,
+    issues: issues
   }
 
 }

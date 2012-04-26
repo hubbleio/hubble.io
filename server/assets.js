@@ -55,7 +55,8 @@ module.exports = function(conf) {
           "contributorlist": assets['article_contributors.html'].compose(repo),
           "articleCategories": articleCategories,
           "tags": assets['tags.html'].compose(repo.meta.tags),
-          "suggestions": suggestionMarkup
+          "suggestions": suggestionMarkup,
+          "discussions": assets['discussions/index.html'].compose(repo.discussions)
         };
         var title = repo.meta.title || repo.github.title;
         var nav = assets['nav/article.html'].compose(repo.github.name);
@@ -415,6 +416,48 @@ module.exports = function(conf) {
       return this.raw;
     }
   };
+
+  /*******************
+   * Discussions
+   *******************/
+
+  assets['discussions/index.html'] = {
+    raw: fs.readFileSync('./public/assets/discussions/index.html', 'utf8'),
+    compose: function(discussions) {
+      var discussions = discussions.map(function(discussion) {
+        return assets['discussions/discussion.html'].compose(discussion);
+      }).join('');
+
+      var map = new Plates.Map();
+      map.class('discussionlist').use('discussionlist');
+
+      var data = {
+        discussionlist: discussions
+      };
+
+      return Plates.bind(this.raw, data);
+    }
+  };
+
+  assets['discussions/discussion.html'] = {
+    raw: fs.readFileSync('./public/assets/discussions/discussion.html', 'utf8'),
+    compose: function(discussion) {
+      var map = new Plates.Map();
+      map.class('title').use('title');
+      map.class('body').use('body');
+      map.class('avatar').use('avatar').as('src');
+      map.class('created').use('created')
+
+      var data = {
+        title: discussion.title,
+        body: discussion.body || "Lorem Ipsum",
+        avatar: discussion.user && discussion.user.avatar_url,
+        created: discussion.created_at
+      }
+
+      return Plates.bind(this.raw, data, map);
+    }
+  }
 
   return assets;
 };

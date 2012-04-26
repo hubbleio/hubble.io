@@ -3304,3 +3304,53 @@ body {
 #menu li a {
   white-space: nowrap;
 }
+
+/**** Discussions *****/
+
+#discussions {
+  padding: 2em;
+}
+#discussions fieldset legend {
+  padding-left: 0;
+}
+#discussions form input[type=text],
+#discussions form textarea {
+  width: 400px;
+}
+#discussions form textarea {
+  height: 50px;
+}
+#discussions form label {
+  width: 100px;
+  padding-right: 2em;
+}
+#discussions form input.submit {
+  vertical-align: bottom;
+}
+
+#discussions .discussionlist {
+  border-top: 1px solid #ddd;
+}
+
+#discussions article .avatar {
+  float: left;
+  margin: 1em;
+}
+#discussions  article:before {
+  display: table;
+  content: "";
+  zoom: 1;
+}
+#discussions article:after {
+  clear: both;
+}
+
+#discussions article .body {
+  margin: 1em;
+}
+
+#discussions article .meta {
+  font-size: 10px;
+  text-align: left;
+  color: #222;
+}

@@ -11,11 +11,12 @@ var        fs  = require('fs'),
           zlib = require('zlib'),
            tar = require('tar'),
         marked = require('github-flavored-markdown').parse,
-        hl     = require("highlight").Highlight,
+        hl     = require('highlight').Highlight,
        request = require('request'),
         Plates = require('plates'),
     difficulty = require('./difficulty'),
-       Suggest = require('./suggest');
+       Suggest = require('./suggest'),
+      Comments = require('./comments');
 
 var dir = __dirname + '/tmp';
 
@@ -144,8 +145,7 @@ Content.prototype.downloadReposGithubInfo = function (callback) {
       that.repos[repo.name].github = repo;
     });
 
-    callback();
-
+    that.downloadComments(callback);
   });
 }
 
@@ -218,6 +218,25 @@ Content.prototype.download = function (repo, callback) {
       getfiles();
     });
   });
+};
+
+Content.prototype.downloadComments = function(callback) {
+  var that = this,
+      comments = Comments(this.conf);
+
+  async.forEach(Object.keys(this.repos), function(repoName, next) {
+    var repo = that.repos[repoName];
+
+    if (! repo.github) { return next(); }
+
+    comments.get(repo, function(err, comments) {
+      if (err) { return next(err); }
+      console.log(comments);
+      that.repos[repoName].discussions = comments;
+      next();
+    });
+
+  }, callback);
 };
 
 
