@@ -4,12 +4,15 @@
    * AJAX!!!!
    *********************/
 
-  function ajax(method, url, callback) {
+  function ajax(method, url, data, callback) {
     $.ajax({
       type: method,
       url: url,
+      data: data,
       success: function(data) {
-        callback(null, JSON.parse(data));
+        try { data = JSON.parse(data); }
+        catch(error) { }
+        callback(null, data);
       },
       error: function(request, text, error) {
         var message = request.responseText || text || '';
@@ -19,8 +22,12 @@
     });
   }
 
-  function post(url, callback) {
-    return ajax('POST', url, callback);
+  function post(url, data, callback) {
+    if (typeof data === 'function') {
+      callback = data;
+      data = undefined;
+    }
+    return ajax('POST', url, data, callback);
   }
 
   /*********************
@@ -132,4 +139,23 @@
     
   });
 
+  /*********************
+   * Discussions
+   *********************/
+
+  $('#discuss form').submit(function(ev) {
+    ev.preventDefault();
+    var form = $(this);
+    form.attr('disabled', 'disabled')
+    post(form.attr('action'), form.serialize(), function(err) {
+      console.log('back');
+      form.attr('disabled', '');
+      if (err) {
+        alert(err.message);
+        return;
+      }
+      document.location = '#discuss';
+      document.location.reload();
+    });
+  });
 }());

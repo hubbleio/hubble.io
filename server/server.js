@@ -15,12 +15,14 @@ var director = require('director'),
     githubAuth = require('./auth/github'),
     personalize = require('./personalize'),
     Github = require('./github');
+    Comments = require('./comments');
 
 var server = exports;
 
 server.createServer = function(content, conf) {
 
-  var github = Github(conf);
+  var github   = Github(conf),
+      comments = Comments(conf);
 
   function findRepo(name) {
     var repo = content.getRepo(name);

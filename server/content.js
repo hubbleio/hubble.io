@@ -231,7 +231,6 @@ Content.prototype.downloadComments = function(callback) {
 
     comments.get(repo, function(err, comments) {
       if (err) { return next(err); }
-      console.log(comments);
       that.repos[repoName].discussions = comments;
       next();
     });

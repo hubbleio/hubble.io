@@ -1,7 +1,10 @@
 var fs     = require('fs'),
     Plates = require('plates'),
     _      = require('underscore'),
-    sort   = require('./sort');
+    marked = require('github-flavored-markdown').parse,
+    hl     = require('highlight').Highlight,
+    sort   = require('./sort')
+;
 
 var escape = encodeURIComponent;
 
@@ -56,7 +59,7 @@ module.exports = function(conf) {
           "articleCategories": articleCategories,
           "tags": assets['tags.html'].compose(repo.meta.tags),
           "suggestions": suggestionMarkup,
-          "discussions": assets['discussions/index.html'].compose(repo.discussions)
+          "discussions": assets['discussions/index.html'].compose(repo, repo.discussions)
         };
         var title = repo.meta.title || repo.github.title;
         var nav = assets['nav/article.html'].compose(repo.github.name);
@@ -423,37 +426,70 @@ module.exports = function(conf) {
 
   assets['discussions/index.html'] = {
     raw: fs.readFileSync('./public/assets/discussions/index.html', 'utf8'),
-    compose: function(discussions) {
+    compose: function(repo, discussions) {
       var discussions = discussions.map(function(discussion) {
-        return assets['discussions/discussion.html'].compose(discussion);
+        return assets['discussions/discussion.html'].compose(repo, discussion);
       }).join('');
 
       var map = new Plates.Map();
+      map.class('newdiscussion').use('url').as('action');
       map.class('discussionlist').use('discussionlist');
 
       var data = {
+        url: '/article/' + escape(repo.github.name) + '/comment',
         discussionlist: discussions
       };
 
-      return Plates.bind(this.raw, data);
+      return Plates.bind(this.raw, data, map);
     }
   };
 
   assets['discussions/discussion.html'] = {
     raw: fs.readFileSync('./public/assets/discussions/discussion.html', 'utf8'),
-    compose: function(discussion) {
+    compose: function(repo, discussion) {
       var map = new Plates.Map();
+      map.class('author').use('author');
       map.class('title').use('title');
       map.class('body').use('body');
       map.class('avatar').use('avatar').as('src');
+      map.class('created').use('created');
+      map.class('comments').use('comments');
+      map.class('discussion').use('url').as('data-url')
+
+      var commentsMarkup = (discussion.comments || []).map(function(comment) {
+        return assets['discussions/comment.html'].compose(comment);
+      }).join('');
+
+      var data = {
+        url: '/articles/' + escape(repo.github.name) + '/comment',
+        author: '<a href="https://github.com/' + discussion.user.login + '">' + discussion.user.login + '</a>',
+        title: discussion.title,
+        body: hl(marked(discussion.body), false, true),
+        avatar: discussion.user && discussion.user.avatar_url,
+        created: discussion.created_at,
+        comments: commentsMarkup
+      }
+
+      return Plates.bind(this.raw, data, map);
+    }
+  };
+
+  assets['discussions/comment.html'] = {
+    raw: fs.readFileSync('./public/assets/discussions/comment.html', 'utf8'),
+    compose: function(comment) {
+
+      var map = new Plates.Map();
+      map.class('author').use('author');
+      map.class('avatar').use('avatar').as('src');
+      map.class('body').use('body');
       map.class('created').use('created')
 
       var data = {
-        title: discussion.title,
-        body: discussion.body || "Lorem Ipsum",
-        avatar: discussion.user && discussion.user.avatar_url,
-        created: discussion.created_at
-      }
+        author: '<a href="https://github.com/' + comment.user.login + '">' + comment.user.login + '</a>',
+        body: hl(marked(comment.body), false, true),
+        avatar: comment.user && comment.user.avatar_url,
+        created: comment.created_at
+      };
 
       return Plates.bind(this.raw, data, map);
     }
