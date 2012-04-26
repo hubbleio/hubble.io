@@ -22,6 +22,16 @@ server.createServer = function(content, conf) {
 
   var github = Github(conf);
 
+  function findRepo(name) {
+    var repo = content.getRepo(name);
+    if (! repo) {
+      this.res.setHeader(404);
+      this.res.end('Not Found');
+      return false
+    }
+    return repo
+  }
+
   //
   // define a routing table that will contain methods
   // for transforming static content or invoking services.
@@ -41,22 +51,23 @@ server.createServer = function(content, conf) {
     },
     '/article/:name/like': {
       post: function(name) {
-        var repo = content.getRepo(name);
-        if (! repo) {
-          this.res.setHeader(404);
-          return this.res.end('Not Found');
-        }
+        var repo = findRepo.call(this, name);
+        if (! repo) { return; }
         github.like.call(this, repo);
       }
     },
     '/article/:name/fork': {
       post: function(name) {
-        var repo = content.getRepo(name);
-        if (! repo) {
-          this.res.setHeader(404);
-          return this.res.end('Not Found');
-        }
+        var repo = findRepo.call(this, name);
+        if (! repo) { return; }
         github.fork.call(this, repo);
+      }
+    },
+    '/article/:name/comment': {
+      post: function(name) {
+        var repo = findRepo.call(this, name);
+        if (! repo) { return; }
+        comments.create.call(this, repo);
       }
     },
     '/article/:name': {
