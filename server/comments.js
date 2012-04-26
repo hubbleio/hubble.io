@@ -19,7 +19,7 @@ module.exports = function(conf) {
     });
   }
 
-  function create(repo) {
+  function create(repo, callback) {
     var that = this;
     issues.create.call(this, repo, this.req.body.title, this.req.body.body, function(err) {
       if (err) {
@@ -28,7 +28,7 @@ module.exports = function(conf) {
         that.res.end(err.message);
         return;
       }
-      that.res.end();
+      callback();
     });
   }
 

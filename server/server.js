@@ -19,7 +19,7 @@ var director = require('director'),
 
 var server = exports;
 
-server.createServer = function(content, conf) {
+server.createServer = function(assets, content, conf) {
 
   var github   = Github(conf),
       comments = Comments(conf);
@@ -67,9 +67,15 @@ server.createServer = function(content, conf) {
     },
     '/article/:name/comment': {
       post: function(name) {
+        var res = this.res;
         var repo = findRepo.call(this, name);
         if (! repo) { return; }
-        comments.create.call(this, repo);
+        comments.create.call(this, repo, function() {
+          content.downloadComments(repo, function(err) {
+            content.composeRepo(assets, repo);
+            res.end();
+          });
+        });
       }
     },
     '/article/:name': {

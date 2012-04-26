@@ -80,14 +80,12 @@ Content.prototype.getRepo = function(name) {
 Content.prototype.compose = function (assets, repos) {
 
   var that = this;
-  var suggest = Suggest(this.repos, this.tags, this.categories);
 
   //
   // Compose for all items in the repos.
   //
   Object.keys(this.repos).forEach(function (name) {
-    var repo = that.repos[name];
-    assets['pages/article.html'].compose(that.categoryIndex, repo, that.categoryIndex, suggest(repo, 5)); // TODO: 5 should not be hardcoded
+    that.composeRepo(assets, that.repos[name]);
   });
 
   //
@@ -114,6 +112,12 @@ Content.prototype.compose = function (assets, repos) {
   // if there are any updates, refresh the index.
   //
   assets['pages/index.html'].compose(this.repos, this.contributors, this.tags, this.categoryIndex, 5, this.conf.title);
+};
+
+
+Content.prototype.composeRepo = function(assets, repo) {
+  var suggest = Suggest(this.repos, this.tags, this.categories);
+  assets['pages/article.html'].compose(this.categoryIndex, repo, this.categoryIndex, suggest(repo, 5)); // TODO: 5 should not be hardcoded
 };
 
 
@@ -145,7 +149,7 @@ Content.prototype.downloadReposGithubInfo = function (callback) {
       that.repos[repo.name].github = repo;
     });
 
-    that.downloadComments(callback);
+    that.downloadAllComments(callback);
   });
 }
 
@@ -220,21 +224,25 @@ Content.prototype.download = function (repo, callback) {
   });
 };
 
-Content.prototype.downloadComments = function(callback) {
+
+Content.prototype.downloadComments = function(repo, callback) {
   var that = this,
       comments = Comments(this.conf);
+  
+  if (! repo.github) { return callback(); }
+
+  comments.get(repo, function(err, comments) {
+    if (err) { return next(err); }
+    repo.discussions = comments;
+    callback();
+  });
+}
+
+Content.prototype.downloadAllComments = function(callback) {
+  var that = this;
 
   async.forEach(Object.keys(this.repos), function(repoName, next) {
-    var repo = that.repos[repoName];
-
-    if (! repo.github) { return next(); }
-
-    comments.get(repo, function(err, comments) {
-      if (err) { return next(err); }
-      that.repos[repoName].discussions = comments;
-      next();
-    });
-
+    that.downloadComments(that.repos[repoName], next);
   }, callback);
 };
 

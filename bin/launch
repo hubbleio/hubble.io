@@ -51,7 +51,7 @@ function afterDownload() {
     if (err) { throw err; }
     content.aggregate();
     content.compose(assets, content.repos);
-    server.createServer(content, config);
+    server.createServer(assets, content, config);
   });
 }
 
