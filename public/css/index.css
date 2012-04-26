@@ -3309,6 +3309,7 @@ body {
 
 #discussions {
   padding: 2em;
+  padding-left: 70px;
 }
 #discussions fieldset legend {
   padding-left: 0;
@@ -3328,14 +3329,11 @@ body {
   vertical-align: bottom;
 }
 
-#discussions .discussionlist {
-  border-top: 1px solid #ddd;
+
+#discussions article.discussion {
+  margin-bottom: 2em;
 }
 
-#discussions article .avatar {
-  float: left;
-  margin: 1em;
-}
 #discussions  article:before {
   display: table;
   content: "";
@@ -3343,6 +3341,22 @@ body {
 }
 #discussions article:after {
   clear: both;
+}
+
+#discussions .bubble {
+  padding: 3px;
+  background: #EEE;
+  border-radius: 3px;
+  padding: 1em;
+}
+
+#discussions article .avatar {
+  width: 48px;
+  height: auto;
+  border-radius: 3px;
+  position: relative;
+  float: left;
+  margin-left: -60px;
 }
 
 #discussions article .body {
@@ -3353,4 +3367,9 @@ body {
   font-size: 10px;
   text-align: left;
   color: #222;
+}
+
+#discussions .comments {
+  padding: 1em;
+  padding-left: 70px;
 }

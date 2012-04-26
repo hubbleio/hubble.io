@@ -1,7 +1,30 @@
 var request = require('request'),
     bubble  = require('bubble'),
     escape = encodeURIComponent,
-    GITHUB_BASE_URL = 'https://api.github.com';
+    GITHUB_BASE_URL = 'https://api.github.com'
+    ;
+
+function handleRequest(expectedStatusCode, callback) {
+  var req = this.req;
+  return function(err, resp, body) {
+    if (err) {
+      console.error(err);
+      return callback(err);
+    }
+    if (resp.statusCode !== expectedStatusCode) {
+      try { body = JSON.parse(body); }
+      catch(error) {  }
+      err = new Error('Github expected response status code is ' + resp.statusCode + ': ' + body.message || body);
+      return callback(err)
+    }
+    console.log('body: %j', body);
+    if (typeof body === 'string') {
+      try { body = JSON.parse(body); }
+      catch(error) { err = error; }
+    }
+    return callback(err, body);
+  }
+}
 
 function Github(conf) {
 
@@ -43,27 +66,15 @@ function Github(conf) {
                                     repo.github.name],
                                   this.req.session);
 
-    request.put(url, b(function(response) {
+    request.put(url, handleRequest.call(that, 201, b(function() {
       
-      if (response.statusCode < 200 || response.statusCode >= 300) {
-        if (response.statusCode === 404) {
-          throw new Error('You already watch this repo');
-        }
-        throw new Error('Reply to github watch was status code:' + response.statusCode);
-      }
-
       var url = githubRepoActionURL([ 'repos', conf.orgname, repo.github.name]);
       
-      request.get(url, b(function(resp, body) {
-        if (response.statusCode < 200 || response.statusCode >= 300) {
-          throw new Error('Reply from github repo get:' + response.statusCode);
-        }
+      request.get(url, handleRequest.call(that, 200, b(function(body) {
+        repo.github = body;
+      })));
 
-        repo.github = JSON.parse(body);
-
-      }));
-
-    }));
+    })));
 
   }
 
@@ -113,14 +124,10 @@ function Github(conf) {
       });
 
 
-      request.get(url, b(function(resp, body) {
-        if (response.statusCode < 200 || response.statusCode >= 300) {
-          throw new Error('Reply from github repo get:' + response.statusCode);
-        }
+      request.get(url, handleRequest.call(that, 200, b(function(body) {
+        repo.github = body;
 
-        repo.github = JSON.parse(body);
-
-      }));
+      })));
 
     }));
 
@@ -134,35 +141,38 @@ function Github(conf) {
   var issues = (function() {
 
     function get(repo, callback) {
-      request.get(githubRepoActionURL([ 'repos', conf.orgname, repo.github.name, 'issues']), function(err, resp, body) {
-        if (err) { return callback(err); }
-        try { body = JSON.parse(body); }
-        catch(error) { err = error; }
-        callback(err, body);
-      });
+      request.get(githubRepoActionURL([ 'repos', conf.orgname, repo.github.name, 'issues']), handleRequest.call(this, 200, callback));
     }
 
     function create(repo, title, body, callback) {
+
+      if (! this.req.session.user || ! this.req.session.user.login) {
+        this.res.writeHead(403);
+        return this.res.end('Please login first');
+      }
+
       var options = {
         uri: githubRepoActionURL(['repos', conf.orgname, repo.github.name, 'issues'], this.req.session),
-        qs: {
+        json: {
           title: title,
           body: body
         }
       };
 
-      request.post(options, function(err, resp, body) {
-        if (err) { return callback(err); }
-        if (resp.statusCode !== 201) {
-          err = new Error('Github issue create returned status code ' + resp.statusCode);
-        }
-        callback(err);
-      });
+      console.log(options);
+
+      request.post(options, handleRequest.call(this, 201, callback));
     }
 
-    function issues(issue) {
+    function issues(repo, issue) {
 
       function createComment(body, callback) {
+
+        if (! this.req.session.user || ! this.req.session.user.login) {
+          this.res.writeHead(403);
+          return this.res.end('Please login first');
+        }
+
         var url = githubRepoActionURL([ 'repos',
                                         conf.orgname,
                                         repo.github.name,
@@ -171,15 +181,22 @@ function Github(conf) {
                                         'comments'],
                                       this.req.session);
         
-        request.post(url, function(err, resp, body) {
-          if (err) { return callback(err); }
-          if (res.statusCode !== 201) { err = new Error('Error creating comment on github. status code: ' + resp.statusCode); }
-          callback(err);
-        });
+        request.post(url, handleRequest.call(this, 201, callback));
+      }
+
+      function get(callback) {
+        var url = githubRepoActionURL([ 'repos',
+                                        conf.orgname,
+                                        repo.github.name,
+                                        'issues',
+                                        issue,
+                                        'comments']);
+        request.get(url, handleRequest.call(this, 200, callback));
       }
 
       return {
         comments: {
+          get: get,
           create: createComment
         }
       }
