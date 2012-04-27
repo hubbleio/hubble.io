@@ -19,7 +19,7 @@ var help = [
     "options:".underline,
 
     "  -s --silent    Suppress the log messages from the output           ",
-    "  -d --download  Download the hole org before launching server       ",
+    "  -c --cache     Use local cache, don't download repos from GitHub   ",
     "  -h, --help     This is it!                                         ",
     ""
 ].join('\n');
@@ -55,7 +55,7 @@ function afterDownload() {
   });
 }
 
-if (argv.d) {
+if (! argv.c) {
   content.downloadAll(afterDownload);
 } else {
   afterDownload();
