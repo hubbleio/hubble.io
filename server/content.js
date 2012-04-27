@@ -137,7 +137,7 @@ Content.prototype.downloadReposGithubInfo = function (callback) {
     }
 
     if (res.statusCode > 299) {
-      return callback(new Error('Github returned status:' + res.statusCode));
+      return callback(new Error('Github returned status:' + res.statusCode + ' for URL ' + JSON.stringify(url)));
     }
     
     var cfg = JSON.parse(body);
@@ -271,6 +271,7 @@ Content.prototype.loadRepos = function (callback) {
         var versionPath = repoPath + '/' + version;
         fs.stat(versionPath, function(err, stat) {
           if (err) { return next(err); }
+          if (! stat.isDirectory()) { return next(); }
           if (! latestVersion || latestVersion.mtime < stat.mtime) {
             latestVersion = { mtime: stat.mtime, path: versionPath };
           }
@@ -290,7 +291,10 @@ Content.prototype.loadRepos = function (callback) {
     //that.repos[repoName] = {};
     var repoPath = dir + '/' + repoName;
     determineOldestRepoVersion(repoPath, function(err, latestVersionPath) {
-      if (err) { return next(err); }
+      if (err) {
+        if (err.code !== 'ENOTDIR') { return done(err); }
+        else return done();
+      }
       if (! latestVersionPath) { return done(); }
 
       fs.readdir(latestVersionPath, function(err, repoFiles) {
