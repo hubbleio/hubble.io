@@ -60,7 +60,7 @@ function Github(conf) {
 
     var url = githubRepoActionURL([ 'user',
                                     'watched',
-                                    this.req.session.user.login,
+                                    conf.orgname,
                                     repo.github.name],
                                   this.req.session);
 
