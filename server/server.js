@@ -27,7 +27,7 @@ server.createServer = function(assets, content, conf) {
   function findRepo(name) {
     var repo = content.getRepo(name);
     if (! repo) {
-      this.res.setHeader(404);
+      this.res.writeHead(404);
       this.res.end('Not Found');
       return false
     }

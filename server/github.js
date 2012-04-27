@@ -13,7 +13,7 @@ function handleResponse(expectedStatusCode, callback) {
     if (resp.statusCode !== expectedStatusCode) {
       try { body = JSON.parse(body); }
       catch(error) {  }
-      err = new Error('Github expected response status code is ' + resp.statusCode + ': ' + body.message || body);
+      err = new Error('Github expected response status code is ' + resp.statusCode + ': ' + (body && (body.message || body) || ''));
       return callback(err)
     }
     if (typeof body === 'string') {
@@ -64,7 +64,7 @@ function Github(conf) {
                                     repo.github.name],
                                   this.req.session);
 
-    request.put(url, handleResponse(201, b(function() {
+    request.put(url, handleResponse(204, b(function() {
       
       var url = githubRepoActionURL([ 'repos', conf.orgname, repo.github.name]);
       
