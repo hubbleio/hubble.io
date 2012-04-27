@@ -66,16 +66,37 @@ server.createServer = function(assets, content, conf) {
       }
     },
     '/article/:name/comment': {
-      post: function(name) {
+      get: function(name) {
         var res = this.res;
         var repo = findRepo.call(this, name);
         if (! repo) { return; }
-        comments.create.call(this, repo, function() {
+        var discussion = this.req.query.discussion;
+        this.res.writeHead(200, { 'Content-Type': 'text/html' });
+        this.res.end(assets['discussions/new_comment.html'].compose(repo, discussion));
+      },
+      post: function(name) {
+        var res  = this.res,
+            body = this.req.body,
+            repo = findRepo.call(this, name);
+
+        if (! repo) { return; }
+
+        function done(err) {
+          if (err) {
+            res.writeHead(500);
+            return res.end(err.message);
+          }
           content.downloadComments(repo, function(err) {
             content.composeRepo(assets, repo);
             res.end();
           });
-        });
+        }
+        
+        if (! body.discussion) {
+          comments.create.call(this, repo, done);
+        } else {
+          comments.reply.call(this, repo, body.discussion, body.body, done);
+        }
       }
     },
     '/article/:name': {

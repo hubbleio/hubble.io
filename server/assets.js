@@ -455,13 +455,14 @@ module.exports = function(conf) {
       map.class('created').use('created');
       map.class('comments').use('comments');
       map.class('discussion').use('url').as('data-url')
+      map.class('reply').use('url').as('href')
 
       var commentsMarkup = (discussion.comments || []).map(function(comment) {
         return assets['discussions/comment.html'].compose(comment);
       }).join('');
 
       var data = {
-        url: '/articles/' + escape(repo.github.name) + '/comment',
+        url: '/article/' + escape(repo.github.name) + '/comment?discussion=' + discussion.number,
         author: '<a href="https://github.com/' + discussion.user.login + '">' + discussion.user.login + '</a>',
         title: discussion.title,
         body: hl(marked(discussion.body), false, true),
@@ -491,6 +492,25 @@ module.exports = function(conf) {
         created: comment.created_at
       };
 
+      return Plates.bind(this.raw, data, map);
+    }
+  };
+
+  assets['discussions/new_comment.html'] = {
+    raw: fs.readFileSync('./public/assets/discussions/new_comment.html', 'utf8'),
+    compose: function(repo, discussion) {
+
+      var map = new Plates.Map();
+      map.where('name').is('article').use('article').as('value');
+      map.where('name').is('discussion').use('discussion').as('value');
+      map.class('newcomment').use('url').as('action');
+
+      var data = {
+        article: repo.github.name,
+        discussion: discussion,
+        url: '/article/' + escape(repo.github.name) + '/comment'
+      };
+      
       return Plates.bind(this.raw, data, map);
     }
   }
