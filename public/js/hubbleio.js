@@ -143,7 +143,8 @@
    * Discussions
    *********************/
 
-  $('#discuss form').submit(function(ev) {
+  $('#discuss form').live('submit', function(ev) {
+    console.log('submit');
     ev.preventDefault();
     var form = $(this);
     form.attr('disabled', 'disabled')
@@ -158,4 +159,11 @@
       document.location.reload();
     });
   });
+
+  $('#discuss .reply').click(function(ev) {
+    ev.preventDefault();
+    var link = $(this);
+    link.parent().load(link.attr('href'));
+  });
+
 }());

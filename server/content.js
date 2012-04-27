@@ -232,7 +232,7 @@ Content.prototype.downloadComments = function(repo, callback) {
   if (! repo.github) { return callback(); }
 
   comments.get(repo, function(err, comments) {
-    if (err) { return next(err); }
+    if (err) { return callback(err); }
     repo.discussions = comments;
     callback();
   });

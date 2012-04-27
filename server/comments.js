@@ -33,7 +33,7 @@ module.exports = function(conf) {
   }
 
   function reply(repo, issue, body, callback) {
-    issues(issue).comments.create.call(this, body, callback)
+    issues(repo, issue).comments.create.call(this, body, callback)
   }
 
   return {

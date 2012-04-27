@@ -4,8 +4,7 @@ var request = require('request'),
     GITHUB_BASE_URL = 'https://api.github.com'
     ;
 
-function handleRequest(expectedStatusCode, callback) {
-  var req = this.req;
+function handleResponse(expectedStatusCode, callback) {
   return function(err, resp, body) {
     if (err) {
       console.error(err);
@@ -17,7 +16,6 @@ function handleRequest(expectedStatusCode, callback) {
       err = new Error('Github expected response status code is ' + resp.statusCode + ': ' + body.message || body);
       return callback(err)
     }
-    console.log('body: %j', body);
     if (typeof body === 'string') {
       try { body = JSON.parse(body); }
       catch(error) { err = error; }
@@ -66,11 +64,11 @@ function Github(conf) {
                                     repo.github.name],
                                   this.req.session);
 
-    request.put(url, handleRequest.call(that, 201, b(function() {
+    request.put(url, handleResponse(201, b(function() {
       
       var url = githubRepoActionURL([ 'repos', conf.orgname, repo.github.name]);
       
-      request.get(url, handleRequest.call(that, 200, b(function(body) {
+      request.get(url, handleResponse(200, b(function(body) {
         repo.github = body;
       })));
 
@@ -124,7 +122,7 @@ function Github(conf) {
       });
 
 
-      request.get(url, handleRequest.call(that, 200, b(function(body) {
+      request.get(url, handleResponse(200, b(function(body) {
         repo.github = body;
 
       })));
@@ -141,7 +139,7 @@ function Github(conf) {
   var issues = (function() {
 
     function get(repo, callback) {
-      request.get(githubRepoActionURL([ 'repos', conf.orgname, repo.github.name, 'issues']), handleRequest.call(this, 200, callback));
+      request.get(githubRepoActionURL([ 'repos', conf.orgname, repo.github.name, 'issues']), handleResponse.call(this, 200, callback));
     }
 
     function create(repo, title, body, callback) {
@@ -161,7 +159,7 @@ function Github(conf) {
 
       console.log(options);
 
-      request.post(options, handleRequest.call(this, 201, callback));
+      request.post(options, handleResponse(201, callback));
     }
 
     function issues(repo, issue) {
@@ -180,8 +178,13 @@ function Github(conf) {
                                         issue,
                                         'comments'],
                                       this.req.session);
+
+        var options = {
+          url: url,
+          json: { body: body }
+        };
         
-        request.post(url, handleRequest.call(this, 201, callback));
+        request.post(options, handleResponse.call(this, 201, callback));
       }
 
       function get(callback) {
@@ -191,7 +194,7 @@ function Github(conf) {
                                         'issues',
                                         issue,
                                         'comments']);
-        request.get(url, handleRequest.call(this, 200, callback));
+        request.get(url, handleResponse(200, callback));
       }
 
       return {
