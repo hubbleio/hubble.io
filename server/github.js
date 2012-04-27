@@ -13,7 +13,7 @@ function handleResponse(expectedStatusCode, callback) {
     if (resp.statusCode !== expectedStatusCode) {
       try { body = JSON.parse(body); }
       catch(error) {  }
-      err = new Error('Github expected response status code is ' + resp.statusCode + ': ' + (body && (body.message || body) || ''));
+      err = new Error('Github expected response status code is ' + resp.statusCode + 'URL: ' + resp.request.href + ',  body:' + (body && (body.message || body) || ''));
       return callback(err)
     }
     if (typeof body === 'string') {
@@ -106,25 +106,8 @@ function Github(conf) {
         throw new Error('Reply to github fork was status code:' + response.statusCode);
       }
 
-      var b = bubble(function(err) {
-        if (err) {
-          console.error(err);
-          that.res.writeHead(500);
-          that.res.end(err.message);
-        } else {
-          that.res.writeHead(201);
-          var resp = {
-            forks: repo.github.forks,
-            url: 'https://github.com/' + escape(that.req.session.user.login) + '/' + escape(repo.github.name)
-          };
-          that.res.end(JSON.stringify(resp));
-        }
-      });
-
-
-      request.get(url, handleResponse(200, b(function(body) {
+      request.get(githubRepoActionURL(['repos', conf.orgname, repo.github.name]), handleResponse(200, b(function(body) {
         repo.github = body;
-
       })));
 
     }));

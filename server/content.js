@@ -137,7 +137,7 @@ Content.prototype.downloadReposGithubInfo = function (callback) {
     }
 
     if (res.statusCode > 299) {
-      return callback(new Error('Github returned status:' + res.statusCode + ' for URL ' + JSON.stringify(url)));
+      return callback(new Error('Github returned status:' + res.statusCode + ' for URL ' + JSON.stringify(url) + '. Body: ' + JSON.stringify(body)));
     }
     
     var cfg = JSON.parse(body);
