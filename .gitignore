@@ -15,4 +15,5 @@ results
 node_modules
 npm-debug.log
 server/tmp/*
+!server/tmp/README
 server/conf.json

@@ -3,11 +3,13 @@
   "description": "A github based, open source documentation solution",
   "author": "hij1nx <hij1nx@me.com>",
   "version": "1.0.8",
-  "maintainers": [ "Pedro Teixeira <pedro@nodejitsu.com>" ],
+  "maintainers": [
+    "Pedro Teixeira <pedro@nodejitsu.com>"
+  ],
   "contributors": [
-    { 
-      "name": "Paolo Fragomeni", 
-      "email": "hij1nx@nodejitsu.com" 
+    {
+      "name": "Paolo Fragomeni",
+      "email": "hij1nx@nodejitsu.com"
     },
     {
       "name": "Pedro Teixeira",
@@ -16,7 +18,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "http://github.com/hubbleio/hubble.io.git" 
+    "url": "http://github.com/hubbleio/hubble.io.git"
   },
   "keywords": [
     "documentation",
@@ -33,14 +35,16 @@
     "request": "*",
     "plates": "*",
     "github-flavored-markdown": "*",
-    "highlight": "*",    
+    "highlight": "*",
     "tar": "*",
     "underscore": "*",
     "bubble": "*"
   },
-  "main": "./server/index",
-  "engines": { "node": ">= 0.4.0" },
+  "main": "./bin/launch",
+  "engines": {
+    "node": ">= 0.6.0"
+  },
   "scripts": {
-    "test": "vows --spec test/server/*/*-test.js"
+    "start": "bin/launch"
   }
 }
