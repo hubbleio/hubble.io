@@ -4,11 +4,9 @@ var sys = require('sys'),
     path = require('path'),
     fs = require('fs'),
     argv = require('optimist').argv,
-    Content = require('../server/content'),
     server = require('../server/server'),
-    conf = require('../server/conf.json')
-    assets = require('../server/assets')(conf);
-
+    conf = require('../server/conf.json');
+    
 var help = [
     "",
     "usage:".underline,
@@ -44,19 +42,22 @@ var config = {
   "host": argv.h || argv.host || '127.0.0.1'
 };
 
-var content = new Content(conf);
+server.createServer(config);
 
-function afterDownload() {
-  content.loadRepos(function(err) {
-    if (err) { throw err; }
-    content.aggregate();
-    content.compose(assets, content.repos);
-    server.createServer(assets, content, config);
-  });
-}
 
-if (! argv.c) {
-  content.downloadAll(afterDownload);
-} else {
-  afterDownload();
-}
+// var content = new Content(conf);
+
+// function afterDownload() {
+//   content.loadRepos(function(err) {
+//     if (err) { throw err; }
+//     content.aggregate();
+//     content.compose(assets, content.repos);
+//     server.createServer(assets, content, config);
+//   });
+// }
+
+// if (! argv.c) {
+//   content.downloadAll(afterDownload);
+// } else {
+//   afterDownload();
+// }
