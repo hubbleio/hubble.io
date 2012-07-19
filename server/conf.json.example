@@ -1,6 +1,15 @@
 {
   "orgname": "hubble.io",
+  "title": "Hubble.IO",
   "tagline": "Documentation powered by GitHub and Node.js",
+  "description": "Hubble.IO makes guides publications easier",
+  "content": {
+    "home": {
+      "beginner": "Beginner Intro",
+      "intermediate": "Intermediate Intro",
+      "expert": "Expert Intro"
+    }
+  },
   "auth": {
     "github": {
       "callback_uri": "http://localhost:8080/auth/github/callback", 

@@ -37,6 +37,8 @@ var conf = JSON.parse(fs.readFileSync('./server/conf.json'));
 var config = {
   "orgname": conf.orgname,
   "tagline": conf.tagline,
+  "title": conf.title,
+  "content": conf.content,
   "auth": conf.auth,
   "port": argv.p || argv.port || 8080,
   "host": argv.h || argv.host || '127.0.0.1'
