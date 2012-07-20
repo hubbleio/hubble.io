@@ -5,6 +5,7 @@ var sys = require('sys'),
     fs = require('fs'),
     argv = require('optimist').argv,
     server = require('../server/server'),
+    Content = require('../lib/content'),
     conf = require('../server/conf.json');
     
 var help = [
@@ -44,8 +45,11 @@ var config = {
   "host": argv.h || argv.host || '127.0.0.1'
 };
 
-server.createServer(config);
-
+var content = Content(config, function(err) {
+  if(err) { throw err; }
+  console.log('Content loaded');
+  server.createServer(config, content);
+});
 
 // var content = new Content(conf);
 

@@ -1,6 +1,6 @@
 var Templates       = require('../../lib/templates'),
-    Comments        = require('../comments'),
-    Github          = require('../github');
+    Comments        = require('../../lib/comments'),
+    Github          = require('../../lib/github');
 
     /*
     personalize     = require('../personalize');
@@ -19,8 +19,8 @@ function findRepo(name) {
   return repo;
 }
 
-module.exports = function(conf) {
-  var templates = Templates(conf, __dirname + '/../templates'),
+module.exports = function(conf, content) {
+  var templates = Templates(conf, __dirname + '/../templates', content),
       github   = Github(conf),
       comments = Comments(conf);
 

@@ -1,0 +1,11 @@
+{
+  "title": "Inspecting Data",
+  "description": "Using the `util` library's inspect function to visualize data ",
+  "date": "Fri Aug 26 2011 03:08:50 GMT-0700 (PST)",
+  "tags": ["core", "debug"],
+  "author": "Charlie McConnell",
+  "difficulty": 2,
+  "categories": [
+    ["Debugging"]
+  ]
+}

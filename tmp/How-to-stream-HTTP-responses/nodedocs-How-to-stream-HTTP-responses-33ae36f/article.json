@@ -1,0 +1,18 @@
+{
+	"title": "How to Stream HTTP Response",
+	"description": "Handling the HTTP Client Response as a Stream",
+	"date": "Mon, 13 Feb 2012 14:54:38 GMT",
+	"tags": ["http", "client", "response", "stream"],
+	"authors": [
+    { "name": "Pedro Teixeira",
+		  "email": "pedro.teixeira@gmail.com",
+		  "url": "https://github.com/pgte"
+    }
+	],
+	"difficulty": 5,
+	"categories": [
+	  ["Streams"],
+	  ["HTTP", "Client"],
+	  ["HTTP", "Server"]
+	]
+}

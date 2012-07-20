@@ -1,0 +1,15 @@
+{
+  "title": "Asynchronous Iterations",
+  "description": "How to synchronize asynchronous function calls",
+  "date": "Fri Aug 26 2011 03:08:50 GMT-0700 (PST)",
+  "tags": ["flow", "asynchronous"],
+  "authors": [
+    { "name": "Pedro Teixeira",
+		  "url": "https://github.com/pgte"
+    }
+  ],
+  "difficulty": 6,
+  "categories": [
+    ["Asynchronous Programming"]
+  ]
+}

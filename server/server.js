@@ -12,7 +12,7 @@ var director = require('director'),
 
 var server = exports;
 
-server.createServer = function(conf) {
+server.createServer = function(conf, content) {
 
 
   //
@@ -20,7 +20,7 @@ server.createServer = function(conf) {
   // for transforming static content or invoking services.
   //
 
-  var router = new director.http.Router(require('./routes')(conf));
+  var router = new director.http.Router(require('./routes')(conf, content));
 
   //
   // create a static file server for any generic requests

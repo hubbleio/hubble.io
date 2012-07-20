@@ -1,0 +1,19 @@
+{
+	"title": "How to Access Querystring Parameters",
+	"description": "Using the url module to parse the query string arguments in an URL",
+	"date": "Mon, 13 Feb 2012 14:54:38 GMT",
+	"tags": ["http", "url", "parsing"],
+	"authors": [
+	  { "name": "Nico Reed",
+		  "url": "https://github.com/nicoreed"
+    },
+    { "name": "Pedro Teixeira",
+		  "email": "pedro.teixeira@gmail.com",
+		  "url": "https://github.com/pgte"
+    }
+	],
+	"difficulty": 2,
+  "categories": [
+    ["HTTP", "Server"]
+  ]
+}

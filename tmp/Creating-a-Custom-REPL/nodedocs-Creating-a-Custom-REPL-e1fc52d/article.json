@@ -1,0 +1,16 @@
+{
+	"title": "Creating a Custom REPL",
+	"description": "Creating our own Read-Eval-Print-Loop",
+	"date": "Mon, 13 Feb 2012 14:54:38 GMT",
+	"tags": ["REPL", "custom"],
+	"authors": [
+	  { "name": "Josh Holbrook",
+		  "email": "josh.holbrook@gmail.com",
+		  "url": "https://github.com/jesusabdullah"
+    }
+	],
+	"difficulty": 5,
+	"categories": [
+	  ["REPL"]
+	]
+}
