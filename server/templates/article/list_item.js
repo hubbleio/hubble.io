@@ -8,7 +8,7 @@ module.exports = function(html, templates, conf, bind, Map, content) {
       title: article.name,
       url: '/articles/' + encodeURIComponent(article.name)
     };
-    return bind(data, html, map);
+    return bind(html, data, map);
   };
   
 };

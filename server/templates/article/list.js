@@ -10,7 +10,7 @@ module.exports = function(html, templates, conf, bind, map, content) {
       title: title,
       list: list
     };
-    return bind(data, html);
+    return bind(html, data);
   };
   
 };

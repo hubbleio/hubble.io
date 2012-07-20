@@ -15,7 +15,6 @@ module.exports = function(html, templates, conf, bind, Map) {
       expert: conf.content.home.expert
     };
 
-
     return bind(html, data);
   };
 

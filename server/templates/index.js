@@ -5,11 +5,12 @@ module.exports = function(html, templates, conf, bind, map, content) {
 
   return function() {
     var data = {
-      'guides-popular': templates('/article/list.html')('Most popular guides', popularGuides),
+      'guides-popular': templates('/article/list.html')('Popular guides', popularGuides),
       'guides-new':     templates('/article/list.html')('New guides', newGuides)
     };
 
-    var main = bind(data, html);
+    var main = bind(html, data);
+    console.log('main:', main);
     return templates('/layout.html')({
       main: main,
       title: 'Home',
