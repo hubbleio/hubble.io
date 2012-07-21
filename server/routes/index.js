@@ -46,9 +46,9 @@ module.exports = function(conf, content) {
         return templates('/index.html')();
       })
     },
-    '/index.html': {
+    '/contributors': {
       get: respond(function() {
-        return personalize.call(this, content.getIndex());
+        return templates('/contributors.html')();
       })
     },
     '/article/:name/like': {
