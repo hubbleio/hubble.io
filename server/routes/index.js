@@ -43,12 +43,12 @@ module.exports = function(conf, content) {
   var routes = {
     '/': {
       get: respond(function() {
-        return templates('/index.html')();
+        return templates('/index.html').call(this);
       })
     },
     '/contributors': {
       get: respond(function() {
-        return templates('/contributors.html')();
+        return templates('/contributors.html').call(this);
       })
     },
     '/article/:name/like': {

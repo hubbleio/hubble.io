@@ -5,6 +5,7 @@ module.exports = function(html, templates, conf, bind, map, content) {
 
   return function() {
     var data = {
+      'sign-in-with-github': (! this.req.session.user && templates('/user/sign_in_big_button.html')()) || '',
       'guides-popular': templates('/article/list.html')('Popular guides', popularGuides),
       'guides-new':     templates('/article/list.html')('New guides', newGuides)
     };
