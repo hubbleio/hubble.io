@@ -10,7 +10,6 @@ module.exports = function(html, templates, conf, bind, map, content) {
     };
 
     var main = bind(html, data);
-    console.log('main:', main);
     return templates('/layout.html')({
       main: main,
       title: 'Home',

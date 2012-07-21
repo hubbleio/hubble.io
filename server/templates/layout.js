@@ -1,10 +1,11 @@
-module.exports = function(html, templates, conf, bind, Map) {
+module.exports = function(html, templates, conf, bind, Map, content) {
   return function(options) {
     var map = Map();
     map.class('orgname').to('orgname');
 
     var data = {
       //menu: templates['categories.html'](categories),
+      categories: templates('/categories/menu.html')(content.index.categories),
       main: options.main,
       title: conf.title + ' - ' + options.title,
       orgname: conf.title,
