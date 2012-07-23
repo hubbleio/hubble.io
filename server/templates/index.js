@@ -31,7 +31,8 @@ module.exports = function(html, templates, conf, bind, map, content) {
       'intermediate-intro': conf.content.home.intermediate,
       'intermediate-some-articles': someArticles('intermediate'),
       'expert-intro': conf.content.home.expert,
-      'expert-some-articles': someArticles('expert')
+      'expert-some-articles': someArticles('expert'),
+      'contributor-list': templates('/author/list.html').call(this)
     };
 
     var main = bind(html, data);
