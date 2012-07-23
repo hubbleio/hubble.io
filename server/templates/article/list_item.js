@@ -5,7 +5,7 @@ module.exports = function(html, templates, conf, bind, Map, content) {
     map.class('title').to('title');
     map.class('title').to('url').as('href');
     var data = {
-      title: article.name,
+      title: article.meta.title,
       url: '/articles/' + encodeURIComponent(article.name)
     };
     return bind(html, data, map);
