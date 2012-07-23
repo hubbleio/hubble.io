@@ -122,24 +122,7 @@ module.exports = function(conf, content) {
         });
       })
     },
-    '/auth/logout': {
-      get: respond(function() {
-        githubAuth(conf.auth.github, this.req, this.res).logout();
-      })
-    },
-    '/auth/github/callback': {
-      get: respond(function() {
-        githubAuth(conf.auth.github, this.req, this.res).end();
-      }),
-      post: respond(function() {
-        githubAuth(conf.auth.github, this.req, this.res).end();
-      })
-    },
-    '/auth/github': {
-      get: respond(function() {
-        githubAuth(conf.auth.github, this.req, this.res).begin();
-      })
-    }
+    '/auth': require('./auth')(conf, respond)
   };
 
   return routes;
