@@ -11,7 +11,7 @@ module.exports = function(html, templates, conf, bind, map, content) {
     };
 
     var main = bind(html, data);
-    return templates('/layout.html')({
+    return templates('/layout.html').call(this, {
       main: main,
       title: 'Home',
       orgname: conf.title

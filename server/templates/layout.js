@@ -13,7 +13,10 @@ module.exports = function(html, templates, conf, bind, Map, content) {
       description: conf.description,
       beginner: conf.content.home.beginner,
       intermediate: conf.content.home.beginner,
-      expert: conf.content.home.expert
+      expert: conf.content.home.expert,
+      profile: this.req.session.user ?
+        templates('/user/profile.html').call(this) :
+        templates('/user/profile_not_logged_in.html').call(this)
     };
 
     return bind(html, data);
