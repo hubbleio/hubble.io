@@ -45,7 +45,9 @@ var config = {
   "host": argv.h || argv.host || '127.0.0.1'
 };
 
-var content = Content(config, function(err) {
+var download = ! argv.c;
+
+var content = Content(config, download, function(err) {
   if(err) { throw err; }
   console.log('Content loaded');
   server.createServer(config, content);
