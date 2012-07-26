@@ -7,8 +7,6 @@ module.exports = function(html, templates, conf, bind, Map, content) {
     var map = Map();
     map['class']('authors').to('authors');
 
-    console.log('authors:', authors);
-
     return authors.map(function(author) {
       var data = {
         authors: templates('/author/anchor_string.html').call(this, author)

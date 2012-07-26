@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(function() {
 	$(".collapse").collapse();
 	$('#requestModal').modal({
 	 keyboard: true, 

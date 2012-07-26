@@ -3783,6 +3783,10 @@ footer .navbar li:first-child {
 
 /* Contributors */
 
+.contributor {
+  margin-top: 20px;
+}
+
 .contributors li {
 	float: left;
 	margin: 0 10px 10px 0;
@@ -3857,6 +3861,10 @@ footer .navbar li:first-child {
 	background: url(../img/sprite.png) no-repeat -253px 0;
 }
 
+.contributor .meta li a[href=""] {
+  visibility: hidden;
+}
+
 .member li:nth-child(n+2) > a,
 .contributor li:nth-child(n+2) > a {
 	background-position: -280px 0;
@@ -3879,6 +3887,11 @@ footer .navbar li:first-child {
 section.contributors-listing {
 	overflow: auto;
 	margin-top: 50px;
+}
+
+
+.avatar {
+  list-style: none
 }
 
 /* 2.4 Level

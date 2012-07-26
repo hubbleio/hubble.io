@@ -2,8 +2,6 @@ module.exports = function(html, templates, conf, bind, Map, content) {
 
   return function() {
 
-    console.log('this.req', this.req);
-
     //
     // clone the categories so we can reduce it
     //
