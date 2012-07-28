@@ -5,10 +5,7 @@ module.exports = function(html, templates, conf, bind, Map, content) {
   return function(author, idx) {
 
     var map = Map();
-    map['class']('avatar').to('avatar');
-    map['class']('name').to('name');
-    map['class']('links').to('links');
-    map['class']('written-count').to('written_count');
+    map['class']('info').to('info');
     map['class']('some-articles').to('some_articles');
     map['class']('all-articles').to('all_articles');
     map.where('id').is('all-articles-1').use('all_articles_container_id').as('id');
@@ -16,10 +13,7 @@ module.exports = function(html, templates, conf, bind, Map, content) {
     //map['class']('btn-all-articles').to('fuuuck');
 
     var data = {
-      avatar: templates('/author/avatar.html').call(this, author),
-      name: author.meta.name,
-      links: templates('/author/links.html').call(this, author),
-      written_count: author.articles.length,
+      info: templates('/author/info.html').call(this, author),
       some_articles: templates('/article/simple_list.html').call(this, author.articles.slice(0, 2)),
       all_articles: author.articles.length > 2 ?
         templates('/article/simple_list.html').call(this, author.articles.slice(2)) :

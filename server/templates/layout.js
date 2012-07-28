@@ -1,8 +1,5 @@
 module.exports = function(html, templates, conf, bind, Map, content) {
   return function(options) {
-    var map = Map();
-    map.class('orgname').to('orgname');
-
     var data = {
       //menu: templates['categories.html'](categories),
       categories: templates('/categories/menu.html')(content.index.categories),
@@ -16,7 +13,8 @@ module.exports = function(html, templates, conf, bind, Map, content) {
       expert: conf.content.home.expert,
       profile: this.req.session.user ?
         templates('/user/profile.html').call(this) :
-        templates('/user/profile_not_logged_in.html').call(this)
+        templates('/user/profile_not_logged_in.html').call(this),
+      head: templates('/shared/head.html').call(this)
     };
 
     return bind(html, data);

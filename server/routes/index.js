@@ -1,6 +1,7 @@
 var Templates       = require('../../lib/templates'),
     Comments        = require('../../lib/comments'),
-    Github          = require('../../lib/github');
+    Github          = require('../../lib/github')
+    ;
 
     /*
     personalize     = require('../personalize');
@@ -51,58 +52,7 @@ module.exports = function(conf, content) {
         return templates('/contributors.html').call(this);
       })
     },
-    '/article/:name/like': {
-      post: respond(function(name) {
-        var repo = findRepo.call(this, name);
-        if (! repo) { return; }
-        github.like.call(this, repo);
-      })
-    },
-    '/article/:name/fork': {
-      post: respond(function(name) {
-        var repo = findRepo.call(this, name);
-        if (! repo) { return; }
-        github.fork.call(this, repo);
-      })
-    },
-    '/article/:name/comment': {
-      get: respond(function(name) {
-        var res = this.res;
-        var repo = findRepo.call(this, name);
-        if (! repo) { return; }
-        var discussion = this.req.query.discussion;
-        return assets['discussions/new_comment.html'].compose(repo, discussion);
-      }),
-      post: respond(function(name) {
-        var res  = this.res,
-            body = this.req.body,
-            repo = findRepo.call(this, name);
-
-        if (! repo) { return; }
-
-        function done(err) {
-          if (err) {
-            res.writeHead(500);
-            return res.end(err.message);
-          }
-          content.downloadComments(repo, function(err) {
-            content.composeRepo(assets, repo);
-            res.end();
-          });
-        }
-        
-        if (! body.discussion) {
-          comments.create.call(this, repo, done);
-        } else {
-          comments.reply.call(this, repo, body.discussion, body.body, done);
-        }
-      })
-    },
-    '/article/:name': {
-      get: respond(function(name) {
-        return personalize.call(this, content.getArticle(name));
-      })
-    },
+    '/articles': require('./article')(conf, content, templates, github, respond),
     '/tags/:tag': {
       get: respond(function(tag) {
         return personalize.call(this, content.getTag(tag));
