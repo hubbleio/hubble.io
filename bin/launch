@@ -42,7 +42,9 @@ var config = {
   "content": conf.content,
   "auth": conf.auth,
   "port": argv.p || argv.port || 8080,
-  "host": argv.h || argv.host || '127.0.0.1'
+  "host": argv.h || argv.host || '127.0.0.1',
+  "db": conf.db,
+  "email": conf.email
 };
 
 var download = ! argv.c;

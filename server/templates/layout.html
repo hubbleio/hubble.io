@@ -99,55 +99,14 @@
       <div class="modal-body">
         <p>Couldn’t find what you’re looking for? We’re all about helping each other so write down what you’d like to see! </p>
       
-      <div class="alert">
-       <button class="close" data-dismiss="alert">×</button>
-       <p>But first, it seems that you haven’t logged in yet. <a href="#">Do that with your Github account &rsaquo;</a></p>
-      </div>
-        
-        <form action="#" method="post">
-          <fieldset>
-              <input type="text" id="title" name="title" placeholder="Title of the article" required />
-              <textarea id="short-desc" name="short-desc" placeholder="Short description of the article" required></textarea>     
-              <div class="article-content">
-                <a href="#" class="btn">Preview the article</a>
-                <textarea id="content" name="content" placeholder="Article content" required></textarea> 
-              </div>     
-              
-              <div class="btn-container clearfix">
-              
-               <div class="btn-group">
-                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                  Select difficulty
-                  <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                <li><a href="#">Beginner</a></li>
-                <li><a href="#">Intermediate</a></li>
-                <li><a href="#">Advanced</a></li>
-                  <!-- dropdown menu links -->
-                </ul>
-              </div>
-              <!-- btn-group --> 
-  
-              <div class="btn-group">
-                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                  Choose categories
-                  <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                <li><a href="#">Category #1</a></li>
-                <li><a href="#">Category #2</a></li>
-                <li><a href="#">Category #3</a></li>
-                  <!-- dropdown menu links -->
-                </ul>
-              </div>  
-              <!-- btn-group -->            
-              </div>
-                        
-                  
-            <button type="submit" class=" btn btn-primary medium">Submit article</button>
-          </fieldset>
-        </form>
+        <div class="alert not-loggedin">
+         <button class="close" data-dismiss="alert">×</button>
+         <p>But first, it seems that you haven’t logged in yet. <a href="/auth/github">Do that with your Github account &rsaquo;</a></p>
+        </div>
+
+        <div class="modal-body-dynamic" data-source="/articles/new">
+        </div>
+
       </div>
       <!-- /modal-body -->
     </div>

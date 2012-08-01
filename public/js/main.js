@@ -8,12 +8,52 @@ $(function() {
 	  show: false
   });
 
+  //
+  // Form drop-down menus
+  //
+  $('form .dropdown-menu li a').live('click', function(ev) {
+    var $this = $(this);
+    var value = $this.attr('data-value') || $this.html();
+    console.log('value:', value);
+    var form = $this.parents('form');
+    $this.parentsUntil(form, '.btn-group')
+      .find('.dropdown-toggle')
+        .html(value + ' <span class="caret"></span>');
+
+    var argName = $this.parentsUntil(form, '.dropdown-menu').attr('data-name');
+    var hidden = form.find('input[name="' + argName + '"]');
+    if (hidden.size() < 1) {
+      var hidden = $('<input type="hidden" name="' + argName + '" />');
+      hidden.val(value);
+      hidden = form.append(hidden);
+    } else {
+      hidden.val(value);
+    }
+
+    ev.stopPropagation();
+    ev.preventDefault();
+  });
+
 
   $('.modal').on('show', function() {
-    console.log('modal show');
+    var $this = $(this);
     if (loggedIn) {
-      $(this).find('.alert.not-loggedin').hide();
+      $this.find('.alert.not-loggedin').hide();
+    } else {
+      $this.find('.loggedin-only').remove();
     }
+  });
+
+  $('.modal').on('shown', function() {
+    var $this = $(this);
+    if (! loggedIn) { return; }
+    var dynamic = $this.find('.modal-body-dynamic');
+    dynamic
+      .addClass('loading')
+      .load(dynamic.attr('data-source'), function() {
+        dynamic.removeClass('loading');
+      })
+      ;
   });
 
   //

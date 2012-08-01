@@ -1,6 +1,11 @@
-var githubAuth = require('../github_auth');
+var githubAuth     = require('../github_auth'),
+    Article        = require('../../lib/article'),
+    ArticleRequest = require('../article_request')
+    ;
 
-module.exports = function(conf, content, templates, github, respond) {
+module.exports = function(conf, content, templates, github, authenticated, respond) {
+
+  var articleRequest = ArticleRequest(conf);
 
   function findArticle(name, next) {
     var article = content.index.byName[name];
@@ -13,6 +18,33 @@ module.exports = function(conf, content, templates, github, respond) {
   }
 
   return {
+    post: authenticated(function() {
+      articleRequest.call(this, this.req.body);
+    }),
+    '/new': {
+      get: respond(function(name) {
+        return templates('/article/new.html').call(this);
+      })
+    },
+    '/preview': {
+      post: respond(function() {
+        var postedArticle = this.req.body;
+        var categories = [];
+        if (postedArticle.category) {
+          categories.push(postedArticle.category.split(' &gt; '));
+        }
+
+        var article = {
+          meta: {
+            categories: categories,
+            authors: []
+          },
+          markup: Article.markdownToMarkup(postedArticle.content)
+        };
+
+        return templates('/article/preview.html').call(this, article);
+      })
+    },
     '/:name/like': {
       post: respond(function(name) {
         findArticle.call(this, name, function(article) {

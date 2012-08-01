@@ -38,7 +38,9 @@
     "highlight": "*",
     "tar": "*",
     "underscore": "*",
-    "bubble": "*"
+    "bubble": "*",
+    "nano": "*",
+    "sendgrid-web": "*"
   },
   "main": "./bin/launch",
   "engines": {

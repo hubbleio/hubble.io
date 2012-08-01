@@ -16,5 +16,14 @@
       "client_id": "----client id----",
       "secret": "----secret-----"
     }
+  },
+  "db": {
+    "url": "http://localhost:5984"
+  },
+  "email": {
+    "sendgrid": {
+      "user": "me@me.com",
+      "key": "some secret key"
+    }
   }
 }

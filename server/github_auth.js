@@ -59,7 +59,6 @@ function githubOauth(conf, req, res) {
         }
         try { var user = JSON.parse(body); } catch (err) { return error(err); }
         req.session.user = user;
-        console.log('user is', req.session.user);
         req.session.github = {accessToken: accessToken};
         res.writeHead(302, {"Location": '/'});
         res.end();

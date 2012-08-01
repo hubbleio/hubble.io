@@ -25,6 +25,17 @@ module.exports = function(conf, content) {
       github   = Github(conf),
       comments = Comments(conf);
 
+  function authenticated(callback) {
+    return function() {
+      if (this.req.session && this.req.session.user) {
+        return callback.apply(this, arguments);
+      } else {
+        this.res.writeHead(403);
+        this.res.end('Forbidden');
+      }
+    };
+  }
+
   function respond(end) {
     return function() {
       try {
@@ -52,7 +63,7 @@ module.exports = function(conf, content) {
         return templates('/contributors.html').call(this);
       })
     },
-    '/articles': require('./article')(conf, content, templates, github, respond),
+    '/articles': require('./article')(conf, content, templates, github, authenticated, respond),
     '/tags/:tag': {
       get: respond(function(tag) {
         return personalize.call(this, content.getTag(tag));
