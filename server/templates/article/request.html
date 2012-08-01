@@ -16,7 +16,7 @@
     form.hide();
     $.post('/articles/suggestion', form.serialize(), function() {
       form.parent().removeClass('loading');
-      form.replaceWith('<p>Your article request has been submitted successfully. Our team will be in contact. Thanks!</p>');
+      form.replaceWith('<p>Your article suggestion has been submitted successfully. Our team will be in contact. Thanks!</p>');
     })
       .error(function(xhr) {
         var message = xhr.responseText || xhr.statusText;
