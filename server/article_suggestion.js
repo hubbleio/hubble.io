@@ -1,14 +1,14 @@
 var nano = require('nano'),
     Sendgrid = require('sendgrid-web');
 
-var database = 'article_requests';
-var requiredProps = ['title', 'short-desc', 'content', 'difficulty'];
-var props = ['title', 'short-desc', 'content', 'difficulty', 'category'];
+var database = 'article_suggestions';
+var requiredProps = ['question', 'email'];
+var props = requiredProps;
 
-function valid(articleRequest, messages) {
+function valid(articleSuggestion, messages) {
   
   function notPresent(attr) {
-    var not = ! articleRequest[attr];
+    var not = ! articleSuggestion[attr];
     if (not) {
       messages.push('Missing ' + attr);
     }
@@ -23,7 +23,7 @@ module.exports = function(config) {
   var db = nano(config.db.url).use(database);
   var sendgrid = new Sendgrid(config.email.sendgrid);
 
-  function validateAndCreate(articleRequest) {
+  function validateAndCreate(articleSuggestion) {
     var res = this.res,
         toInsert = {
           from: this.req.session.user
@@ -31,7 +31,7 @@ module.exports = function(config) {
         errors = []
     ;
     props.forEach(function(prop) {
-      toInsert[prop] = articleRequest[prop];
+      toInsert[prop] = articleSuggestion[prop];
     });
     if (valid(toInsert, errors)) {
       db.insert(toInsert, function(err, doc) {
@@ -43,7 +43,7 @@ module.exports = function(config) {
         sendgrid.send({
           to: config.email.to,
           from: config.email.from,
-          subject: "New Article Request",
+          subject: "New Article Suggestion",
           html: config.db.url + '/_utils/document.html?' + database + '/' + doc.id
         }, function(err) {
           if (err) {

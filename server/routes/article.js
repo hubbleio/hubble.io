@@ -1,11 +1,14 @@
 var githubAuth     = require('../github_auth'),
     Article        = require('../../lib/article'),
-    ArticleRequest = require('../article_request')
+    ArticleRequest = require('../article_request'),
+    ArticleSuggestion = require('../article_suggestion')
     ;
 
 module.exports = function(conf, content, templates, github, authenticated, respond) {
 
-  var articleRequest = ArticleRequest(conf);
+  var articleRequest    = ArticleRequest(conf),
+      articleSuggestion = ArticleSuggestion(conf)
+      ;
 
   function findArticle(name, next) {
     var article = content.index.byName[name];
@@ -43,6 +46,14 @@ module.exports = function(conf, content, templates, github, authenticated, respo
         };
 
         return templates('/article/preview.html').call(this, article);
+      })
+    },
+    '/suggestion': {
+      get: respond(function() {
+        return templates('/article/request.html').call(this);
+      }),
+      post: respond(function() {
+        articleSuggestion.call(this, this.req.body);
       })
     },
     '/:name/like': {

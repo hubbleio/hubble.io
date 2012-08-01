@@ -39,7 +39,6 @@
   //
   $('#submit-article').click(function(ev) {
     var form = $(this).parents('form');
-    form.blur();
     form.parent().addClass('loading');
     form.hide();
     $.post('/articles', form.serialize(), function() {

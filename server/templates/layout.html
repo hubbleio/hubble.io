@@ -77,14 +77,15 @@
       <!-- /modal-header -->
       <div class="modal-body">
         <p>Couldn’t find what you’re looking for? We’re all about helping each other so write down what you’d like to see! </p>
-        
-        <form action="#" method="post">
-          <fieldset>
-              <input type="text" id="email" name="email" placeholder="Your email" required />
-              <textarea id="question" name="question" placeholder="Your question or problem.." required></textarea>           
-            <button type="submit" class=" btn btn-primary medium">Submit request</button>
-          </fieldset>
-        </form>
+
+        <div class="alert not-loggedin">
+         <button class="close" data-dismiss="alert">×</button>
+         <p>But first, it seems that you haven’t logged in yet. <a href="/auth/github">Do that with your Github account &rsaquo;</a></p>
+        </div>
+
+        <div class="modal-body-dynamic" data-source="/articles/suggestion">
+        </div>
+
       </div>
       <!-- /modal-body -->
     </div>

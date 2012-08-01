@@ -1,0 +1,58 @@
+<form id="request-article" action="#" method="post">
+  <fieldset>
+      <input type="email" id="email" name="email" placeholder="Your email" required />
+      <textarea id="question" name="question" placeholder="Your question or problem.." required></textarea>           
+    <button type="submit" class=" btn btn-primary medium">Submit request</button>
+  </fieldset>
+</form>
+
+<script>
+  //
+  // New Article
+  //
+  $('#request-article').submit(function(ev) {
+    var form = $(this);
+    form.parent().addClass('loading');
+    form.hide();
+    $.post('/articles/suggestion', form.serialize(), function() {
+      form.parent().removeClass('loading');
+      form.replaceWith('<p>Your article request has been submitted successfully. Our team will be in contact. Thanks!</p>');
+    })
+      .error(function(xhr) {
+        var message = xhr.responseText || xhr.statusText;
+        try {
+          var reply = JSON.parse(xhr.responseText);
+          if (reply && reply.error) {
+            message = reply.error;
+          } 
+        } catch(err) {
+          // do nothing
+        }
+        form.parent().removeClass('loading');
+        form.show();
+        alert(message);
+      })
+      ;
+    ev.preventDefault();
+    ev.stopPropagation();
+    return false;
+  });
+
+  //
+  // Preview Article
+  //
+  $('#preview').click(function(ev) {
+
+    console.log('preview');
+
+    var $this = $(this);
+    var form = $this.parents('form');
+    console.log('form:', form);
+    form.submit();
+    
+    ev.preventDefault();
+    ev.stopPropagation();
+    return false;
+  });
+
+</script>
