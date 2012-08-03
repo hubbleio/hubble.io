@@ -1,0 +1,16 @@
+{
+  "title": "The Console Module",
+  "description": "Using the built-in console module to output structured info",
+  "date": "Mon, 13 Feb 2012 14:54:38 GMT",
+  "tags": ["core", "console", "cli", "globals"],
+  "authors": [
+    { "name": "Charlie McConnell",
+      "url": "https://github.com/avianflu"
+    }
+  ],
+  "difficulty": 1,
+  "categories": [
+    ["Debugging"],
+    ["Intro"]
+  ]
+}

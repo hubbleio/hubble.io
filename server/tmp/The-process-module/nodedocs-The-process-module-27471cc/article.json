@@ -1,0 +1,15 @@
+{
+  "title": "The process module",
+  "description": "Using the built-in process module to inspect your current process",
+  "date": "Mon, 13 Feb 2012 14:54:38 GMT",
+  "tags": ["core", "process", "globals"],
+  "authors": [
+    { "name": "Charlie McConnell",
+      "url": "https://github.com/avianflu"
+    }
+  ],
+  "difficulty": 2,
+  "categories": [
+    ["Intro"]
+  ]
+}

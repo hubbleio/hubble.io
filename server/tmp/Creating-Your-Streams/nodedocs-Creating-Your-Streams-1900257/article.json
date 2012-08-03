@@ -1,0 +1,15 @@
+{
+  "title": "Creating Your Streams",
+  "description": "How to create your own streams",
+  "date": "Fri Aug 26 2011 03:08:50 GMT-0700 (PST)",
+  "tags": ["streams", "events"],
+  "authors": [
+    { "name": "Pedro Teixeira",
+		  "url": "https://github.com/pgte"
+    }
+  ],
+  "difficulty": 8,
+  "categories": [
+    ["Streams"]
+  ]
+}

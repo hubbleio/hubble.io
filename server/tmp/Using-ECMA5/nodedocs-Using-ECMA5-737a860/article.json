@@ -1,0 +1,15 @@
+{
+  "title": "Using ECMA5",
+  "description": "What are the ECMA5 features in Node",
+  "date": "Mon, 13 Feb 2012 14:54:38 GMT",
+  "tags": ["core", "globals"],
+  "authors": [
+    {
+      "name": "Community"
+    }
+  ],
+  "difficulty": 3,
+  "categories": [
+    ["JavaScript"]
+  ]
+}

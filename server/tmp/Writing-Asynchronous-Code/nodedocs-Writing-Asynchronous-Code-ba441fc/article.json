@@ -1,0 +1,16 @@
+{
+  "title":"Writing asynchronous code",
+  "description": "Nodejs promotes an asynchronous coding style from the ground up, in contrast to many of the most popular web frameworks.",
+  "date": "Fri Aug 26 2011 03:08:50 GMT-0700 (PST)",
+  "tags": ["asynchronous", "callbacks", "event-emitters"],
+  "authors": [
+    { "name": "Nico Reed",
+      "url": "https://github.com/nicoreed"
+    }
+  ],
+  "difficulty": 3,
+  "categories": [
+    ["JavaScript"],
+    ["Asynchronous Programming"]
+  ]
+}

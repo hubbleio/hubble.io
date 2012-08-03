@@ -1,0 +1,17 @@
+{
+    "title": "TLS",
+    "description": "How To Use The TLS Module",
+    "date": "Fri Aug 26 2011 03:08:50 GMT-0700 (PST)",
+    "tags": ["core", "tls", "ssl", "secure"],
+    "authors": [
+      {
+      	"name": "Joshua Holbrook",
+      	"url": "https://github.com/jesusabdullah"
+      }
+    ],
+    "difficulty": 5,
+    "categories": [
+      ["TCP", "Server"],
+      ["Security", "TLS"]
+    ]
+}

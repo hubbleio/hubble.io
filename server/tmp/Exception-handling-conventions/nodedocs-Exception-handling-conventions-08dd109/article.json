@@ -1,0 +1,16 @@
+{
+    "title":"Exception handling conventions",
+    "description": "Conventions for handling errors",
+    "date": "Fri Aug 26 2011 03:08:50 GMT-0700 (PST)",
+    "tags": ["errors", "conventions"],
+    "authors": [
+      {
+	      "name": "Nico Reed",
+	      "url": "https://github.com/nicoreed"
+	  }    
+    ],
+    "difficulty": 1,
+    "categories": [
+      ["JavaScript"]
+    ]
+}

@@ -5,7 +5,7 @@ module.exports = function(html, templates, conf, bind, Map, content) {
       categories: templates('/categories/menu.html')(content.index.categories),
       main: options.main,
       title: conf.title + ' - ' + options.title,
-      orgname: conf.title,
+      orgname: '',
       tagline: conf.tagline,
       description: conf.description,
       beginner: conf.content.home.beginner,

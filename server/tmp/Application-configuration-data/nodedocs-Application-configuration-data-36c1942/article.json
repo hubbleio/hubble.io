@@ -1,0 +1,15 @@
+{
+  "title": "Application configuration data",
+  "description": "How to manage volitile application data",
+  "date": "Fri Aug 26 2011 03:08:50 GMT-0700 (PST)",
+  "tags": ["conventions", "filesystem"],
+  "authors": [
+    { "name": "Charlie McConnell",
+		  "url": "https://github.com/avianflu"
+    }
+  ],
+  "difficulty": 3,
+  "categories": [
+    ["File System"]
+  ]
+}

@@ -190,12 +190,12 @@ body {
 }
 
 a {
-  color: #426B92;
+  color: #427593;
   text-decoration: none;
 }
 
 a:hover {
-  color: #005580;
+  color: #427593;
   text-decoration: underline;
 }
 
@@ -2474,10 +2474,11 @@ input[type="submit"].btn.btn-mini {
 }
 
 .navbar-inner {
+  padding-top: 100px;
   min-height: 50px;
   padding-right: 20px;
   padding-left: 20px;
-  background-color: #000;
+  background-color: #555;
 }
 
 .nav-collapse.collapse {
@@ -2498,6 +2499,33 @@ input[type="submit"].btn.btn-mini {
 
 .collapse.in {
   height: auto;
+}
+
+.large-brand {
+  color: #fff;
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  width: 400px;
+  height: 50px;
+  font-family: "ProximaNovaRgRegular", Helvetica, Arial, sans-serif;
+  font-size: 3.5em;
+  font-weight: normal;
+  line-height: 1.1em;
+}
+
+.large-brand em {
+  color: #e9e9e9;
+  font-family: "ProximaNovaLtBold", Helvetica, Arial, sans-serif;
+  font-style: normal;
+}
+
+.large-brand .logo {
+  height: 58px;
+  width: 58px;
+  margin-right: 25px;
+  float: left;
+  background: url(../img/nodeguides.png) no-repeat;
 }
 
 .navbar {
@@ -2668,7 +2696,7 @@ input[type="submit"].btn.btn-mini {
   position: relative;
   left: 0;
   display: block;
-  float: left;
+  float: right;
   margin: 0 10px 0 0;
 }
 
@@ -2709,7 +2737,7 @@ input[type="submit"].btn.btn-mini {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   border-radius: 5px;
-  background-color: #222;
+  background-color: #323232;
 }
 
 .navbar .divider-vertical {
@@ -3578,7 +3606,7 @@ a.badge:hover {
 
 footer {
 	padding: 30px 0;
-	background: rgb(0, 0, 0);
+	background: #555;
 }
 
 footer p,
@@ -3590,6 +3618,10 @@ footer li {
 footer p {
 	margin: 0;
 	color: rgba(192, 192, 192, .5);
+}
+
+footer p a {
+  color: #fff;
 }
 
 footer .copyrights {
@@ -3622,6 +3654,7 @@ footer .navbar li {
 
 footer .navbar a {
 	display: block;
+  color: #fff;
 }
 
 footer .navbar li:nth-child(n+3) > a,
@@ -3682,10 +3715,9 @@ footer .navbar li:first-child {
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
-	background: #d3d3d3;
-	color: #636363;
-	border: 1px solid #a6a6a6;
-	box-shadow: 0 0 20px #9d9c9c inset;
+	background: #555;
+	color: #fff;
+	border: 1px solid #555;
 	text-align: center;
 }
 
@@ -3704,14 +3736,14 @@ footer .navbar li:first-child {
 }
 
 .topic-cloud:after {
-	border-bottom-color: #b7b6b6;
+	border-bottom-color: #555;
 	border-width: 10px;
 	left: 50%;
 	margin-left: -10px;
 }
 
 .topic-cloud:before {
-	border-bottom-color: #a6a6a6;
+	border-bottom-color: #555;
 	border-width: 11px;
 	left: 50%;
 	margin-left: -11px;

@@ -1,0 +1,15 @@
+{
+	"title": "Prompting for Command-line Input",
+	"description": "Asking input from the user on your command-line utility",
+	"date": "Mon, 13 Feb 2012 14:54:38 GMT",
+	"tags": ["command-line", "prompt"],
+	"authors": [
+	  { "name": "Charlie McConnell",
+		  "url": "https://github.com/avianflu"
+    }
+	],
+	"difficulty": 2,
+	"categories": [
+	  ["Command-line"]
+	]
+}

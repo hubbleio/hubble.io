@@ -1,0 +1,19 @@
+{
+	"title": "Handling Multipart Form Data",
+	"description": "Handling File uploads on the Server-side using node-formidable",
+	"date": "Mon, 13 Feb 2012 14:54:38 GMT",
+	"tags": ["http", "server", "upload", "multipart"],
+	"authors": [
+	  { "name": "Charlie McConnell",
+		  "url": "https://github.com/avianflu"
+    },
+    { "name": "Pedro Teixeira",
+		  "email": "pedro.teixeira@gmail.com",
+		  "url": "https://github.com/pgte"
+    }
+	],
+	"difficulty": 2,
+  "categories": [
+    ["HTTP", "Server"]
+  ]
+}
