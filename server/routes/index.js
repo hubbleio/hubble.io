@@ -69,11 +69,7 @@ module.exports = function(conf, content) {
         return personalize.call(this, content.getTag(tag));
       })
     },
-    '/categories/([\\w|\\s|-]+)': {
-      get: respond(function(category) {
-        return personalize.call(this, content.getCategory(category));
-      })
-    },
+    '/categories': require('./category')(conf, content, templates, respond),
     '/update/': {
       post: respond(function() {
         var that = this;
