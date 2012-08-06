@@ -17,3 +17,5 @@ npm-debug.log
 tmp/*
 !server/tmp/README
 server/conf.json
+public_old
+server2

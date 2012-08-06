@@ -9,8 +9,8 @@ module.exports = function(html, templates, conf, bind, Map, content) {
     map['class']('author').to('author_url').as('href');
 
     var data = {
-      author: author.name,
-      author_url: '/authors/' + encodeURIComponent(author.name)
+      author: author.meta.name,
+      author_url: '/authors/' + encodeURIComponent(author.meta.name)
     };
 
     return bind(html, data, map);

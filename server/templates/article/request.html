@@ -43,11 +43,8 @@
   //
   $('#preview').click(function(ev) {
 
-    console.log('preview');
-
     var $this = $(this);
     var form = $this.parents('form');
-    console.log('form:', form);
     form.submit();
     
     ev.preventDefault();

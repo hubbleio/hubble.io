@@ -59,7 +59,9 @@ $(function() {
   //
   // Rate Article
   //
-  $('.rate').click(function() {
+  $('.rate').click(function(ev) {
+    var button = $(this);
+    console.log(button.attr('href'));
     var modal = $('#rateModal');
     modal.modal();
     modal.on('shown', function() {
@@ -67,8 +69,8 @@ $(function() {
       if (loggedIn) {
         contentEl.html('<p>Loading...</p>');
         contentEl.addClass('loading');
-        var url = document.location.pathname + '/like';
-        console.log(url);
+        var url = button.attr('href') || (document.location.pathname + '/like');
+        
         $.post(url, function(content) {
           var url;
           try {
@@ -84,6 +86,10 @@ $(function() {
         });
       }
     });
+
+    ev.stopPropagation();
+    ev.preventDefault();
+    return false;
   });
 
   //
