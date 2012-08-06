@@ -70,6 +70,7 @@ module.exports = function(conf, content) {
       })
     },
     '/categories': require('./category')(conf, content, templates, respond),
+    '/levels': require('./level')(conf, content, templates, respond),
     '/update/': {
       post: respond(function() {
         var that = this;
