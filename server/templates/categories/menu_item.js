@@ -1,14 +1,22 @@
 module.exports = function(html, templates, conf, bind, Map, content) {
 
-  return function(category) {
+  var map = Map();
+  map['class']('category-item').to('name');
+  map['class']('category-item').to('url').as('href');
 
-    var map = Map();
-    map.class('category-item').to('name');
-    map.class('category-item').to('url').as('href');
+  return function(category, prefix) {
+
+    if (! prefix) {
+      prefix = '';
+    }
+    var name = prefix + category.name;
+    if (category.children && category.children.length) {
+      name += templates('/categories/menu_group.html').call(this, category.children, '› ');
+    }
 
     var data = {
-      name: category,
-      url: '/categories/' + encodeURIComponent(category)
+      name: name,
+      url: '/categories/' + encodeURIComponent(name)
     };
 
     return bind(html, data, map);
