@@ -17,7 +17,7 @@ module.exports = function(html, templates, conf, bind, Map, content) {
     
     return templates('/layout.html').call(this, {
       main: main,
-      title: category.name
+      title: parts.join(' - ')
     });
   };
 };
