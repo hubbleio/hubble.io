@@ -17,7 +17,7 @@ module.exports = function(html, templates, conf, bind, Map, content) {
     var data = {
       title: article.meta.title,
       authors: templates('/author/anchor_strings.html').call(this, article.meta.authors),
-      when: moment(article.meta.date).fromNow(),
+      when: moment(article.github.created_at).fromNow(),
       description: article.meta.description,
       url: url,
       rate_url: url + '/like'

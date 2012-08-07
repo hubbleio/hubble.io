@@ -6,7 +6,7 @@ module.exports = function(conf, content, templates, respond) {
       return templates('/contributors.html').call(this);
     }),
 
-    '/([\\w|\\s|-]+)': {
+    '/([\\w|\\s|-|\.]+)': {
 
       get: respond(function(authorName) {
         var author = content.index.byAuthor[authorName];
