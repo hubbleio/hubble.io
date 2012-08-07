@@ -26,7 +26,7 @@ server.createServer = function(conf, content) {
   // create a static file server for any generic requests
   // that do not require any special treatments.
   //
-  var file = new nstatic.Server('./public/');
+  var file = new nstatic.Server(__dirname + '/public/');
 
   //
   // stup a server and when there is a request, dispatch the
