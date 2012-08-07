@@ -16,7 +16,7 @@ module.exports = function(html, templates, conf, bind, Map, content) {
 
     var data = {
       name: name,
-      url: '/categories/' + encodeURIComponent(name)
+      url: '/categories/' + encodeURIComponent(category.id)
     };
 
     return bind(html, data, map);
