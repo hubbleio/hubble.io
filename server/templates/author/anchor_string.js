@@ -10,7 +10,7 @@ module.exports = function(html, templates, conf, bind, Map, content) {
 
     var data = {
       author: author.meta.name,
-      author_url: '/authors/' + encodeURIComponent(author.meta.name)
+      author_url: '/contributors/' + encodeURIComponent(author.meta.name)
     };
 
     return bind(html, data, map);

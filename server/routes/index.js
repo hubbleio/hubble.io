@@ -58,11 +58,7 @@ module.exports = function(conf, content) {
         return templates('/index.html').call(this);
       })
     },
-    '/contributors': {
-      get: respond(function() {
-        return templates('/contributors.html').call(this);
-      })
-    },
+    '/contributors': require('./contributor')(conf, content, templates, respond),
     '/articles': require('./article')(conf, content, templates, github, authenticated, respond),
     '/tags/:tag': {
       get: respond(function(tag) {
