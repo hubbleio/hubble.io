@@ -1,6 +1,10 @@
 module.exports = function(html, templates, conf, bind, Map, content) {
 
   return function(parts) {
+
+    if (! Array.isArray(parts)) {
+      parts = [parts];
+    }
     
     var data = {
       breadcrumb: parts.map(function(part, idx) {

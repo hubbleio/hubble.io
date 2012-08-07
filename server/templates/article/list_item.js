@@ -12,7 +12,7 @@ module.exports = function(html, templates, conf, bind, Map, content) {
   return function(article) {
     var data = {
       title: article.meta.title,
-      url: '/articles/' + encodeURIComponent(article.name),
+      url: '/guides/' + encodeURIComponent(article.name),
       authors: templates('/author/anchor_strings.html').call(this, article.meta.authors),
       published_when: moment(article.github.updated_at).fromNow(),
       intro: article.meta.description

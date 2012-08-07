@@ -8,7 +8,7 @@ module.exports = function(html, templates, conf, bind, Map, content) {
     var data = articles.map(function(article) {
       return {
         title: article.meta.title,
-        url: '/articles/' + encodeURIComponent(article.name)
+        url: '/guides/' + encodeURIComponent(article.name)
       };
     });
     return bind(html, data, map);

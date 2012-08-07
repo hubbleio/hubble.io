@@ -1,4 +1,4 @@
-<form action="/articles/preview" target="article-preview" method="post" class="loggedin-only" id="new-article">
+<form action="/guides/preview" target="article-preview" method="post" class="loggedin-only" id="new-article">
   <fieldset>
     <input type="text" id="title" name="title" placeholder="Title of the article" required />
     <textarea id="short-desc" name="short-desc" placeholder="Short description of the article" required></textarea>     
@@ -41,7 +41,7 @@
     var form = $(this).parents('form');
     form.parent().addClass('loading');
     form.hide();
-    $.post('/articles', form.serialize(), function() {
+    $.post('/guides', form.serialize(), function() {
       form.parent().removeClass('loading');
       form.replaceWith('<p>Your article request has been submitted successfully. Our team will be in contact. Thanks!</p>');
     })

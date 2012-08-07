@@ -12,7 +12,7 @@ module.exports = function(html, templates, conf, bind, Map, content) {
 
   return function(article) {
 
-    var url = '/articles/' + encodeURIComponent(article.name);
+    var url = '/guides/' + encodeURIComponent(article.name);
 
     var data = {
       title: article.meta.title,

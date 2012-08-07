@@ -14,7 +14,7 @@
     var form = $(this);
     form.parent().addClass('loading');
     form.hide();
-    $.post('/articles/suggestion', form.serialize(), function() {
+    $.post('/guides/suggestion', form.serialize(), function() {
       form.parent().removeClass('loading');
       form.replaceWith('<p>Your article suggestion has been submitted successfully. Our team will be in contact. Thanks!</p>');
     })

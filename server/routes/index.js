@@ -59,7 +59,7 @@ module.exports = function(conf, content) {
       })
     },
     '/contributors': require('./contributor')(conf, content, templates, respond),
-    '/articles': require('./article')(conf, content, templates, github, authenticated, respond),
+    '/guides': require('./article')(conf, content, templates, github, authenticated, respond),
     '/tags/:tag': {
       get: respond(function(tag) {
         return personalize.call(this, content.getTag(tag));
