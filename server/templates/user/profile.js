@@ -1,3 +1,9 @@
+function makeSafe(text) {
+  return text.replace(/\W/g, function (chr) {
+    return '&#' + chr.charCodeAt(0) + ';';
+  });
+}
+
 module.exports = function(html, templates, conf, bind, Map, content) {
 
   return function() {
@@ -9,7 +15,7 @@ module.exports = function(html, templates, conf, bind, Map, content) {
     map['class']('username').to('username');
 
     var data = {
-      username: this.req.session.user.login
+      username: makeSafe(this.req.session.user.login)
     };
 
     return bind(html, data, map);
