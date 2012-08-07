@@ -2,7 +2,10 @@ module.exports = function(html, templates, conf, bind, Map, content) {
 
   return function(level, articles) {
 
-    var parts = [level];
+    var parts = [{
+      url: '/levels/' + encodeURIComponent(level),
+      label: level
+    }];
 
     var data = {
       breadcrumb: templates('/shared/breadcrumb.html').call(this, parts),

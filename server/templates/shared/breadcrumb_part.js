@@ -5,9 +5,11 @@ module.exports = function(html, templates, conf, bind, Map, content) {
   map['class']('category-name').to('url').as('href');
 
   return function(part) {
+    var url = part.url || ('/categories/' + encodeURIComponent(part));
+    var name = part.label || part;
     var data = {
-      url: '/categories/' + encodeURIComponent(part),
-      'name': part
+      url: url,
+      'name': name
     };
     return bind(html, data, map);
   };
