@@ -1891,10 +1891,14 @@ button.close {
 }
 
 .btn.rate span,
-.btn.fork span {
+.btn.fork span,
+.btn.github span {
 	display: inline-block;
 	float: left;
 	height: 16px;
+}
+.btn.github span {
+  height: 25px;
 }
 
 .btn.rate span {
@@ -1907,6 +1911,12 @@ button.close {
 	width: 12px;
 	margin: 7px 5px 0 0;
 	background: url(../img/sprite.png) no-repeat -290px -64px;
+}
+
+.btn.github span {
+  width: 20px;
+  margin: 7px 5px 0 10px;
+  background: url(../img/sprite.png) no-repeat -280px 0px;
 }
 
 .btn-all-articles {

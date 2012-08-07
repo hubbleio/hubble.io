@@ -1,5 +1,11 @@
 module.exports = function(html, templates, conf, bind, Map, content) {
 
+  var map = Map();
+  map.where('href').is('/to-github').use('github_url').as('href');
+  map['class']('breadcrumbs').to('breadcrumbs');
+  map['class']('article-body').to('article-body');
+  map['class']('author').to('author');
+
   return function(article) {
 
     var previous;
@@ -18,10 +24,12 @@ module.exports = function(html, templates, conf, bind, Map, content) {
       
       author: article.meta.authors.map(function(author) {
         return templates('/author/in_article.html').call(this, author, article);
-      }).join('')
+      }).join(''),
+
+      github_url: article.github.html_url
     };
 
-    var main = bind(html, data);
+    var main = bind(html, data, map);
     return templates('/layout.html').call(this, {
       main: main,
       title: article.meta.title
