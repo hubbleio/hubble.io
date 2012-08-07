@@ -2692,6 +2692,11 @@ input[type="submit"].btn.btn-mini {
   bottom: 0;
 }
 
+.navbar a {
+  text-decoration: none;
+  color: inherit;
+}
+
 .navbar .nav {
   position: relative;
   left: 0;
