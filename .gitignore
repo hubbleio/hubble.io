@@ -16,6 +16,6 @@ node_modules
 npm-debug.log
 tmp/*
 !tmp/README
-server/conf.json
+config/*.json
 public_old
 server2

@@ -2,7 +2,7 @@
   "name": "nodeguides",
   "description": "A github based, open source documentation solution",
   "author": "hij1nx <hij1nx@me.com>",
-  "version": "1.1.0-14",
+  "version": "1.1.0-15",
   "maintainers": [
     "Pedro Teixeira <pedro@nodejitsu.com>"
   ],
@@ -40,7 +40,8 @@
     "underscore": "*",
     "bubble": "*",
     "nano": "*",
-    "sendgrid-web": "*"
+    "sendgrid-web": "*",
+    "konphyg": "*"
   },
   "main": "./bin/launch",
   "engines": {

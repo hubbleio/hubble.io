@@ -6,7 +6,7 @@ var sys = require('sys'),
     argv = require('optimist').argv,
     server = require('../server/server'),
     Content = require('../lib/content'),
-    conf = require('../server/conf.json');
+    conf = require('konphyg')(__dirname + '/../config')('conf');
     
 var help = [
     "",
@@ -26,8 +26,6 @@ var help = [
 if (argv.h || argv.help) {
   return console.log(help);
 }
-
-var conf = JSON.parse(fs.readFileSync('./server/conf.json'));
 
 ['orgname', 'tagline'].forEach(function(val, index) {
   if(!conf[val]) {
