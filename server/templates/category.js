@@ -8,7 +8,7 @@ module.exports = function(html, templates, conf, bind, Map, content) {
     var data = {
       breadcrumb: templates('/shared/breadcrumb.html').call(this, parts),
       'level-articles': category.articles.map(function(article) {
-        return templates('/article/short.html').call(this, article);
+        return templates('/article/short.html').call(this, article, '/categories/' + encodeURIComponent(category.id));
       }).join(''),
       title: category.name
     };

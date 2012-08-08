@@ -4,20 +4,20 @@ var githubAuth     = require('../github_auth'),
     ArticleSuggestion = require('../article_suggestion')
     ;
 
-module.exports = function(conf, content, templates, github, authenticated, respond) {
+module.exports = function(conf, content, templates, github, authenticated, respond, inCategory) {
 
   var articleRequest    = ArticleRequest(conf),
       articleSuggestion = ArticleSuggestion(conf)
       ;
 
-  function findArticle(name, next) {
+  function findArticle(cat, name, next) {
     var article = content.index.byName[name];
     if (! article) {
       this.res.writeHead(404);
       this.res.end('Not Found');
       return;
     }
-    return next.call(this, article);
+    return next.call(this, cat, article, inCategory);
   }
 
   return {
@@ -104,8 +104,22 @@ module.exports = function(conf, content, templates, github, authenticated, respo
       })
     },
     '/:name': {
-      get: respond(function(name) {
-        return findArticle.call(this, name, templates('/article.html'));
+      get: respond(function(cat, name) {
+        if (! inCategory) {
+          name = cat;
+          cat = undefined;
+          findArticle.call(this, cat, name, function(cat, article) {
+            if (article.meta.categories.length) {
+              cat = article.meta.categories[0];
+              cat = content.index.searchCategory(cat);
+              var url = '/categories/' + encodeURIComponent(cat.id) + '/guides/' + encodeURIComponent(article.name);
+              this.res.writeHead(301, {Location: url});
+              this.res.end();
+              return;
+            }
+          });
+        }
+        return findArticle.call(this, cat, name, templates('/article.html'));
       })
     }
   };

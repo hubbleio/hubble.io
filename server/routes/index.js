@@ -46,11 +46,20 @@ module.exports = function(conf, content) {
         }
       } catch(err) {
         console.error(err.stack);
-        this.res.writeHead(500, { 'Content-Type': 'text/html'});
-        this.res.end(templates('/error.html'));
+        if (! this.res.finished) {
+          try {
+            this.res.writeHead(500, { 'Content-Type': 'text/html'});
+          } catch(err2) {
+            console.error(err2.stack);
+          }
+          
+          this.res.end(templates('/error.html'));
+        }
       }
     };
   }
+
+  var articleRoutes = require('./article');
 
   var routes = {
     '/': {
@@ -59,13 +68,13 @@ module.exports = function(conf, content) {
       })
     },
     '/contributors': require('./contributor')(conf, content, templates, respond),
-    '/guides': require('./article')(conf, content, templates, github, authenticated, respond),
+    '/guides': articleRoutes(conf, content, templates, github, authenticated, respond),
     '/tags/:tag': {
       get: respond(function(tag) {
         return personalize.call(this, content.getTag(tag));
       })
     },
-    '/categories': require('./category')(conf, content, templates, respond),
+    '/categories': require('./category')(conf, content, templates, github, authenticated, articleRoutes, respond),
     '/levels': require('./level')(conf, content, templates, respond),
     '/update/': {
       post: respond(function() {

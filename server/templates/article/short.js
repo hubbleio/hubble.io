@@ -10,9 +10,13 @@ module.exports = function(html, templates, conf, bind, Map, content) {
   map.where('href').is('/to-article').use('url').as('href');
   map.where('href').is('/rate').use('rate_url').as('href');
 
-  return function(article) {
+  return function(article, urlPrefix) {
 
-    var url = '/guides/' + encodeURIComponent(article.name);
+    if (! urlPrefix) {
+      urlPrefix = '';
+    }
+
+    var url = urlPrefix + '/guides/' + encodeURIComponent(article.name);
 
     var data = {
       title: article.meta.title,

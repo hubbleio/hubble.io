@@ -6,10 +6,37 @@ module.exports = function(html, templates, conf, bind, Map, content) {
   map['class']('article-body').to('article-body');
   map['class']('author').to('author');
 
-  return function(article) {
+  return function(cat, article, inCategory) {
 
     var previous;
-    var next = '/direita';
+    var next;
+
+    function articleURL(article) {
+      //if (! article) { return ''; }
+      url = '';
+      if (cat) {
+        url += '/categories/' + encodeURIComponent(cat.id);
+      }
+      url += '/guides/' + encodeURIComponent(article.name);
+      return url;
+    }
+
+    if (!cat) {
+      cat = article.meta.categories[0];
+    }
+    if (('object' !== typeof cat) || Array.isArray(cat)) {
+      cat = content.index.searchCategory(cat);
+    }
+    
+    if (cat) {
+      var idx = cat.articles.indexOf(article);
+      if (idx > 0) {
+        previous = articleURL(cat.articles[idx - 1]);
+      }
+      if (idx > -1 && idx < cat.articles.length - 1) {
+        next = articleURL(cat.articles[idx + 1]);
+      }
+    }
 
     var data = {
       
