@@ -2,7 +2,7 @@
   "name": "nodeguides",
   "description": "A github based, open source documentation solution",
   "author": "hij1nx <hij1nx@me.com>",
-  "version": "1.1.0-6",
+  "version": "1.1.0-14",
   "maintainers": [
     "Pedro Teixeira <pedro@nodejitsu.com>"
   ],
@@ -49,5 +49,5 @@
   "scripts": {
     "start": "bin/launch"
   },
-  "subdomain": "nodedocs"
+  "subdomain": "nodeguides"
 }
