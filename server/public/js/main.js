@@ -2,11 +2,18 @@ $(function() {
 
   var loggedIn = $('meta[name="logged-in"]').attr('content') === 'true';
 
-	$(".collapse").collapse();
-	$('#requestModal').modal({
-	  keyboard: true,
-	  show: false
+  $(document).ajaxError(function(e, xhr) {
+    if (xhr.status == 403) {
+      if (confirm('You have been logged out. Click Ok to log in using GitHub.')) {
+        document.location = '/auth/github';
+      }
+    } else {
+      alert('Some error happened, please try again later.');
+    }
   });
+
+	$(".collapse").collapse();
+	$('#requestModal').modal({ keyboard: true, show: false });
 
   //
   // Form drop-down menus
