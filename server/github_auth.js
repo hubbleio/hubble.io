@@ -19,10 +19,11 @@ function buildURI() {
 function githubOauth(conf, req, res) {
 
   function begin() {
+    var callbackURI = conf.callback_uri + '?redir=' + encodeURIComponent(req.headers.referer);
     res.writeHead(302, {"Location": buildURI(
         GITHUB_OAUTH_URI_BASE + '/authorize?',
         'client_id', conf.client_id,
-        'redirect_uri', conf.callback_uri,
+        'redirect_uri', callbackURI,
         'scope', 'public_repo'
     )});
     res.end();
@@ -60,7 +61,8 @@ function githubOauth(conf, req, res) {
         try { var user = JSON.parse(body); } catch (err) { return error(err); }
         req.session.user = user;
         req.session.github = {accessToken: accessToken};
-        res.writeHead(302, {"Location": '/'});
+        var redirURL = req.query && req.query.redir || '/';
+        res.writeHead(302, {"Location": redirURL});
         res.end();
       });
     });
