@@ -95,7 +95,7 @@ $(function() {
   //
   // Fork Article
   //
-  $('.fork').click(function() {
+  $('.fork').click(function(ev) {
     var modal = $('#forkModal');
     modal.modal();
     modal.on('shown', function() {
@@ -120,6 +120,10 @@ $(function() {
         });
       }
     });
+
+    ev.stopPropagation();
+    ev.preventDefault();
+    return false;
   });
 
 });
