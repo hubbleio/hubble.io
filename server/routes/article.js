@@ -57,28 +57,48 @@ module.exports = function(conf, content, templates, github, authenticated, respo
       })
     },
     '/:name/like': {
-      post: respond(function(name) {
-        findArticle.call(this, name, function(article) {
+      post: respond(function(cat, name) {
+        if (! inCategory) {
+          name = cat;
+          cat = undefined;
+        }
+
+        findArticle.call(this, cat, name, function(cat, article) {
           github.like.call(this, article);
         });
       })
     },
     '/:name/fork': {
-      post: respond(function(name) {
-        findArticle.call(this, name, function(article) {
+      post: respond(function(cat, name) {
+        if (! inCategory) {
+          name = cat;
+          cat = undefined;
+        }
+
+        findArticle.call(this, cat, name, function(cat, article) {
           github.fork.call(this, article);
         });
       })
     },
     '/:name/comment': {
-      get: respond(function(name) {
+      get: respond(function(cat, name) {
+        if (! inCategory) {
+          name = cat;
+          cat = undefined;
+        }
+
         var res = this.res;
         var repo = findRepo.call(this, name);
         if (! repo) { return; }
         var discussion = this.req.query.discussion;
         return assets['discussions/new_comment.html'].compose(repo, discussion);
       }),
-      post: respond(function(name) {
+      post: respond(function(cat, name) {
+        if (! inCategory) {
+          name = cat;
+          cat = undefined;
+        }
+
         var res  = this.res,
             body = this.req.body,
             repo = findRepo.call(this, name);
