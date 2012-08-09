@@ -2,6 +2,9 @@ $(function() {
 
   var loggedIn = $('meta[name="logged-in"]').attr('content') === 'true';
 
+  //
+  // Handle AJAX errors
+  //
   $(document).ajaxError(function(e, xhr) {
     if (xhr.status == 403) {
       if (confirm('You have been logged out. Click Ok to log in using GitHub.')) {
