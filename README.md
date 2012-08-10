@@ -23,30 +23,31 @@ Socially-centric open source documentation.
 ## Installation
 
 ```bash
-  $npm install hubbleio
+  $ git clone git://github.com/hubbleio/hubble.io.git
+  $ cd hubble.io
 ```
 
 ## Usage
 
 ### Setup configuration
 
-Copy the `server/conf.json.example' into `server/conf.json` and edit at will.
+Copy the `config/conf.json.example' into `config/conf.json` and edit at will.
 
-    $ cp server/conf.json.example server/conf.json
-    $ edit server/conf.json
+    $ cp config/conf.json.example config/conf.json
+    $ edit config/conf.json
 
 ### Start the server
 
 Starting up the server but downloading the repos first:
 
 ```bash
-  $ bin/launch -d
+  $ bin/launch
 ```
 
-If you don't want this to download the repos, you can omit the "-d" flag:
+If you don't want this to download the repos, you can use the "-c" flag:
 
 ```bash
-  $ bin/launch
+  $ bin/launch -c
 ```
 
 Access via browser to [http://localhost:8080](http://localhost:8080).
