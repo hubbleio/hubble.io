@@ -47,25 +47,8 @@ var config = {
 
 var download = ! argv.c;
 
-var content = Content(config, download, function(err) {
+Content(config, download, function(err, content) {
   if(err) { throw err; }
   console.log('Content loaded');
   server.createServer(config, content);
 });
-
-// var content = new Content(conf);
-
-// function afterDownload() {
-//   content.loadRepos(function(err) {
-//     if (err) { throw err; }
-//     content.aggregate();
-//     content.compose(assets, content.repos);
-//     server.createServer(assets, content, config);
-//   });
-// }
-
-// if (! argv.c) {
-//   content.downloadAll(afterDownload);
-// } else {
-//   afterDownload();
-// }

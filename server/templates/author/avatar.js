@@ -12,7 +12,13 @@ module.exports = function(html, templates, conf, bind, Map, content) {
     if (author.meta.email) {
       var emailHash = crypto.createHash('md5').update(author.meta.email.toLowerCase()).digest('hex');
       avatarURL = '//www.gravatar.com/avatar/' + encodeURIComponent(emailHash);
-    } else {
+    }
+    if (! avatarURL) {
+      if (author.meta.github_info && author.meta.github_info.avatar_url) {
+        avatarURL = author.meta.github_info.avatar_url;
+      }
+    }
+    if (! avatarURL) {
       avatarURL = '/img/no_avatar.jpg';
     }
 
