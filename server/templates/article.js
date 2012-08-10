@@ -39,7 +39,7 @@ module.exports = function(html, templates, conf, bind, Map, content) {
     }
 
     var data = {
-      
+
       'breadcrumbs': article.meta.categories.map(function(catList) {
         return templates('/shared/breadcrumb.html').call(this, catList);
       }).join(''),

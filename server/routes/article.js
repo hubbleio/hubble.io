@@ -31,21 +31,32 @@ module.exports = function(conf, content, templates, github, authenticated, respo
     },
     '/preview': {
       post: respond(function() {
+        var res = this.res;
         var postedArticle = this.req.body;
         var categories = [];
         if (postedArticle.category) {
           categories.push(postedArticle.category.split(' &gt; '));
         }
 
-        var article = {
-          meta: {
-            categories: categories,
-            authors: []
-          },
-          markup: Article.markdownToMarkup(postedArticle.content)
-        };
+        github.markdownToMarkup(postedArticle.content, function(err, markup) {
+          if (err) {
+            res.writeHead(500);
+            return res.end(err.stack);
+          }
 
-        return templates('/article/preview.html').call(this, article);
+          var article = {
+            meta: {
+              categories: categories,
+              authors: []
+            },
+            markup: markup
+          };
+
+          res.writeHead(200);
+          res.end(templates('/article/preview.html').call(this, article));
+
+        });
+
       })
     },
     '/suggestion': {

@@ -1,5 +1,13 @@
 #!/usr/bin/env node
 
+// if (process.env.NODE_ENV !== 'production') {
+//   process.logging = function(module) {
+//     return function() {
+//       console.log('[' + module + '] ', arguments);
+//     };
+//   };
+// }
+
 var sys = require('sys'),
     path = require('path'),
     fs = require('fs'),
@@ -48,7 +56,7 @@ var config = {
 var download = ! argv.c;
 
 Content(config, download, function(err, content) {
-  if(err) { throw err; }
+  if (err) { throw err; }
   console.log('Content loaded');
   server.createServer(config, content);
 });

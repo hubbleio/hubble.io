@@ -10,8 +10,6 @@ module.exports = function(conf, content, templates, github, authenticated, artic
             category
             ;
 
-        console.log('category parts:', categoryParts);
-        
         while (categoryParts.length) {
           var part = categoryParts.splice(0, 1)[0];
           category = children[part];
