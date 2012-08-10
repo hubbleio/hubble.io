@@ -1,0 +1,82 @@
+<form action="/guides/preview" target="article-preview" method="post" class="loggedin-only" id="new-article">
+  <fieldset>
+    <input type="text" id="title" name="title" placeholder="Title of the article" required />
+    <textarea id="short-desc" name="short-desc" placeholder="Short description of the article" required></textarea>     
+    <div class="article-content">
+      <a href="#" id="preview" class="btn">Preview the article</a>
+      <textarea id="content" name="content" placeholder="Article content" required></textarea> 
+    </div>     
+    
+    <div class="btn-container clearfix">
+    
+      <div class="btn-group">
+        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+          Select difficulty
+          <span class="caret"></span>
+        </a>
+      <ul class="dropdown-menu" id="difficulty-levels" data-name="difficulty">
+      </ul>
+    </div>
+    <!-- btn-group --> 
+
+    <div class="btn-group">
+      <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+        Choose a category
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu" id="categories" data-name="category">
+      </ul>
+    </div>  
+    <!-- btn-group -->            
+        
+    <button type="submit" id="submit-article" class=" btn btn-primary medium">Submit article</button>
+  </fieldset>
+</form>
+
+<script>
+  //
+  // New Article
+  //
+  $('#submit-article').click(function(ev) {
+    var form = $(this).parents('form');
+    form.parent().addClass('loading');
+    form.hide();
+    $.post('/guides', form.serialize(), function() {
+      form.parent().removeClass('loading');
+      form.replaceWith('<p>Your article request has been submitted successfully. Our team will be in contact. Thanks!</p>');
+    })
+      .error(function(xhr) {
+        var message = xhr.responseText || xhr.statusText;
+        try {
+          var reply = JSON.parse(xhr.responseText);
+          if (reply && reply.error) {
+            message = reply.error;
+          } 
+        } catch(err) {
+          // do nothing
+        }
+        form.parent().removeClass('loading');
+        form.show();
+        alert(message);
+      })
+      ;
+    ev.preventDefault();
+    ev.stopPropagation();
+    return false;
+  });
+
+  //
+  // Preview Article
+  //
+  $('#preview').click(function(ev) {
+
+    var $this = $(this);
+    var form = $this.parents('form');
+    form.submit();
+    
+    ev.preventDefault();
+    ev.stopPropagation();
+    return false;
+  });
+
+</script>

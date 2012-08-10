@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head id="head">
+  </head>
+
+  <body>
+
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+        
+          <div class="large-brand">
+              <a href="/" class="logo"></a><a href="/">node<em>guides</em></a>
+            </a>
+          </div>
+
+
+          <a href="#" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          
+          <a class="brand" href="/" id="orgname"></a>
+          <div class="nav-collapse">
+            <ul class="nav" role="navigation">
+              <li><a href="#categories" data-toggle="collapse" data-target="#categories">Categories</a></li>
+              <li><a href="/contributors">Contributors</a></li>
+              <li><a data-toggle="modal" href="#submitModal">Submit an article</a></li>
+              <li><a data-toggle="modal" href="#requestModal">Request an article</a></li>
+              <li><a href="#">FAQ</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+          
+          <div class="profile">
+          </div>
+          <!-- /.profile -->
+          
+        </div>
+
+      </div>
+      <!-- /.navbar-inner -->
+
+      <div id="categories" class="collapse in">
+      </div>
+      <!-- /#categories -->     
+
+    </div>
+    <!-- /.navbar -->
+
+    <div class="container" id="main">
+    </div> <!-- /container -->
+    
+    <footer role="contentinfo">
+    
+      <div class="container">
+    
+        <div class="copyrights">
+          <p>We make node.js accessible to all. And we love Open Source.</p>
+          <p>&copy; Company 2012 NodeGuides. Protected by <a href="http://creativecommons.org/">Creative Commons 3.0</a></p>
+          
+          <p class="powered">Powered by <a href="https://github.com/hubbleio/hubble.io" class="ir">hubble.io<span></span></a></p>           
+        </div>
+        <!-- / copyrights -->
+    
+        
+        <ul class="navbar unstyled">
+          <li><a href="#">About</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Twitter</a></li>
+          <li><a href="#">Github</a></li>
+        </ul>
+        
+      </div> <!-- /container -->
+        
+    </footer>
+      
+    <div class="modal fade" id="requestModal">
+      <div class="modal-header">
+       <button class="close" data-dismiss="modal"></button>
+       <h2>Request an article</h2>
+      </div>
+      <!-- /modal-header -->
+      <div class="modal-body">
+        <p>Couldn’t find what you’re looking for? We’re all about helping each other so write down what you’d like to see! </p>
+
+        <div class="alert not-loggedin">
+         <button class="close" data-dismiss="alert">×</button>
+         <p>But first, it seems that you haven’t logged in yet. <a href="/auth/github">Do that with your Github account &rsaquo;</a></p>
+        </div>
+
+        <div class="modal-body-dynamic" data-source="/guides/suggestion">
+        </div>
+
+      </div>
+      <!-- /modal-body -->
+    </div>
+    <!-- /modal -->
+    
+    <div class="modal fade" id="submitModal">
+      <div class="modal-header">
+       <button class="close" data-dismiss="modal"></button>
+       <h2>Submit an article</h2>
+      </div>
+      <!-- /modal-header -->
+      <div class="modal-body">
+        <p>Couldn’t find what you’re looking for? We’re all about helping each other so write down what you’d like to see! </p>
+
+        <div class="alert not-loggedin">
+         <button class="close" data-dismiss="alert">×</button>
+         <p>But first, it seems that you haven’t logged in yet. <a href="/auth/github">Do that with your Github account &rsaquo;</a></p>
+        </div>
+
+        <div class="modal-body-dynamic" data-source="/guides/new">
+        </div>
+
+      </div>
+      <!-- /modal-body -->
+    </div>
+    <!-- /modal --> 
+
+    <div class="modal fade" id="rateModal">
+      <div class="modal-header">
+        <button class="close" data-dismiss="modal"></button>
+        <h2>Watch this article</h2>
+      </div>
+
+      <div class="alert not-loggedin">
+        <button class="close" data-dismiss="alert">×</button>
+        <p>But first, it seems that you haven’t logged in yet. <a href="/auth/github">Do that with your Github account &rsaquo;</a></p>
+      </div>
+
+      <div class="modal-body">
+      </div>
+
+      <div class="modal-footer">
+      </div>
+
+    </div>
+
+
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script> 
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/main.js"></script>
+  </body>
+</html>
