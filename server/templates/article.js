@@ -44,10 +44,7 @@ module.exports = function(html, templates, conf, bind, Map, content) {
         return templates('/shared/breadcrumb.html').call(this, catList);
       }).join(''),
       
-      'article-body': [
-        article.markup,
-        templates('/article/article_buttons.html').call(this, previous, next)
-      ].join(''),
+      'article-body': templates('/article/body.html').call(this, article, previous, next),
       
       author: article.meta.authors.map(function(author) {
         return templates('/author/in_article.html').call(this, author, article);

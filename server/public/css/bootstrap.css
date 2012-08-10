@@ -4054,3 +4054,18 @@ article .button-container {
   float: right;
   margin: 7px 0 0 0;
 }
+
+.article-body {
+  position: relative;
+}
+
+.expand {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0 8px;
+  background: #fff url(../img/sprite.png) -110px -55px no-repeat;
+}
+.expand:hover {
+  text-decoration: none;
+}

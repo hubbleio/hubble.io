@@ -136,5 +136,24 @@ $(function() {
     return false;
   });
 
+  //
+  // Expand Link
+  //
+  $('.expand').click(function(ev) {
+    var $this = $(this);
+    var expandable = $this.parents('.expandable');
+    var container = expandable.parent();
+    expandable.animate({
+      width: container.width()
+    });
+
+    $this.hide();
+    
+    ev.stopPropagation();
+    ev.preventDefault();
+    return false;
+  });
+
+
 });
 
