@@ -3947,6 +3947,10 @@ section.contributors-listing {
 	font-size: 12px;
 }
 
+.level-articles .buttons {
+  float: right;
+}
+ 
 .level-overview,
 .article {
 	overflow: auto;
@@ -3978,7 +3982,7 @@ section.contributors-listing {
 
 .article-short {
 	float: left; 
-	max-width: 500px;
+	max-width: 420px;
 }
 
 .buttons {
