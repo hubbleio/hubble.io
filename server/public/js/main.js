@@ -169,8 +169,6 @@ $(function() {
       var ratio = width / height;
       var newWidth = $this.width();
       var newHeight = Math.ceil(newWidth / ratio);
-      console.log('new width:', newWidth);
-      console.log('new height:', newHeight);
       iframe.animate({
         width: newWidth,
         height: newHeight
