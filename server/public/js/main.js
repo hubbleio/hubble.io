@@ -145,15 +145,39 @@ $(function() {
     var container = expandable.parent();
     expandable.animate({
       width: container.width()
+    }, function() {
+      expandable.find('.article-body').trigger('resize');
     });
 
     $this.hide();
+
     
     ev.stopPropagation();
     ev.preventDefault();
     return false;
   });
 
+  //
+  // Expand all iframes containing videos
+  //
+  $('.article-body').on('resize', function() {
+    $this = $(this);
+    $this.find('iframe').each(function(idx, iframe) {
+      iframe = $(iframe);
+      var width = iframe.width();
+      var height = iframe.height();
+      var ratio = width / height;
+      var newWidth = $this.width();
+      var newHeight = Math.ceil(newWidth / ratio);
+      console.log('new width:', newWidth);
+      console.log('new height:', newHeight);
+      iframe.animate({
+        width: newWidth,
+        height: newHeight
+      });
+    });
+  })
+  .trigger('resize')
+  ;
 
 });
-
