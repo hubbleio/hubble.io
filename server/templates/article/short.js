@@ -4,6 +4,7 @@ module.exports = function(html, templates, conf, bind, Map, content) {
 
   var map = Map();
   map['class']('title').to('title');
+  map['class']('title').use('url').as('href');
   map['class']('authors').to('authors');
   map['class']('when').to('when');
   map['class']('description').to('description');
