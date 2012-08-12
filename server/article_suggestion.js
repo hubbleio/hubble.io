@@ -2,7 +2,7 @@ var nano = require('nano'),
     Sendgrid = require('sendgrid-web');
 
 var database = 'article_suggestions';
-var requiredProps = ['question', 'email'];
+var requiredProps = ['question'];
 var props = requiredProps;
 
 function valid(articleSuggestion, messages) {
@@ -26,7 +26,8 @@ module.exports = function(config) {
   function validateAndCreate(articleSuggestion) {
     var res = this.res,
         toInsert = {
-          from: this.req.session.user
+          from: this.req.session.user,
+          created_at: Date.now()
         },
         errors = []
     ;
