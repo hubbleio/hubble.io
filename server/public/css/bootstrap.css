@@ -3895,16 +3895,21 @@ footer .navbar li:first-child {
 	height: 20px;
 	width: 20px;
 	text-indent: -9999em;
-	background: url(../img/sprite.png) no-repeat -253px 0;
 }
 
 .contributor .meta li a[href=""] {
   visibility: hidden;
 }
 
-.member li:nth-child(n+2) > a,
-.contributor li:nth-child(n+2) > a {
-	background-position: -280px 0;
+
+.member .meta li.twitter a,
+.contributor .meta li a {
+  background: url(../img/sprite.png) no-repeat -253px 0;
+}
+
+.member li.github > a,
+.contributor li.github > a {
+	background: url(../img/sprite.png) no-repeat -280px 0;
 }
 
 .member p,

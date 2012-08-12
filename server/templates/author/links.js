@@ -12,7 +12,9 @@ module.exports = function(html, templates, conf, bind, Map, content) {
     var ret = [];
 
     ['twitter', 'github'].forEach(function(type) {
-      ret.push(templates('/author/link.html').call(this, titleMap[type] || '', author.meta[type]));
+      if (author.meta[type]) {
+        ret.push(templates('/author/link_' + type + '.html').call(this, titleMap[type] || '', author.meta[type]));
+      }
     });
 
     ret.push(templates('/author/article_count.html').call(this, author));
