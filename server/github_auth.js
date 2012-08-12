@@ -19,7 +19,7 @@ function buildURI() {
 function githubOauth(conf, req, res) {
 
   function begin() {
-    var callbackURI = conf.callback_uri + '?redir=' + encodeURIComponent(req.headers.referer);
+    var callbackURI = conf.callback_uri + '?redir=' + encodeURIComponent(req.query.redir || req.headers.referer);
     res.writeHead(302, {"Location": buildURI(
         GITHUB_OAUTH_URI_BASE + '/authorize?',
         'client_id', conf.client_id,

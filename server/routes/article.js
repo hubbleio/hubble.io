@@ -22,7 +22,7 @@ module.exports = function(conf, content, templates, github, authenticated, respo
 
   return {
     post: authenticated(function() {
-      articleRequest.call(this, this.req.body);
+      articleRequest.create.call(this, this.req.body);
     }),
     '/new': {
       get: respond(function(name) {
@@ -31,6 +31,7 @@ module.exports = function(conf, content, templates, github, authenticated, respo
     },
     '/preview': {
       post: respond(function() {
+        var self = this;
         var res = this.res;
         var postedArticle = this.req.body;
         var categories = [];
@@ -52,8 +53,8 @@ module.exports = function(conf, content, templates, github, authenticated, respo
             markup: markup
           };
 
-          res.writeHead(200);
-          res.end(templates('/article/preview.html').call(this, article));
+          res.writeHead(200, {'Content-Type': 'text/html'});
+          res.end(templates('/article/preview.html').call(self, article));
 
         });
 

@@ -5,6 +5,13 @@ var database = 'article_requests';
 var requiredProps = ['title', 'short-desc', 'content', 'difficulty'];
 var props = ['title', 'short-desc', 'content', 'difficulty', 'category'];
 
+function prop(prop) {
+  
+  return function(o) {
+    return o[prop];
+  };
+}
+
 function valid(articleRequest, messages) {
   
   function notPresent(attr) {
@@ -26,7 +33,9 @@ module.exports = function(config) {
   function validateAndCreate(articleRequest) {
     var res = this.res,
         toInsert = {
-          from: this.req.session.user
+          from: this.req.session.user,
+          created_at: Date.now(),
+          state: 'pending'
         },
         errors = []
     ;
@@ -61,5 +70,22 @@ module.exports = function(config) {
     }
   }
 
-  return validateAndCreate;
+  function getAllForUser(user, callback) {
+    (function get() {
+      var uri = '_design/views/_view/by_user?key=' + encodeURIComponent(JSON.stringify(user.login));
+      db.get(uri, function(err, results) {
+        callback(err, results.rows.map(prop('value')));
+      });  
+    }());
+  }
+
+  function get(id, callback) {
+    db.get(id, callback);
+  }
+
+  return {
+    create: validateAndCreate,
+    getAllForUser: getAllForUser,
+    get: get
+  };
 };

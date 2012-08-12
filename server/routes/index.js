@@ -30,8 +30,13 @@ module.exports = function(conf, content) {
       if (this.req.session && this.req.session.user) {
         return callback.apply(this, arguments);
       } else {
-        this.res.writeHead(403);
-        this.res.end('Forbidden');
+        if (this.req.method !== 'GET' || this.req.headers['x-requested-with'] === 'XMLHttpRequest') {
+          this.res.writeHead(403);
+          this.res.end('Forbidden');          
+        } else {
+          this.res.writeHead(303, {Location: '/auth/github?redir=' + encodeURIComponent(this.req.url)});
+          this.res.end();
+        }
       }
     };
   }
@@ -85,7 +90,8 @@ module.exports = function(conf, content) {
         });
       })
     },
-    '/auth': require('./auth')(conf, respond)
+    '/auth': require('./auth')(conf, respond),
+    '/profile': require('./profile')(conf, authenticated, templates, github, respond)
   };
 
   return routes;
