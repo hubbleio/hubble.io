@@ -25,5 +25,8 @@
       "user": "me@me.com",
       "key": "some secret key"
     }
+  },
+  "session": {
+    "store": "memory"
   }
 }

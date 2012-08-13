@@ -50,7 +50,8 @@ var config = {
   "port": argv.p || argv.port || 8080,
   "host": argv.h || argv.host || '127.0.0.1',
   "db": conf.db,
-  "email": conf.email
+  "email": conf.email,
+  "session": conf.session
 };
 
 var download = ! argv.c;

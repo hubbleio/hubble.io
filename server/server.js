@@ -29,6 +29,15 @@ server.createServer = function(conf, content) {
   var file = new nstatic.Server(__dirname + '/public/');
 
   //
+  // Initialize store
+  //
+  var store;
+
+  if (conf.session && conf.session.store === 'redis') {
+    store = require('./middleware/session/redis_store')(conf.session.options);
+  }
+
+  //
   // stup a server and when there is a request, dispatch the
   // route that was requestd in the request object.
   //
@@ -36,7 +45,7 @@ server.createServer = function(conf, content) {
     before: [
       require('./middleware/favicon')(__dirname + '/../public/favicon.png'),
       require('./middleware/cookie_parser')(),
-      require('./middleware/session')(),
+      require('./middleware/session')('sid', store),
       function (req, res) {
         req.url = req.url.replace(/%25/g, '%').replace(/%20/g, ' ');
         var found = router.dispatch(req, res);
