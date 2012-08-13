@@ -2,8 +2,8 @@ var nano = require('nano'),
     Sendgrid = require('sendgrid-web');
 
 var database = 'article_requests';
-var requiredProps = ['title', 'short-desc', 'content', 'difficulty'];
-var props = ['title', 'short-desc', 'content', 'difficulty', 'category'];
+var requiredProps = ['title', 'short-desc', 'content'];
+var props = ['title', 'short-desc', 'content'];
 
 function prop(prop) {
   

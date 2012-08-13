@@ -3186,15 +3186,6 @@ input[type="submit"].btn.btn-mini {
           transition: opacity 0.3s linear, top 0.3s ease-out;
 }
 
-.modal#submitModal {
-  width: 630px;
-  height: 600px;
-}
-
-.modal#submitModal .modal-body {
-  min-height: 700px;
-}
-
 #submitModal .btn-group {
   float: left;
   margin-right: 10px;
