@@ -74,11 +74,6 @@ module.exports = function(conf, content) {
     },
     '/contributors': require('./contributor')(conf, content, templates, respond),
     '/guides': articleRoutes(conf, content, templates, github, authenticated, respond),
-    '/tags/:tag': {
-      get: respond(function(tag) {
-        return personalize.call(this, content.getTag(tag));
-      })
-    },
     '/categories': require('./category')(conf, content, templates, github, authenticated, articleRoutes, respond),
     '/levels': require('./level')(conf, content, templates, articleRoutes, github, authenticated, respond),
     '/update/': {
