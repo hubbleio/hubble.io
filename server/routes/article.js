@@ -145,7 +145,7 @@ module.exports = function(conf, content, templates, github, authenticated, respo
             if (article.meta.categories.length) {
               var cat = article.meta.categories[0];
               cat = content.index.searchCategory(cat);
-              var url = prefix + '/guides/' + encodeURIComponent(article.name);
+              var url = '/categories/' + cat.id + '/guides/' + encodeURIComponent(article.name);
               res.writeHead(301, {Location: url});
               res.end();
               return;
