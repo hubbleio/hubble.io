@@ -25,7 +25,7 @@ module.exports = function(conf, content, templates, github, authenticated, artic
         return templates('/category.html').call(this, category);
       }),
 
-      '/guides': articleRoutes(conf, content, templates, github, authenticated, respond, true)
+      '/guides': articleRoutes(conf, content, templates, github, authenticated, respond, '/categories')
     }
   };
 

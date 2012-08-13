@@ -4,20 +4,20 @@ var githubAuth     = require('../github_auth'),
     ArticleSuggestion = require('../article_suggestion')
     ;
 
-module.exports = function(conf, content, templates, github, authenticated, respond, inCategory) {
+module.exports = function(conf, content, templates, github, authenticated, respond, prefix) {
 
   var articleRequest    = ArticleRequest(conf),
       articleSuggestion = ArticleSuggestion(conf)
       ;
 
-  function findArticle(cat, name, next) {
+  function findArticle(name, next) {
     var article = content.index.byName[name];
     if (! article) {
       this.res.writeHead(404);
       this.res.end('Not Found');
       return;
     }
-    return next.call(this, cat, article, inCategory);
+    return next.call(this, article);
   }
 
   return {
@@ -69,32 +69,32 @@ module.exports = function(conf, content, templates, github, authenticated, respo
       })
     },
     '/:name/like': {
-      post: respond(function(cat, name) {
-        if (! inCategory) {
-          name = cat;
-          cat = undefined;
+      post: respond(function(firstLevel, name) {
+        if (! firstLevel) {
+          name = firstLevel;
+          firstLevel = undefined;
         }
 
-        findArticle.call(this, cat, name, function(cat, article) {
+        findArticle.call(this, name, function(article) {
           github.like.call(this, article);
         });
       })
     },
     '/:name/fork': {
-      post: respond(function(cat, name) {
-        if (! inCategory) {
-          name = cat;
-          cat = undefined;
+      post: respond(function(firstLevel, name) {
+        if (! firstLevel) {
+          name = firstLevel;
+          firstLevel = undefined;
         }
 
-        findArticle.call(this, cat, name, function(cat, article) {
+        findArticle.call(this, name, function(article) {
           github.fork.call(this, article);
         });
       })
     },
     '/:name/comment': {
       get: respond(function(cat, name) {
-        if (! inCategory) {
+        if (! prefix) {
           name = cat;
           cat = undefined;
         }
@@ -106,7 +106,7 @@ module.exports = function(conf, content, templates, github, authenticated, respo
         return assets['discussions/new_comment.html'].compose(repo, discussion);
       }),
       post: respond(function(cat, name) {
-        if (! inCategory) {
+        if (! prefix) {
           name = cat;
           cat = undefined;
         }
@@ -136,22 +136,35 @@ module.exports = function(conf, content, templates, github, authenticated, respo
       })
     },
     '/:name': {
-      get: respond(function(cat, name) {
-        if (! inCategory) {
-          name = cat;
-          cat = undefined;
-          findArticle.call(this, cat, name, function(cat, article) {
+      get: respond(function(firstLevel, name) {
+        var res = this.res;
+        if (! prefix) {
+          name = firstLevel;
+          firstLevel = undefined;
+          findArticle.call(this, name, function(article) {
             if (article.meta.categories.length) {
-              cat = article.meta.categories[0];
+              var cat = article.meta.categories[0];
               cat = content.index.searchCategory(cat);
-              var url = '/categories/' + encodeURIComponent(cat.id) + '/guides/' + encodeURIComponent(article.name);
-              this.res.writeHead(301, {Location: url});
-              this.res.end();
+              var url = prefix + '/guides/' + encodeURIComponent(article.name);
+              res.writeHead(301, {Location: url});
+              res.end();
               return;
             }
           });
         }
-        return findArticle.call(this, cat, name, templates('/article.html'));
+        findArticle.call(this, name, function(article) {
+          var cat, level;
+          var prefixURL = prefix + '/';
+          if (prefix === '/categories') {
+            cat = content.index.searchCategory(firstLevel);
+            prefixURL += encodeURIComponent(cat.id);
+          } else if (prefix === '/levels' ) {
+            level = firstLevel;
+            prefixURL += encodeURIComponent(level);
+          }
+          res.writeHead(200, {'Content-Type': 'text/html'});
+          res.end(templates('/article.html').call(this, article, prefixURL, cat, level));
+        });
       })
     }
   };

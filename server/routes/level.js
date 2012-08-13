@@ -1,4 +1,4 @@
-module.exports = function(conf, content, templates, respond) {
+module.exports = function(conf, content, templates, articleRoutes, github, authenticated, respond) {
 
   return  {
 
@@ -12,7 +12,9 @@ module.exports = function(conf, content, templates, respond) {
           return;
         }
         return templates('/level.html').call(this, levelName, articles);
-      })
+      }),
+
+      '/guides': articleRoutes(conf, content, templates, github, authenticated, respond, '/levels')
     }
   };
 
