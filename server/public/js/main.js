@@ -136,24 +136,21 @@ $(function() {
     return false;
   });
 
-  //
-  // Expand Link
-  //
-  $('.expand').click(function(ev) {
-    var $this = $(this);
-    var expandable = $this.parents('.expandable');
-    var container = expandable.parent();
-    expandable.animate({
-      width: container.width()
-    });
-
-    $this.hide();
-
     
-    ev.stopPropagation();
-    ev.preventDefault();
-    return false;
-  });
+  (function() {
+    $('iframe').each(function(idx, iframe) {
+      iframe = $(iframe);
+      var width = iframe.width();
+      var height = iframe.height();
+      var ratio = width / height;
+      var newWidth = iframe.parent().width();
+      var newHeight = Math.ceil(newWidth / ratio);
+      iframe.animate({
+        width: newWidth,
+        height: newHeight
+      });
+    });
+  }());
 
 
 });
