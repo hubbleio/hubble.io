@@ -138,7 +138,7 @@ $(function() {
 
     
   (function() {
-    $('iframe').each(function(idx, iframe) {
+    $('.article-body iframe').each(function(idx, iframe) {
       iframe = $(iframe);
       var width = iframe.width();
       var height = iframe.height();
