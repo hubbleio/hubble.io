@@ -74,7 +74,7 @@ server.start(function() {
 });
 ```
 
-Run your startup script.
+Customize the options and run your startup script.
 
 Access via browser to [http://localhost:8080](http://localhost:8080).
 
