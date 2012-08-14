@@ -33,6 +33,10 @@ var options = {
   }
 };
 
+function clone(o) {
+  return JSON.parse(JSON.stringify(o));
+}
+
 test('does not start up', function(t) {
   t.throws(function() {
     var hubble = HubbleIO({});

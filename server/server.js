@@ -14,7 +14,6 @@ var server = exports;
 
 server.createServer = function(conf, content, callback) {
 
-
   //
   // define a routing table that will contain methods
   // for transforming static content or invoking services.
@@ -26,7 +25,7 @@ server.createServer = function(conf, content, callback) {
   // create a static file server for any generic requests
   // that do not require any special treatments.
   //
-  var file = new nstatic.Server(__dirname + '/public/');
+  
 
   //
   // Initialize store
@@ -36,6 +35,24 @@ server.createServer = function(conf, content, callback) {
   if (conf.session && conf.session.store === 'redis') {
     store = require('./middleware/session/redis_store')(conf.session.options);
   }
+
+  var file = (function handleStatic() {
+    var file = new nstatic.Server(__dirname + '/public/');
+    if (conf.override && conf.override['static']) {
+      var overrideFile = new nstatic.Server(conf.override['static']);
+      return function(req, res) {
+        overrideFile.serve(req, res, function(err) {
+          if (err && err.status === 404) {
+            file.serve(req, res);
+          }
+        });
+      };
+    } else {
+      return function(req, res) {
+        file.serve(req, res);
+      };
+    }
+  }());
 
   //
   // stup a server and when there is a request, dispatch the
@@ -50,8 +67,7 @@ server.createServer = function(conf, content, callback) {
         req.url = req.url.replace(/%25/g, '%').replace(/%20/g, ' ');
         var found = router.dispatch(req, res);
         if (! found) {
-          file.serve(req, res);
-          // res.emit('next');
+          file(req, res);
         }
       }
     ]
