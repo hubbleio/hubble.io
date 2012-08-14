@@ -80,6 +80,49 @@ Access via browser to [http://localhost:8080](http://localhost:8080).
 
 ## Options
 
+### Overriding templates
+
+Inside directory `server/templates` you can find a bunch of templates that are used for rendering all the pages.
+
+You can choose to override these if you want, by supplying your own template base dir when providing the `override.templates` option like this:
+
+```javascript
+var options = {
+  // ...
+  override: {
+    templates: __dirname + '/templates'
+  }
+}
+```
+
+### Overriding static file serving
+
+Hubble.IO serves static files in the `server/public directory`.
+
+You can override some of these and serve additional static files by supplying the `override.static` option like this:
+
+```javascript
+var options = {
+  // ...
+  override: {
+    templates: __dirname + '/public'
+  }
+}
+```
+
+### CouchDB
+
+Hubble.IO uses CouchDB for storing article requests and comments. By default it tries to connect to localhost port 5984, but you can override it by setting the `db.url` option:
+
+```javascript
+var options = {
+  // ...
+  db: {
+    url: "http://my.couch.server.com:8081"
+  }
+}
+```
+
 ### Session Stores
 
 You can use a memory session store or a redis session store.
@@ -87,7 +130,7 @@ You can use a memory session store or a redis session store.
 For changing that you can setup in conf:
 
 ```javascript
-{
+var options = {
   // ...
   "session": {
     "store": "redis"
@@ -98,7 +141,7 @@ For changing that you can setup in conf:
 You can also specify timeout, hostname, port and password in session.options:
 
 ```javascript
-{
+var options = {
   // ...
   "session": {
     "store": "redis",
