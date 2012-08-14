@@ -22,41 +22,65 @@ Socially-centric open source documentation.
 
 ## Installation
 
-```bash
-  $ git clone git://github.com/hubbleio/hubble.io.git
-  $ cd hubble.io
-```
-
-## Usage
-
-### Setup configuration
-
-Copy the `config/conf.json.example' into `config/conf.json` and edit at will.
-
-    $ cp config/conf.json.example config/conf.json
-    $ edit config/conf.json
-
-You can specify an environment-specific configuration by creating file `config/conf.<env>.json` with just the differences.
-
-For instance, you can create the file `config/conf.production.json` for when NODE_ENV is `production`.
-
-### Start the server
-
-Starting up the server but downloading the repos first:
+On the root dir of your project:
 
 ```bash
-  $ bin/launch
+$ npm install hubble.io
 ```
 
-If you don't want this to download the repos, you can use the "-c" flag:
+And create a start script:
 
-```bash
-  $ bin/launch -c
+```javascript
+var HubbleIO = require('hubble.io');
+var options = {
+  "orgname": "nodeguides",
+  "title": "Node Guides",
+  "tagline": "Documentation powered by GitHub and Node.js",
+  "description": "Hubble.IO makes guides publications easier",
+  "content": {
+    "home": {
+      "beginner": "Beginner Intro",
+      "intermediate": "Intermediate Intro",
+      "expert": "Expert Intro"
+    }
+  },
+  "auth": {
+    "github": {
+      "callback_uri": "http://localhost:8080/auth/github/callback", 
+      "client_id": "----client id----",
+      "secret": "----secret-----"
+    }
+  },
+  "db": {
+    "url": "http://localhost:5984"
+  },
+  "email": {
+    "sendgrid": {
+      "user": "me@me.com",
+      "key": "some secret key"
+    }
+  },
+  "session": {
+    "store": "memory"
+  }
+}
+
+console.log('options:', options); 
+
+var server = HubbleIO(options);
+
+server.start(function() {
+  console.log('Hubble.IO started');
+});
 ```
+
+Run your startup script.
 
 Access via browser to [http://localhost:8080](http://localhost:8080).
 
-## Session Stores
+## Options
+
+### Session Stores
 
 You can use a memory session store or a redis session store.
 
