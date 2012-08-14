@@ -8,10 +8,7 @@
 //   };
 // }
 
-var sys = require('sys'),
-    path = require('path'),
-    fs = require('fs'),
-    argv = require('optimist').argv,
+var argv = require('optimist').argv,
     server = require('../server/server'),
     Content = require('../lib/content'),
     conf = require('konphyg')(__dirname + '/../config')('conf');

@@ -12,7 +12,7 @@ var director = require('director'),
 
 var server = exports;
 
-server.createServer = function(conf, content) {
+server.createServer = function(conf, content, callback) {
 
 
   //
@@ -58,6 +58,6 @@ server.createServer = function(conf, content) {
   });
 
   console.log('[hubble] Starting http server on ', conf.host + ':' + conf.port);
-  server.listen(conf.port, conf.host);
+  server.listen(conf.port, conf.host, callback);
 
 };
