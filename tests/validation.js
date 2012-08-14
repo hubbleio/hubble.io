@@ -23,11 +23,21 @@ test('validate works (1)', function(t) {
   t.end();
 });
 
-test('validate works (2)', function(t) {
+test('validate works (1.1)', function(t) {
   t.throws(function() {
     Options({
       orgname: "orgname",
       tagline: "Tag Liine" });
+  }, {name: 'Error', message: 'Options must contain key title'});
+  t.end();
+});
+
+test('validate works (2)', function(t) {
+  t.throws(function() {
+    Options({
+      orgname: "orgname",
+      tagline: "Tag Liine",
+      title: "dsalçkdsalkdjas" });
   }, {name: 'Error', message: 'Options must contain key description'});
   t.end();
 });
@@ -37,6 +47,7 @@ test('validate works (3)', function(t) {
     Options({
       orgname: "orgname",
       tagline: "Tag Liine",
+      title: "dsalçkdsalkdjas",
       description: "This is a description" });
   }, {name: 'Error', message: 'Options must contain key content'});
   t.end();
@@ -47,6 +58,7 @@ test('validate works (4)', function(t) {
     Options({
       orgname: "orgname",
       tagline: "Tag Liine",
+      title: "dsalçkdsalkdjas",
       description: "This is a description",
       content: "Coontent"});
   }, {name: 'Error', message: 'Options must contain key content.home'});
@@ -58,6 +70,7 @@ test('validate works (5)', function(t) {
     Options({
       orgname: "orgname",
       tagline: "Tag Liine",
+      title: "dsalçkdsalkdjas",
       description: "This is a description",
       content: {
         home: "Hoooommeeeee"
@@ -71,6 +84,7 @@ test('validate works (6)', function(t) {
     Options({
       orgname: "orgname",
       tagline: "Tag Liine",
+      title: "dsalçkdsalkdjas",
       description: "This is a description",
       content: {
         home: {
@@ -86,6 +100,7 @@ test('validate works (7)', function(t) {
     Options({
       orgname: "orgname",
       tagline: "Tag Liine",
+      title: "dsalçkdsalkdjas",
       description: "This is a description",
       content: {
         home: {
@@ -102,6 +117,7 @@ test('validate works (8)', function(t) {
     Options({
       orgname: "orgname",
       tagline: "Tag Liine",
+      title: "dsalçkdsalkdjas",
       description: "This is a description",
       content: {
         home: {
@@ -119,6 +135,7 @@ test('validate works (9)', function(t) {
     Options({
       orgname: "orgname",
       tagline: "Tag Liine",
+      title: "dsalçkdsalkdjas",
       description: "This is a description",
       content: {
         home: {
@@ -138,6 +155,7 @@ test('validate works (10)', function(t) {
     Options({
       orgname: "orgname",
       tagline: "Tag Liine",
+      title: "dsalçkdsalkdjas",
       description: "This is a description",
       content: {
         home: {
@@ -159,6 +177,7 @@ test('validate works (11)', function(t) {
     Options({
       orgname: "orgname",
       tagline: "Tag Liine",
+      title: "dsalçkdsalkdjas",
       description: "This is a description",
       content: {
         home: {
@@ -182,6 +201,7 @@ test('validate works (12)', function(t) {
     Options({
       orgname: "orgname",
       tagline: "Tag Liine",
+      title: "dsalçkdsalkdjas",
       description: "This is a description",
       content: {
         home: {
@@ -206,6 +226,7 @@ test('validate works (13)', function(t) {
     Options({
       orgname: "orgname",
       tagline: "Tag Liine",
+      title: "dsalçkdsalkdjas",
       description: "This is a description",
       content: {
         home: {
@@ -231,6 +252,7 @@ test('validate works (14)', function(t) {
     Options({
       orgname: "orgname",
       tagline: "Tag Liine",
+      title: "dsalçkdsalkdjas",
       description: "This is a description",
       content: {
         home: {
@@ -257,6 +279,7 @@ test('validate works (15)', function(t) {
     Options({
       orgname: "orgname",
       tagline: "Tag Liine",
+      title: "dsalçkdsalkdjas",
       description: "This is a description",
       content: {
         home: {
@@ -285,6 +308,7 @@ test('validate works (16)', function(t) {
     Options({
       orgname: "orgname",
       tagline: "Tag Liine",
+      title: "dsalçkdsalkdjas",
       description: "This is a description",
       content: {
         home: {
@@ -315,6 +339,7 @@ test('validate works (17)', function(t) {
     Options({
       orgname: "orgname",
       tagline: "Tag Liine",
+      title: "dsalçkdsalkdjas",
       description: "This is a description",
       content: {
         home: {
@@ -346,6 +371,7 @@ test('validate works (17)', function(t) {
     Options({
       orgname: "orgname",
       tagline: "Tag Liine",
+      title: "dsalçkdsalkdjas",
       description: "This is a description",
       content: {
         home: {
@@ -378,6 +404,7 @@ test('validate works (18)', function(t) {
     Options({
       orgname: "orgname",
       tagline: "Tag Liine",
+      title: "dsalçkdsalkdjas",
       description: "This is a description",
       content: {
         home: {

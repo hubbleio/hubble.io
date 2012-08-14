@@ -1,9 +1,13 @@
-var test = require('tap').test;
-var HubbleIO = require('../');
+var test     = require('tap').test,
+    HubbleIO = require('../'),
+    request  = require('request'),
+    fs       = require('fs')
+    ;
 
 var options = {
   orgname: "nodedocs",
   tagline: "Tag Liine",
+  title: "dsalçkdsalkdjas",
   description: "This is a description",
   content: {
     home: {
@@ -39,8 +43,13 @@ test('does not start up', function(t) {
 test('starts up', function(t) {
   var hubble = HubbleIO(options);
   hubble.start(function() {
-    hubble.stop(function() {
-      t.end();
+    request({uri:'http://localhost:8080/', pool: false}, function(err, res, body) {
+      t.notOk(err, 'No error');
+      t.equal(res.statusCode, 200);
+      t.equal(body, fs.readFileSync(__dirname + '/index.html', 'utf8'));
+      hubble.stop(function() {
+        t.end();
+      });
     });
   });
 });

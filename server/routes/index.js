@@ -1,4 +1,4 @@
-var Templates       = require('../../lib/templates'),
+var Templates       = require('../../lib/cascading_templates'),
     Comments        = require('../../lib/comments'),
     Github          = require('../../lib/github')
     ;
@@ -21,7 +21,7 @@ function findRepo(name) {
 }
 
 module.exports = function(conf, content) {
-  var templates = Templates(conf, __dirname + '/../templates', content),
+  var templates = Templates(conf, content),
       github   = Github(conf),
       comments = Comments(conf);
 
