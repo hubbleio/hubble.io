@@ -60,4 +60,6 @@ server.createServer = function(conf, content, callback) {
   console.log('[hubble] Starting http server on ', conf.host + ':' + conf.port);
   server.listen(conf.port, conf.host, callback);
 
+  return server;
+
 };

@@ -52,7 +52,7 @@
   },
   "scripts": {
     "start": "bin/launch",
-    "test": "node tests/*.js"
+    "test": "node tests"
   },
   "subdomain": "nodeguides"
 }

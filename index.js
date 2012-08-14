@@ -1,10 +1,12 @@
 var Options = require('./lib/options'),
-    server  = require('./server/server'),
+    Server  = require('./server/server'),
+    Content = require('./lib/content'),
     EE      = require('events').EventEmitter;
 
 function create(options) {
 
-  var ee = new EE();
+  var ee = new EE(),
+      server;
 
   options = Options(options);
   
@@ -12,16 +14,21 @@ function create(options) {
     ee.emit('beforeload');
     Content(options, options.download, function(err, content) {
       if (err) { return ee.emit('error', err); }
-      ee.emit('afterload');
+      ee.emit('loaded');
       ee.emit('beforelisten');
-      server.createServer(options, content, function() {
-        ee.emit('afterlisten');
+      server = Server.createServer(options, content, function() {
+        ee.emit('listening');
         if (callback) { callback(); }
       });
     });
   }
 
+  function stop(cb) {
+    server.close(cb);
+  }
+
   ee.start = start;
+  ee.stop = stop;
 
   return ee;
 }
