@@ -51,28 +51,7 @@
     <div class="container" id="main">
     </div> <!-- /container -->
     
-    <footer role="contentinfo">
-    
-      <div class="container">
-    
-        <div class="copyrights">
-          <p>We make node.js accessible to all. And we love Open Source.</p>
-          <p>&copy; Company 2012 NodeGuides. Protected by <a href="http://creativecommons.org/">Creative Commons 3.0</a></p>
-          
-          <p class="powered">Powered by <a href="https://github.com/hubbleio/hubble.io" class="ir">hubble.io<span></span></a></p>           
-        </div>
-        <!-- / copyrights -->
-    
-        
-        <ul class="navbar unstyled">
-          <li><a href="#">About</a></li>
-          <li><a href="#">Contact</a></li>
-          <li><a href="#">Twitter</a></li>
-          <li><a href="#">Github</a></li>
-        </ul>
-        
-      </div> <!-- /container -->
-        
+    <footer role="contentinfo" id="footer">
     </footer>
       
     <div class="modal fade" id="requestModal">
@@ -137,6 +116,29 @@
       </div>
 
     </div>
+    <!-- /modal -->
+
+    <div class="modal fade" id="contactModal">
+      <div class="modal-header">
+       <button class="close" data-dismiss="modal"></button>
+       <h2>Contact Us</h2>
+      </div>
+      <!-- /modal-header -->
+      <div class="modal-body">
+        <p>Write your message: </p>
+
+        <div class="alert not-loggedin">
+         <button class="close" data-dismiss="alert">×</button>
+         <p>But first, it seems that you haven’t logged in yet. <a href="/auth/github">Do that with your Github account &rsaquo;</a></p>
+        </div>
+
+        <div class="modal-body-dynamic" data-source="/contact">
+        </div>
+
+      </div>
+      <!-- /modal-body -->
+    </div>
+    <!-- /modal -->
 
 
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script> 

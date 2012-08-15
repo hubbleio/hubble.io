@@ -17,6 +17,7 @@ $(function() {
 
 	$(".collapse").collapse();
 	$('#requestModal').modal({ keyboard: true, show: false });
+  $('#contactModal').modal({ keyboard: true, show: false });
 
   //
   // Form drop-down menus

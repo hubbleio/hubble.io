@@ -16,7 +16,8 @@ module.exports = function(html, templates, conf, bind, Map, content) {
       expert: conf.content.home.expert,
       profile: this.req.session && this.req.session.user ?
         templates('/user/profile.html').call(this) :
-        templates('/user/profile_not_logged_in.html').call(this)
+        templates('/user/profile_not_logged_in.html').call(this),
+      footer: templates('/shared/footer.html').call(this)
     };
 
     return bind(html, data);
