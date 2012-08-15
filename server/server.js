@@ -34,6 +34,9 @@ server.createServer = function(conf, content, callback) {
 
   if (conf.session && conf.session.store === 'redis') {
     store = require('./middleware/session/redis_store')(conf.session.options);
+  } else {
+    store = require('./middleware/session/memory_store')
+                   (conf.session && conf.session.options && (conf.session.options.timeout * 1000));
   }
 
   var file = (function handleStatic() {
@@ -71,6 +74,10 @@ server.createServer = function(conf, content, callback) {
         }
       }
     ]
+  });
+
+  server.on('close', function() {
+    store.close();
   });
 
   console.log('[hubble] Starting http server on ', conf.host + ':' + conf.port);

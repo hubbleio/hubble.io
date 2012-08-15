@@ -27,6 +27,9 @@ function MemoryStore(timeout) {
     debug('setting %s to %j', id, value);
     store[id] = clone(value);
     process.nextTick(callback);
+    if (timeouts[id]) {
+      clearTimeout(timeouts[id]);
+    }
     timeouts[id] = setTimeout(function() {
       clear(id, function(err) {
         if (err) { console.error(err); }
@@ -43,7 +46,7 @@ function MemoryStore(timeout) {
     });
   }
 
-  return function store(id, value, callback) {
+  function doStore(id, value, callback) {
     if (typeof value == 'function') {
       callback = value;
       value = undefined;
@@ -55,6 +58,14 @@ function MemoryStore(timeout) {
       get(id, callback);
     }
   }
+
+  doStore.close = function close() {
+    Object.keys(timeouts).forEach(function(sid) {
+      clearTimeout(timeouts[sid]);
+    });
+  };
+
+  return doStore;
 }
 
 module.exports = MemoryStore;

@@ -64,7 +64,7 @@ function RedisStore(options) {
     });
   }
 
-  return function store(id, value, callback) {
+  function store(id, value, callback) {
     if (typeof value == 'function') {
       callback = value;
       value = undefined;
@@ -76,6 +76,12 @@ function RedisStore(options) {
       get(id, callback);
     }
   }
+
+  store.close = function close() {
+    client.quit();
+  };
+
+  return store;
 }
 
 module.exports = RedisStore;
