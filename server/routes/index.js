@@ -88,7 +88,8 @@ module.exports = function(conf, content) {
     '/auth': require('./auth')(conf, respond),
     '/profile': require('./profile')(conf, authenticated, templates, github, respond),
     '/contact': require('./contact')(conf, authenticated, templates, respond),
-    '/faq': require('./faq')(conf, templates, respond)
+    '/faq': require('./faq')(conf, templates, respond),
+    '/about': require('./about')(conf, templates, respond)
   };
 
   return routes;
