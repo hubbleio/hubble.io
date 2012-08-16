@@ -2,7 +2,7 @@
   "name": "hubble.io",
   "description": "A github based, open source documentation solution",
   "author": "hij1nx <hij1nx@me.com>",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "maintainers": [
     "Pedro Teixeira <pedro@nodejitsu.com>"
   ],
