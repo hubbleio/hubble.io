@@ -33,22 +33,22 @@ And create a start script:
 ```javascript
 var HubbleIO = require('hubble.io');
 var options = {
-  "orgname": "nodeguides",
-  "title": "Node Guides",
-  "tagline": "Documentation powered by GitHub and Node.js",
-  "description": "Hubble.IO makes guides publications easier",
+  "orgname": "nodedocs",
+  "title": "NodeGuides",
+  "tagline": "Node.js guides for developers",
+  "description": "Node Guides and FAQ are designed to make you immediately productive with Node.js, to help you understand how all pieces fit together",
   "content": {
     "home": {
-      "beginner": "Beginner Intro",
-      "intermediate": "Intermediate Intro",
-      "expert": "Expert Intro"
+      "beginner": "Are you starting your journey with Node? This section of guides is for you!",
+      "intermediate": "Already familiar with Node?",
+      "expert": "Kickass Node developer? There’s also something interesting for you!"
     }
   },
   "auth": {
     "github": {
       "callback_uri": "http://localhost:8080/auth/github/callback", 
-      "client_id": "----client id----",
-      "secret": "----secret-----"
+      "client_id": "157331436a37e82e3ef8",
+      "secret": "09a42e0a664ab06cfa0c41aeb2c7aa436422eb00"
     }
   },
   "db": {
@@ -56,14 +56,25 @@ var options = {
   },
   "email": {
     "sendgrid": {
-      "user": "me@me.com",
-      "key": "some secret key"
-    }
+      "user": "------sendgrid-user-here-----",
+      "key": "------sendgrid-key-here-----"
+    },
+    "to": "------email-here-----",
+    "from": "------email-here-----"
   },
-  "session": {
-    "store": "memory"
-  }
-}
+  "twitter": "------twiiter-url-here-----",
+  "github": "------github-url-here-----",
+  "team": [
+    {
+      "name": "Pedro Teixeira",
+      "role": "Programmer",
+      "bio": "Author of some Node.js modules, the Node Tuts screencast and some Node books. Co-founder and partner of @thenodefirm, Engineer @ Nodejitsu, Organizer of LXJS",
+      "avatar": "//en.gravatar.com/userimage/6494167/902b6be09fcaab52050809f6e6f87066.jpg",
+      "twitter": "https://twitter.com/pgte",
+      "github": "https://github.com/pgte"
+    }
+  ]
+};
 
 console.log('options:', options); 
 
