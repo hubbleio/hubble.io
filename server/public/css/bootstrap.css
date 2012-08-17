@@ -190,12 +190,12 @@ body {
 }
 
 a {
-  color: #427593;
+  color: #7FAF1B;
   text-decoration: none;
 }
 
 a:hover {
-  color: #427593;
+  color: #6f9a15;
   text-decoration: underline;
 }
 
@@ -828,7 +828,9 @@ pre code {
 }
 
 .profile {
-	float: right;
+	position: absolute;
+  top: 3%;
+  right: 5%;
 }
 
 .profile strong {
@@ -3727,29 +3729,37 @@ footer .navbar li:first-child {
 
 .box {
 	padding: 20px;
+  min-height: 100px;
 	background: #fff;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, .1);
+}
+
+.box p {
+  font-size: 1em;
+  line-height: 1.4em;
 }
 
 .box h2,
 .guides h2,
 .contributors h2 {
-	margin: 0 0 20px 0;
+	margin: 0 0 15px 0;
 }
 
 .topic-cloud {
 	padding: 15px 20px;
 	position: relative;
 	z-index: 100;
+  min-height: 50px;
 	margin-top: -10px;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
-	background: #555;
-	color: #fff;
-	border: 1px solid #555;
+  box-shadow: 0 -1px 1px rgba(0, 0, 0, .15) inset;
+	background: #e5e5e5;
+	color: rgba(0, 0, 0, .7);
 	text-align: center;
 }
 
@@ -3768,14 +3778,14 @@ footer .navbar li:first-child {
 }
 
 .topic-cloud:after {
-	border-bottom-color: #555;
+	border-bottom-color: #e5e5e5;
 	border-width: 10px;
 	left: 50%;
 	margin-left: -10px;
 }
 
 .topic-cloud:before {
-	border-bottom-color: #555;
+	border-bottom-color: #e5e5e5;
 	border-width: 11px;
 	left: 50%;
 	margin-left: -11px;
@@ -3792,18 +3802,38 @@ footer .navbar li:first-child {
 	text-align: center;
 }
 
-.github .btn-large {
+.github .btn.btn-large {
 	height: 50px;
 	width: 265px;
 	font: bold 22px/50px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background: #A1C820;
+  border: none;
+  box-shadow: none;
+  color: #364113;
+  text-shadow: 0 1px 1px #b9e529;
+}
+
+.github .btn.btn-large:hover, .github .btn.btn-large:active {
+  -webkit-transition: background .5s ease, color .5s ease;
+  transition: background .5s ease, color .5s ease;
+  background: #91b41d;
+  color: #272f0e;
 }
 
 /* Guides listing */
 
+.guides #list {
+  border-radius: 5px;
+  padding: .2em 1.5em 1em 1.5em;
+  box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+}
+
 .guides div {
 	margin-top: 15px;
-	padding: 0 20px 15px 0;
-	border-bottom: 1px dotted #bdbdbd;
+	padding: 0 0 15px 0;
+	border-bottom: 1px solid rgba(0, 0, 0, .1);
+  box-shadow: 0 1px 0 #fff;
+  background: #fff;
 }
 
 .guides h2 a {
@@ -3815,7 +3845,7 @@ footer .navbar li:first-child {
 }
 
 .guides p {
-	font-size: 12px;
+	font-size: 13px;
 	line-height: 18px;
 }
 
@@ -3833,6 +3863,12 @@ footer .navbar li:first-child {
 
 .guides .meta {
 	margin-bottom: 15px;
+  font-size: .88em;
+  color: rgba(0, 0, 0, .6);
+}
+
+.guides .meta a {
+  font-weight: normal;
 }
 
 /* Contributors */
@@ -3846,7 +3882,15 @@ footer .navbar li:first-child {
 	margin: 0 10px 10px 0;
 	height: 50px;
 	width: 50px;
-	background: #333;
+}
+
+.contributors li a img {
+  border-radius: 5px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, .4);
+}
+
+.contributors li a img:hover {
+  opacity: .8;
 }
 
 /* 2.2 About
