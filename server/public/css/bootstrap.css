@@ -554,7 +554,7 @@ pre code {
 .content h1,
 .content h2,
 .content p {
-	margin: 0 0 20px 0;
+	margin: 0 0 25px 0;
 }
 
 .content p.intro {
@@ -1815,19 +1815,7 @@ button.close {
 }
 
 .btn-primary {
-  background-color: #0074cc;
-  *background-color: #0055cc;
-  background-image: -ms-linear-gradient(top, #5c86ae, #426B92);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#5c86ae), to(#426B92));
-  background-image: -webkit-linear-gradient(top, #5c86ae, #426B92);
-  background-image: -o-linear-gradient(top, #5c86ae, #426B92);
-  background-image: -moz-linear-gradient(top, #5c86ae, #426B92);
-  background-image: linear-gradient(top, #5c86ae, #426B92);
-  background-repeat: repeat-x;
-  border-color: #5c86ae #5c86ae #426B92;
-  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#5c86ae', endColorstr='#426B92', GradientType=0);
-  filter: progid:dximagetransform.microsoft.gradient(enabled=false);
+  background-color: #7FAF1B;
 }
 
 .btn-primary:hover,
@@ -1835,8 +1823,8 @@ button.close {
 .btn-primary.active,
 .btn-primary.disabled,
 .btn-primary[disabled] {
-  background-color: #3c6388;
-  *background-color: #3c6388;
+  background-color: #6f9a15;
+  *background-color: #6f9a15;
 }
 
 .btn-primary:active,
@@ -1887,19 +1875,19 @@ button.close {
 
 .btn.rate span {
 	width: 13px;
-	margin: 7px 5px 0 10px;
+	margin: 7px 5px 0 3px;
 	background: url(../img/sprite.png) no-repeat -287px -37px;
 }
 
 .btn.fork span {
 	width: 12px;
-	margin: 7px 5px 0 0;
+	margin: 7px 3px 0 3px;
 	background: url(../img/sprite.png) no-repeat -290px -64px;
 }
 
 .btn.github span {
   width: 20px;
-  margin: 7px 5px 0 10px;
+  margin: 4px 5px 0 3px;
   background: url(../img/sprite.png) no-repeat -280px 0px;
 }
 
@@ -2945,22 +2933,8 @@ input[type="submit"].btn.btn-mini {
   padding: 7px 14px;
   margin: 0 0 18px;
   list-style: none;
-  background-color: #fbfbfb;
-  background-image: -moz-linear-gradient(top, #ffffff, #f5f5f5);
-  background-image: -ms-linear-gradient(top, #ffffff, #f5f5f5);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f5f5f5));
-  background-image: -webkit-linear-gradient(top, #ffffff, #f5f5f5);
-  background-image: -o-linear-gradient(top, #ffffff, #f5f5f5);
-  background-image: linear-gradient(top, #ffffff, #f5f5f5);
-  background-repeat: repeat-x;
-  border: 1px solid #ddd;
-  -webkit-border-radius: 3px;
-     -moz-border-radius: 3px;
-          border-radius: 3px;
-  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffffff', endColorstr='#f5f5f5', GradientType=0);
-  -webkit-box-shadow: inset 0 1px 0 #ffffff;
-     -moz-box-shadow: inset 0 1px 0 #ffffff;
-          box-shadow: inset 0 1px 0 #ffffff;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
 }
 
 .breadcrumb li {
@@ -4036,6 +4010,10 @@ section.contributors-listing {
 	border-bottom: 1px solid #ddd;
 }
 
+.article-body h1 {
+  margin-top: 20px;
+}
+
 .article:last-child {
 	border: none;
 	margin-bottom: 0;
@@ -4086,6 +4064,14 @@ article .button-container {
 	border-top: 1px solid #ddd;
 }
 
+article .button-container .left {
+  opacity: .6;
+}
+
+article p {
+  line-height: 20px;
+}
+
 .actions {
 	margin-top: 20px;
 	padding: 15px;
@@ -4133,4 +4119,23 @@ article .button-container {
 }
 .expand:hover {
   text-decoration: none;
+}
+
+.other-articles h3 {
+  margin-bottom: 15px;
+}
+
+.other-articles li {
+  margin-bottom: 5px;
+}
+
+.actions .btn {
+  margin-right: 10px;
+  margin-bottom: 5px;
+  padding: 0 5px;
+  color: #000;
+}
+
+.actions .btn.github {
+  margin-right: 0;
 }
