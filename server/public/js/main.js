@@ -80,7 +80,7 @@ $(function() {
       if (loggedIn) {
         contentEl.html('<p>Loading...</p>');
         contentEl.addClass('loading');
-        var url = button.attr('href') || (document.location.pathname + '/like');
+        var url = button.attr('href') || (document.location.pathname + '/star');
         
         $.post(url, function(content) {
           var url;

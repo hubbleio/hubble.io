@@ -68,7 +68,7 @@ module.exports = function(conf, content, templates, github, authenticated, respo
         articleSuggestion.call(this, this.req.body);
       })
     },
-    '/:name/like': {
+    '/:name/star': {
       post: respond(function(firstLevel, name) {
         if (! firstLevel) {
           name = firstLevel;
@@ -76,7 +76,7 @@ module.exports = function(conf, content, templates, github, authenticated, respo
         }
 
         findArticle.call(this, name, function(article) {
-          github.like.call(this, article);
+          github.star.call(this, article);
         });
       })
     },
