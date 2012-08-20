@@ -50,6 +50,8 @@ function githubOauth(conf, req, res) {
       if (response.statusCode < 200 || response.statusCode >= 300) {
         return error(new Error('Github replied with status code ' + response.statusCode + ' to URL ' + uri));
       }
+
+      console.log('response body form github: %s', body.toString());
       
       var accessToken = qs.parse(body).access_token;
       var uri = buildURI(GITHUB_API_URI_BASE + '/user?', 'access_token', accessToken);
