@@ -1,5 +1,5 @@
 var Options = require('./lib/options'),
-    Server  = require('./server/server'),
+    Server  = require('./server'),
     Content = require('./lib/content'),
     EE      = require('events').EventEmitter;
 
