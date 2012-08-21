@@ -72,7 +72,7 @@ module.exports = function(conf, content) {
         return templates('/index.html').call(this);
       })
     },
-    '/contributors': require('./contributor')(conf, content, templates, respond),
+    '/authors': require('./author')(conf, content, templates, respond),
     '/guides': articleRoutes(conf, content, templates, github, authenticated, respond),
     '/categories': require('./category')(conf, content, templates, github, authenticated, articleRoutes, respond),
     '/levels': require('./level')(conf, content, templates, articleRoutes, github, authenticated, respond),

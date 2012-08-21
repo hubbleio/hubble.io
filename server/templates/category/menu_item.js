@@ -11,7 +11,7 @@ module.exports = function(html, templates, conf, bind, Map, content) {
     }
     var name = prefix + category.name;
     if (category.children && category.children.length) {
-      name += templates('/categories/menu_group.html').call(this, category.children, '› ');
+      name += templates('/category/menu_group.html').call(this, category.children, '› ');
     }
 
     var data = {

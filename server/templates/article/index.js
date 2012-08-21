@@ -1,4 +1,4 @@
-var difficultyLevels = require('../../lib/difficulty_levels');
+var difficultyLevels = require('../../../lib/difficulty_levels');
 
 module.exports = function(html, templates, conf, bind, Map, content) {
 

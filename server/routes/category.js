@@ -22,7 +22,7 @@ module.exports = function(conf, content, templates, github, authenticated, artic
           this.res.end('Not found');
           return;
         }
-        return templates('/category.html').call(this, category);
+        return templates('/category/show.html').call(this, category);
       }),
 
       '/guides': articleRoutes(conf, content, templates, github, authenticated, respond, '/categories')

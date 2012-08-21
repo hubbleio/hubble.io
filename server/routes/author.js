@@ -3,7 +3,7 @@ module.exports = function(conf, content, templates, respond) {
   return  {
 
     get: respond(function() {
-      return templates('/contributors.html').call(this);
+      return templates('/author/index.html').call(this);
     }),
 
     '/([\\w|\\s|-|\.]+)': {
@@ -15,7 +15,7 @@ module.exports = function(conf, content, templates, respond) {
           this.res.end('Not found');
           return;
         }
-        return templates('/contributor.html').call(this, author);
+        return templates('/author/show.html').call(this, author);
       })
     }
   };

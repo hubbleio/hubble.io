@@ -5,7 +5,7 @@ module.exports = function(html, templates, conf, bind, Map, content) {
     var parts = [
       {
         label: author.meta.name,
-        url: '/contributors/' + encodeURIComponent(author.meta.name)
+        url: '/authors/' + encodeURIComponent(author.meta.name)
       }
     ];
 

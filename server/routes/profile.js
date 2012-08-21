@@ -16,7 +16,7 @@ module.exports = function(conf, authenticated, templates, github, respond) {
           return res.end(err.stack);
         }
         res.writeHead(200, {'Content-Type': 'text/html'});
-        res.end(templates('/profile.html').call(self, articleRequests));
+        res.end(templates('/profile/index.html').call(self, articleRequests));
       });
     }),
 

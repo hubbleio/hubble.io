@@ -74,7 +74,10 @@ module.exports = function(config) {
     (function get() {
       var uri = '_design/views/_view/by_user?key=' + encodeURIComponent(JSON.stringify(user.login));
       db.get(uri, function(err, results) {
-        callback(err, results.rows.map(prop('value')));
+        if (err) {
+          return callback(err);
+        }
+        callback(null, results.rows.map(prop('value')));
       });  
     }());
   }

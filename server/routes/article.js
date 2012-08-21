@@ -163,7 +163,7 @@ module.exports = function(conf, content, templates, github, authenticated, respo
             prefixURL += encodeURIComponent(level);
           }
           res.writeHead(200, {'Content-Type': 'text/html'});
-          res.end(templates('/article.html').call(this, article, prefixURL, cat, level));
+          res.end(templates('/article/index.html').call(this, article, prefixURL, cat, level));
         });
       })
     }

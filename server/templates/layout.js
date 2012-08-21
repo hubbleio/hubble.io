@@ -5,7 +5,7 @@ module.exports = function(html, templates, conf, bind, Map, content) {
     var data = {
       head: templates('/shared/head.html').call(this, title),
       //menu: templates['categories.html'](categories),
-      categories: templates('/categories/menu.html').call(this),
+      categories: templates('/category/menu.html').call(this),
       main: options.main,
       title: title,
       orgname: '',

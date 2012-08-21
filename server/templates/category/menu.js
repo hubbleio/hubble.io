@@ -27,7 +27,7 @@ module.exports = function(html, templates, conf, bind, Map, content) {
         }
         cats.push(cat);
       }
-      categoriesMarkup += templates('/categories/menu_group.html')(cats);
+      categoriesMarkup += templates('/category/menu_group.html')(cats);
     }
 
     var map = Map();

@@ -9,7 +9,7 @@ module.exports = function(html, templates, conf, bind, Map, content) {
 
     var data = {
       categories: categories.map(function(category) {
-        return templates('/categories/menu_item.html').call(this, category, prefix);
+        return templates('/category/menu_item.html').call(this, category, prefix);
       }).join('')
     };
 

@@ -7,7 +7,7 @@ module.exports = function(html, templates, conf, bind, Map, content) {
   return function() {
 
 
-    var contributors = Object.keys(content.index.byAuthor).map(function(authorName) {
+    var authors = Object.keys(content.index.byAuthor).map(function(authorName) {
       return content.index.byAuthor[authorName];
     }).sort(function(a, b) {
       return b.articles.length - a.articles.length;
@@ -17,13 +17,13 @@ module.exports = function(html, templates, conf, bind, Map, content) {
 
     var data = {
       orgname: conf.orgname,
-      contributors_listing: contributors
+      contributors_listing: authors
     };
 
     var main = bind(html, data, map);
     return templates('/layout.html').call(this, {
       main: main,
-      title: 'Contributors'
+      title: 'Authors'
     });
   };
 };

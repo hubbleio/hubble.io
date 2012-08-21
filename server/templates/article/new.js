@@ -4,16 +4,16 @@ var moment = require('../../../lib/moment'),
 module.exports = function(html, templates, conf, bind, Map, content) {
 
   return function(article) {
-    var data = {
-      'difficulty-levels': difficultyLevels.strings.map(function(difficultyLevelString) {
-        return templates('/difficulty_level/dropdown_element.html').call(this, difficultyLevelString);
-      }).join(''),
+    // var data = {
+    //   'difficulty-levels': difficultyLevels.strings.map(function(difficultyLevelString) {
+    //     return templates('/difficulty_level/dropdown_element.html').call(this, difficultyLevelString);
+    //   }).join(''),
 
-      'categories': content.index.categories.map(function(category) {
-        return templates('/categories/dropdown_element.html').call(this, category);
-      }).join('')
-    };
-    return bind(html, data);
+    //   'categories': content.index.categories.map(function(category) {
+    //     return templates('/category/dropdown_element.html').call(this, category);
+    //   }).join('')
+    // };
+    return html;
   };
   
 };

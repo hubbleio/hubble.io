@@ -23,7 +23,7 @@ module.exports = function(html, templates, conf, bind, Map, content) {
     }
 
     var data = {
-      link_to: '/contributors/' + encodeURIComponent(author.meta.name),
+      link_to: '/authors/' + encodeURIComponent(author.meta.name),
       avatar_url: avatarURL
     };
 
