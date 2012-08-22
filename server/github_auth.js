@@ -53,7 +53,7 @@ function githubOauth(conf, req, res) {
 
       console.log('response body form github: %s', body.toString());
       
-      var accessToken = qs.parse(body).access_token;
+      var accessToken = qs.parse(body.toString()).access_token;
       var uri = buildURI(GITHUB_API_URI_BASE + '/user?', 'access_token', accessToken);
       request.get(uri, function(err, response, body) {
         if (err) { return error(err); }
