@@ -15,8 +15,6 @@ module.exports = function(html, templates, conf, bind, Map) {
       member: conf.team
     };
 
-    console.log('data:', data);
-
     return templates('/layout.html').call(this, {
       main: bind(html, data, map),
       title: 'About'
