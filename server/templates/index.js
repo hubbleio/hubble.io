@@ -1,3 +1,5 @@
+var moment = require('../../lib/moment');
+
 module.exports = function(html, templates, conf, bind, Map, content) {
 
   var map = Map();
@@ -12,6 +14,15 @@ module.exports = function(html, templates, conf, bind, Map, content) {
   map.where('id').is('expert-intro').use('expert-intro');
   map.where('id').is('expert-some-articles').use('expert-some-articles');
   map.where('id').is('contributor-list').use('contributor-list');
+
+  map.className('article').to('article');
+  map.className('article-title').to('article-title');
+  map.className('article-title').use('article-url').as('href');
+  map.className('author').to('author');
+  map.className('author-name').to('author-name');
+  map.className('author-name').use('author-url').as('href');
+  map.className('published-when').use('published-when');
+  map.className('article-intro').use('article-intro');
 
   function someArticles(level) {
     var idx = 0,
@@ -32,6 +43,22 @@ module.exports = function(html, templates, conf, bind, Map, content) {
     return ret;
   }
 
+  function prepareArticle(article) {
+
+    return {
+      'article-title': article.meta.title,
+      'article-url': '/guides/' + encodeURIComponent(article.name),
+      author: article.meta.authors.map(function(author) {
+        return {
+          'author-name': author.meta.name,
+          'author-url': '/authors/' + encodeURIComponent(author.meta.name)
+        };
+      }),
+      'published-when': moment(article.github.updated_at).fromNow(),
+      'article-intro': article.meta.description
+    };
+  }
+
   return function() {
 
     var popularGuides = content.index.byPopularity.slice(0, 2);
@@ -41,8 +68,8 @@ module.exports = function(html, templates, conf, bind, Map, content) {
       'sign-in-with-github': (! this.req.session.user && {
         title: conf.title
       }) || '',
-      'guides-popular': templates('/article/list.html')('Popular guides', popularGuides),
-      'guides-new':     templates('/article/list.html')('New guides', newGuides),
+      'guides-popular': {article: popularGuides.map(prepareArticle)},
+      'guides-new':     {article: newGuides.map(prepareArticle)},
       'beginner-intro': conf.content.home.beginner,
       'beginner-some-articles': someArticles('beginner'),
       'intermediate-intro': conf.content.home.intermediate,
