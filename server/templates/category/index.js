@@ -20,10 +20,11 @@ module.exports = function(html, templates, conf, bind, Map, content) {
 
   return function(category) {
 
-    var child = category;
-    var parts = category.id.split('--');
-    var cats = [];
-    var urlPrefix = '/categories/' + encodeURIComponent(category.id);
+    var child = category,
+        parts = category.id.split('--'),
+        cats = [],
+        urlPrefix = '/categories/' + encodeURIComponent(category.id)
+        ;
 
     var data = {
 
