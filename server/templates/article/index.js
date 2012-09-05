@@ -3,17 +3,31 @@ var difficultyLevels = require('../../../lib/difficulty_levels');
 module.exports = function(html, templates, conf, bind, Map, content) {
 
   var map = Map();
+
   map.where('href').is('/to-github').use('github_url').as('href');
-  map['class']('breadcrumbs').to('breadcrumbs');
-  map['class']('article-body').to('article-body');
-  map['class']('author').to('author');
+  
+  map.className('breadcrumb').to('breadcrumb');
+  map.className('breadcrumb-element').to('breadcrumb-element');
+  map.className('category-name').to('breadcrumb-name');
+  map.className('category-name').to('breadcrumb-url').as('href');
+
+  map.className('article-body').to('article-body');
+  map.className('button-container').to('button-container');
+  map.where('href').is('/left').use('left-url').as('href');
+  map.where('href').is('/right').use('right-url').as('href');
+  
+  map.className('author').to('author');
+  map.className('author-info').to('author-info');
+  map.className('other-articles-title').to('other-articles-title');
+  map.className('short-list-article').to('short-list-article');
+  map.className('short-list-article-link').to('short-list-article-link');
+  map.className('short-list-article-link').use('short-list-article-link-url').as('href');
 
   return function(article, prefix, cat, level) {
 
     var previous, next, idx, levelString, otherArticles;
 
     function articleURL(article) {
-      //if (! article) { return ''; }
       url = '';
       if (prefix) {
         url += prefix;
@@ -49,18 +63,48 @@ module.exports = function(html, templates, conf, bind, Map, content) {
 
     var data = {
 
-      'breadcrumbs': article.meta.categories.map(function(catList) {
-        return templates('/shared/breadcrumb.html').call(this, catList);
-      }).join(''),
-      
-      'article-body': templates('/article/body.html').call(this, article, previous, next),
+      'breadcrumb': article.meta.categories.map(function(catList) {
+        var cats = [];
+        return {
+          'breadcrumb-element': catList.map(function(cat, idx) {
+            cats.push(cat);
+            return {
+              'breadcrumb-name': cat,
+              'breadcrumb-url': '/categories/' + encodeURIComponent(cats.join('--'))
+            };
+          })
+        };
+      }),
+
+      'article-body': article.markup,
+
+      'button-container': {
+        'left-url': previous || '',
+        'right-url': next || ''
+      },
+
+      'author-info': 'ABC',
+      //article.meta.authors.map(templates('/author/info.html')),
       
       author: article.meta.authors.map(function(author) {
-        return templates('/author/in_article.html').call(this, author, article);
-      }).join(''),
+        return {
+          'author-info': templates('/author/info.html')(author),
+          'other-articles-title': 'Other articles from this author:',
+          'short-list-article': author.articles.filter(function(otherArticle) {
+            return otherArticle != article;
+          }).map(function(article) {
+            return {
+              'short-list-article-link': article.name,
+              'short-list-article-link-url': '/guides/' + encodeURIComponent(article.name)
+            };
+          })
+        };
+      }),
 
       github_url: article.github.html_url
     };
+
+    console.log('data.author.other-articles-title:', data.author[0]['other-articles-title']);
 
     var main = bind(html, data, map);
     return templates('/layout.html').call(this, {

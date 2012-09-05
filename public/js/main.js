@@ -70,10 +70,10 @@ $(function() {
   //
   // Rate Article
   //
-  $('.rate').click(function(ev) {
+  $('.star').click(function(ev) {
     var button = $(this);
     console.log(button.attr('href'));
-    var modal = $('#rateModal');
+    var modal = $('#starModal');
     modal.modal();
     modal.on('shown', function() {
       var contentEl = modal.find('.modal-body');

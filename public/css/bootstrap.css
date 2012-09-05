@@ -2949,6 +2949,10 @@ input[type="submit"].btn.btn-mini {
   color: #999999;
 }
 
+.breadcrumb .breadcrumb-element:last-child .divider {
+  display: none;
+}
+
 .breadcrumb .active a {
   color: #333333;
 }
