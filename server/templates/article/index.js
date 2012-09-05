@@ -65,6 +65,7 @@ module.exports = function(html, templates, conf, bind, Map, content) {
 
       'breadcrumb': article.meta.categories.map(function(catList) {
         var cats = [];
+        if (! Array.isArray(catList)) catList = [catList];
         return {
           'breadcrumb-element': catList.map(function(cat, idx) {
             cats.push(cat);
@@ -104,11 +105,8 @@ module.exports = function(html, templates, conf, bind, Map, content) {
       github_url: article.github.html_url
     };
 
-    console.log('data.author.other-articles-title:', data.author[0]['other-articles-title']);
-
-    var main = bind(html, data, map);
     return templates('/layout.html').call(this, {
-      main: main,
+      main: bind(html, data, map),
       title: article.meta.title
     });
   };
