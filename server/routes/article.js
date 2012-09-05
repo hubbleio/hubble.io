@@ -70,7 +70,7 @@ module.exports = function(conf, content, templates, github, authenticated, respo
     },
     '/:name/star': {
       post: respond(function(firstLevel, name) {
-        if (! firstLevel) {
+        if (! name) {
           name = firstLevel;
           firstLevel = undefined;
         }

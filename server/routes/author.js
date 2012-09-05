@@ -15,7 +15,7 @@ module.exports = function(conf, content, templates, respond) {
           this.res.end('Not found');
           return;
         }
-        return templates('/author/show.html').call(this, author);
+        return templates('/author/index.html').call(this, author);
       })
     }
   };
