@@ -1,6 +1,3 @@
-function noop() {};
-var debug = noop;
-
 var ONE_HOUR = 60 * 60 * 1000;
 
 function clone(o) {
@@ -24,7 +21,6 @@ function MemoryStore(timeout) {
   }
 
   function set(id, value, callback) {
-    debug('setting %s to %j', id, value);
     store[id] = clone(value);
     process.nextTick(callback);
     if (timeouts[id]) {
@@ -38,7 +34,6 @@ function MemoryStore(timeout) {
   }
 
   function get(id, callback) {
-    debug('getting %s', id);
     var o = store[id];
     if (typeof o !== 'undefined') { o = clone(o); }
     process.nextTick(function() {

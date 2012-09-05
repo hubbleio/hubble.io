@@ -1,11 +1,7 @@
 var redis = require('redis');
 
-function noop() {};
-var debug = noop;
-//var debug = console.log;
-
 var ONE_HOUR = 60 * 60;
-var DEFAULT_PREFIX = 'hubbleio-session-';
+var DEFAULT_PREFIX = '--session-';
 
 function clone(o) {
   return JSON.parse(JSON.stringify(o));
@@ -40,7 +36,6 @@ function RedisStore(options) {
   }
 
   function set(id, value, callback) {
-    debug('setting %s to %j', id, value);
     try {
       client.setex(options.prefix + id, options.timeout, JSON.stringify(value), callback);
     } catch(err) {
@@ -49,12 +44,10 @@ function RedisStore(options) {
   }
 
   function get(id, callback) {
-    debug('getting %s', id);
     client.get(options.prefix + id, function(err, data) {
       if (err) { return callback(err); }
       if (! data) { return callback(); }
       data = data.toString();
-      debug('got %s', data);
       try {
         data = JSON.parse(data);
       } catch(err) {

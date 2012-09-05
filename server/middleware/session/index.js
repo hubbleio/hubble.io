@@ -8,7 +8,7 @@ function uid(len) {
   return crypto.randomBytes(Math.ceil(len * 3 / 4))
     .toString('base64')
     .slice(0, len);
-};
+}
 
 function newSessionId() {
   return uid(24);
@@ -27,15 +27,14 @@ function Session(sessionCookieName, store) {
 
   return function handleRequest(req, res) {
     var sessionId = req.cookies && req.cookies[sessionCookieName];
-    if (! sessionId) { sessionId = newSessionId(); }
+    sessionId || (sessionId = newSessionId());
 
     res.setHeader('Set-Cookie', escape(sessionCookieName) + '=' + escape(sessionId));
 
     store(sessionId, function(err, session) {
-      session || (
-        session = {
-          id: sessionId
-        });
+      if (err) { return res.emit('error', err); }
+
+      session || ( session = { id: sessionId });
 
       session.clear = clear;
       req.session = session;
@@ -51,7 +50,7 @@ function Session(sessionCookieName, store) {
       });
     });
 
-  }
+  };
 }
 
 module.exports = Session;

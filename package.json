@@ -33,7 +33,7 @@
     "optimist": "*",
     "async": "*",
     "request": "*",
-    "plates": "*",
+    "plates": ">= 0.4.8",
     "github-flavored-markdown": "*",
     "highlight": "*",
     "tar": "*",
@@ -41,7 +41,9 @@
     "bubble": "*",
     "nano": "*",
     "sendgrid-web": "*",
-    "redis": "*"
+    "redis": "*",
+    "flatware-cookie-parser": "*",
+    "flatware-session": "*"
   },
   "devDependencies": {
     "tap": "0.3.x"
