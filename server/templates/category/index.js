@@ -12,6 +12,8 @@ module.exports = function(html, templates, conf, bind, Map, content) {
   map.className('title').to('title');
   map.className('title').use('url').as('href');
   map.className('authors').to('authors');
+  map.className('author-link').to('author-name');
+  map.className('author-link').use('author-url').as('href');
   map.className('when').to('when');
   map.className('description').to('description');
   map.where('href').is('/to-article').use('url').as('href');
@@ -44,7 +46,12 @@ module.exports = function(html, templates, conf, bind, Map, content) {
 
         return {
           title: article.meta.title,
-          authors: templates('/author/anchor_strings.html').call(this, article.meta.authors),
+          authors: article.meta.authors.map(function(author) {
+            return {
+              'author-name': author.meta.name,
+              'author-url' : '/authors/' + encodeURIComponent(author.meta.name)
+            };
+          }),
           when: moment(article.github.created_at).fromNow(),
           description: article.meta.description,
           url: url,
