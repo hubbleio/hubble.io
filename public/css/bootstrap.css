@@ -3935,13 +3935,14 @@ footer .navbar li:first-child {
 }
 
 
-.member .meta li.twitter a,
+.member .meta .twitter a,
 .contributor .meta li a {
   background: url(../img/sprite.png) no-repeat -253px 0;
 }
 
-.member li.github > a,
-.contributor li.github > a {
+.member .github > a,
+.contributor .meta li .github a,
+.contributor .github > a {
 	background: url(../img/sprite.png) no-repeat -280px 0;
 }
 

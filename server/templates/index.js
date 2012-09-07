@@ -1,4 +1,6 @@
-var moment = require('../../lib/moment');
+var moment = require('../../lib/moment'),
+    crypto = require('crypto')
+;
 
 module.exports = function(html, templates, conf, bind, Map, content) {
 
@@ -13,7 +15,10 @@ module.exports = function(html, templates, conf, bind, Map, content) {
   map.where('id').is('intermediate-some-articles').use('intermediate-some-articles');
   map.where('id').is('expert-intro').use('expert-intro');
   map.where('id').is('expert-some-articles').use('expert-some-articles');
-  map.where('id').is('contributor-list').use('contributor-list');
+
+  map.className('author-avatar').to('author-avatar');
+  map.className('avatar').to('author-avatar-url').as('src');
+  map.className('author-link').to('author-link-to').as('href');
 
   map.className('article').to('article');
   map.className('article-title').to('article-title');
@@ -48,7 +53,7 @@ module.exports = function(html, templates, conf, bind, Map, content) {
     return {
       'article-title': article.meta.title,
       'article-url': '/guides/' + encodeURIComponent(article.name),
-      author: article.meta.authors.map(function(author) {
+      'author': article.meta.authors.map(function(author) {
         return {
           'author-name': author.meta.name,
           'author-url': '/authors/' + encodeURIComponent(author.meta.name)
@@ -64,6 +69,37 @@ module.exports = function(html, templates, conf, bind, Map, content) {
     var popularGuides = content.index.byPopularity.slice(0, 2);
     var newGuides = content.index.byCreationDate.slice(0, 2);
 
+    //
+    // Sort authors by number of articles
+    //
+      var authorList = Object.keys(content.index.byAuthor).map(function(authorName) {
+        return content.index.byAuthor[authorName];
+      }).sort(function(a, b) {
+        return b.articles.length - a.articles.length;
+      }).map(function(author) {
+
+        var avatarURL;
+
+        if (author.meta.email) {
+          var emailHash = crypto.createHash('md5').update(author.meta.email.toLowerCase()).digest('hex');
+          avatarURL = '//www.gravatar.com/avatar/' + encodeURIComponent(emailHash);
+        }
+        if (! avatarURL) {
+          if (author.meta.github_info && author.meta.github_info.avatar_url) {
+            avatarURL = author.meta.github_info.avatar_url;
+          }
+        }
+        if (! avatarURL) {
+          avatarURL = '/img/no_avatar.jpg';
+        }
+
+        return {
+          'author-link-to': '/authors/' + encodeURIComponent(author.meta.name),
+          'author-avatar-url': avatarURL
+        };
+      });
+
+
     var data = {
       'sign-in-with-github': (! this.req.session.user && {
         title: conf.title
@@ -76,7 +112,7 @@ module.exports = function(html, templates, conf, bind, Map, content) {
       'intermediate-some-articles': someArticles('intermediate'),
       'expert-intro': conf.content.home.expert,
       'expert-some-articles': someArticles('expert'),
-      'contributor-list': templates('/author/list.html').call(this)
+      'author-avatar': authorList
     };
 
     return templates('/layout.html').call(this, {
