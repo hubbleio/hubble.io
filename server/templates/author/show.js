@@ -52,8 +52,6 @@ module.exports = function(html, templates, conf, bind, Map, content) {
       title: author.meta.name
     };
 
-    console.log('author:', data.article.map(function(a) { return a.author; }));
-
     return templates('/layout.html').call(this, {
       main: bind(html, data, map),
       title: author.meta.name
