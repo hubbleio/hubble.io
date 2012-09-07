@@ -134,4 +134,23 @@ $(function() {
   }());
 
 
+  //
+  // Button to expand / collapse all author articles
+  //
+  $('.btn-all-articles').click(function() {
+    var $this = $(this),
+        target = $($this.attr('data-target')),
+        collapsed = target.hasClass('collapsed');
+
+    if (collapsed) {
+      target.slideDown();
+      target.removeClass('collapsed');
+      $this.text('Hide');
+    } else {
+      target.slideUp();
+      target.addClass('collapsed');
+      $this.text('Show all articles');
+    }
+  });
+
 });
