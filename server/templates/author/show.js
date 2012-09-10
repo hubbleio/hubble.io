@@ -21,6 +21,9 @@ module.exports = function(html, templates, conf, bind, Map, content) {
   map.where('href').is('/to-article').use('url').as('href');
   map.where('href').is('/star').use('rate_url').as('href');
 
+  map.className('author-beside').to('author-beside');
+  map.className('author-info').to('author-info');
+
   return function(author) {
 
     var data = {
@@ -49,7 +52,14 @@ module.exports = function(html, templates, conf, bind, Map, content) {
           rate_url: url + '/star'
         };
       }),
-      title: author.meta.name
+
+      title: author.meta.name,
+
+      'author-beside': {
+        'author-info': templates('/author/info.html')(author),
+        'other-articles-title': 'Other articles from this author:'
+      }
+
     };
 
     return templates('/layout.html').call(this, {
