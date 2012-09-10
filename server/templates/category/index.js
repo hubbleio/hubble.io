@@ -19,14 +19,28 @@ module.exports = function(html, templates, conf, bind, Map, content) {
   map.where('href').is('/to-article').use('url').as('href');
   map.where('href').is('/star').use('rate_url').as('href');
 
+  map.className('subcategories').to('subcategories');
+  map.className('subcategory').to('subcategory');
+  map.className('subcategory-link').to('subcategory-name');
+  map.className('subcategory-link').use('subcategory-link').as('href');
+
 
   return function(category) {
 
     var child = category,
         parts = category.id.split('--'),
         cats = [],
-        urlPrefix = '/categories/' + encodeURIComponent(category.id)
+        urlPrefix = '/categories/' + encodeURIComponent(category.id),
+        subCategories
         ;
+
+    subCategories = Object.keys(category.children).map(function(subCatName) {
+      var subCat = category.children[subCatName];
+      return {
+        'subcategory-name': subCatName,
+        'subcategory-link': '/categories/' + encodeURIComponent(subCat.id)
+      };
+    });
 
     var data = {
 
@@ -60,7 +74,11 @@ module.exports = function(html, templates, conf, bind, Map, content) {
 
       }),
 
-      title: category.name
+      title: category.name,
+
+      subcategories: subCategories.length ? ({
+        subcategory: subCategories
+      }): ''
     };
 
     return templates('/layout.html').call(this, {
