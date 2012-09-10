@@ -28,6 +28,10 @@ module.exports = function(html, templates, conf, bind, Map, content) {
   map.className('popular-article-link').to('popular-article-name');
   map.className('popular-article-link').use('popular-article-url').as('href');
 
+  map.className('author').to('author');
+  map.className('author-list-link').to('author-name');
+  map.className('author-list-link').to('author-url').as('href');
+
 
   return function(category) {
 
@@ -36,7 +40,8 @@ module.exports = function(html, templates, conf, bind, Map, content) {
         cats = [],
         urlPrefix = '/categories/' + encodeURIComponent(category.id),
         subCategories,
-        popularArticles
+        popularArticles,
+        authors
         ;
 
     subCategories = Object.keys(category.children).map(function(subCatName) {
@@ -51,6 +56,13 @@ module.exports = function(html, templates, conf, bind, Map, content) {
       return {
         'popular-article-name': article.meta.title,
         'popular-article-url': '/guides/' + encodeURIComponent(article.name)
+      };
+    });
+
+    authors = category.authors.map(function(author) {
+      return {
+        'author-name': author.meta.name,
+        'author-url': '/authors/' + encodeURIComponent(author.meta.name)
       };
     });
 
@@ -92,7 +104,9 @@ module.exports = function(html, templates, conf, bind, Map, content) {
         subcategory: subCategories
       }): '',
 
-      'popular-article': popularArticles
+      'popular-article': popularArticles,
+
+      'author': authors
     };
 
     return templates('/layout.html').call(this, {
