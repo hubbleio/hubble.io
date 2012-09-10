@@ -8,6 +8,7 @@ module.exports = function(html, templates, conf, bind, Map, content) {
   map.className('author-avatar-link').to('author-link-to').as('href');
 
   map.className('name').to('name');
+  map.className('name').use('url').as('href');
 
   map.where('role').is('link').to('link');
   map.where('role').is('link-type').use('link-class').as('class');
@@ -46,6 +47,7 @@ module.exports = function(html, templates, conf, bind, Map, content) {
       'author-avatar-url': avatarURL,
       'author-avatar-link': '/authors/' + encodeURIComponent(author.meta.name),
       'name': author.meta.name,
+      'url': '/authors/' + encodeURIComponent(author.meta.name),
       'link': links,
       'written_count': author.articles.length
     };
