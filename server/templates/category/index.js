@@ -24,6 +24,10 @@ module.exports = function(html, templates, conf, bind, Map, content) {
   map.className('subcategory-link').to('subcategory-name');
   map.className('subcategory-link').use('subcategory-link').as('href');
 
+  map.className('popular-article').to('popular-article');
+  map.className('popular-article-link').to('popular-article-name');
+  map.className('popular-article-link').use('popular-article-url').as('href');
+
 
   return function(category) {
 
@@ -31,7 +35,8 @@ module.exports = function(html, templates, conf, bind, Map, content) {
         parts = category.id.split('--'),
         cats = [],
         urlPrefix = '/categories/' + encodeURIComponent(category.id),
-        subCategories
+        subCategories,
+        popularArticles
         ;
 
     subCategories = Object.keys(category.children).map(function(subCatName) {
@@ -39,6 +44,13 @@ module.exports = function(html, templates, conf, bind, Map, content) {
       return {
         'subcategory-name': subCatName,
         'subcategory-link': '/categories/' + encodeURIComponent(subCat.id)
+      };
+    });
+
+    popularArticles = category.byPopularity.slice(0, 5).map(function(article) {
+      return {
+        'popular-article-name': article.meta.title,
+        'popular-article-url': '/guides/' + encodeURIComponent(article.name)
       };
     });
 
@@ -74,11 +86,13 @@ module.exports = function(html, templates, conf, bind, Map, content) {
 
       }),
 
-      title: category.name,
+      'title': category.name,
 
-      subcategories: subCategories.length ? ({
+      'subcategories': subCategories.length ? ({
         subcategory: subCategories
-      }): ''
+      }): '',
+
+      'popular-article': popularArticles
     };
 
     return templates('/layout.html').call(this, {
