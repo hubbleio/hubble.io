@@ -4122,15 +4122,23 @@ article p {
   position: relative;
 }
 
-.expand {
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 0 8px;
-  background: #fff url(../img/sprite.png) -110px -55px no-repeat;
+.article-body h1:hover a.anchor,
+.article-body h2:hover a.anchor,
+.article-body h3:hover a.anchor,
+.article-body h4:hover a.anchor,
+.article-body h5:hover a.anchor,
+.article-body h6:hover a.anchor {
+  display: inline-block;
 }
-.expand:hover {
-  text-decoration: none;
+
+a.anchor {
+  display: none;
+  padding-left: 29px;
+  margin-left: -30px;
+  background: url(../img/sprite.png) no-repeat -275px -85px;
+  text-decoration: underline;
+  height: 30px;
+  min-width: 1px;
 }
 
 .other-articles h3 {
