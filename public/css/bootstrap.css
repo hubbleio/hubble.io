@@ -4028,7 +4028,7 @@ section.contributors-listing {
 
 .article-short {
 	float: left; 
-	max-width: 420px;
+	max-width: 410px;
 }
 
 .buttons {
@@ -4047,6 +4047,11 @@ section.contributors-listing {
 .level-description {
 	float: left;
 	max-width: 430px;
+}
+
+.rest p {
+  color: #aaa;
+  margin-bottom: 10px;
 }
 
 /* 2.5 Article

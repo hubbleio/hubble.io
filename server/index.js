@@ -84,6 +84,7 @@ server.createServer = function(conf, content, callback) {
     ]
   });
 
+
   server.on('close', function() {
     store.close();
   });

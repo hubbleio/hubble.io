@@ -47,7 +47,7 @@ module.exports = function(html, templates, conf, bind, Map, content) {
             };
           }),
           when: moment(article.github.created_at).fromNow(),
-          description: article.meta.description,
+          description: article.meta.intro,
           url: url,
           rate_url: url + '/star'
         };
