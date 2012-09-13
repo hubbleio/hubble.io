@@ -14,14 +14,6 @@ results
 .DS_Store
 node_modules
 npm-debug.log
-<<<<<<< HEAD
-server/tmp/*
-!server/tmp/README
-#server/conf.json
-=======
 tmp/*
 !tmp/README
 config/*.json
-public_old
-server2
->>>>>>> redesign

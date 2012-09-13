@@ -2,7 +2,7 @@
   "name": "hubble.io",
   "description": "A github based, open source documentation solution",
   "author": "hij1nx <hij1nx@me.com>",
-  "version": "0.1.8",
+  "version": "0.1.14",
   "maintainers": [
     "Pedro Teixeira <pedro@nodejitsu.com>"
   ],
@@ -27,23 +27,23 @@
     "awesome"
   ],
   "dependencies": {
-    "union": "*",
-    "director": "*",
-    "node-static": "*",
-    "optimist": "*",
-    "async": "*",
-    "request": "*",
-    "plates": ">= 0.4.8",
-    "github-flavored-markdown": "*",
-    "highlight": "*",
-    "tar": "*",
-    "underscore": "*",
-    "bubble": "*",
-    "nano": "*",
-    "sendgrid-web": "*",
-    "redis": "*",
-    "flatware-cookie-parser": "*",
-    "flatware-session": "*"
+    "union": "0.3.x",
+    "director": "1.1.x",
+    "node-static": "0.6.x",
+    "optimist": "0.3.4",
+    "async": "0.1.x",
+    "request": "2.11.x",
+    "plates": "0.4.8",
+    "github-flavored-markdown": "1.0.x",
+    "highlight": "0.2.x",
+    "tar": "0.1.x",
+    "underscore": "1.3.x",
+    "bubble": "0.1.x",
+    "nano": "3.3.x",
+    "sendgrid-web": "0.0.x",
+    "redis": "0.8.x",
+    "flatware-cookie-parser": "0.1.x",
+    "flatware-session": "0.1.x"
   },
   "devDependencies": {
     "tap": "0.3.x"

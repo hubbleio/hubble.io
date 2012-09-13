@@ -16,5 +16,4 @@ node_modules
 npm-debug.log
 tmp/*
 !tmp/README
-public_old
-server2
+!tmp/request_cache/README
