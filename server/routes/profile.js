@@ -16,10 +16,10 @@ module.exports = function(options) {
           return res.end(err.stack);
         }
         res.writeHead(200, {'Content-Type': 'text/html'});
-        res.end(options.templates('/profile/index.html').call(self, articleRequests));
+        res.end(options.templates('/profile.html').call(self, articleRequests));
       });
     }),
 
-    '/article-requests': require('./article_request')(options)
+    '/article-requests': require('./article_request')(options, articleRequest)
   };
 };

@@ -3469,7 +3469,8 @@ a.badge:hover {
 }
 
 .label-important,
-.badge-important {
+.badge-important,
+.label-rejected {
   background-color: #b94a48;
 }
 
@@ -3489,7 +3490,8 @@ a.badge:hover {
 }
 
 .label-success,
-.badge-success {
+.badge-success,
+.label-approved {
   background-color: #468847;
 }
 

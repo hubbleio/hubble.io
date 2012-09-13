@@ -1,6 +1,6 @@
 var bubble = require('bubble');
 
-module.exports = function(options) {
+module.exports = function(options, articleRequest) {
 
   return {
     
@@ -9,7 +9,7 @@ module.exports = function(options) {
         var self = this;
         var res = this.res;
 
-        var b = bubble(function(err) {
+        var b = bubble(function(err, markup) {
           if (err) {
             console.error(err);
             res.writeHead(500);
@@ -24,7 +24,7 @@ module.exports = function(options) {
           };
 
           res.writeHead(200, {'Content-Type': 'text/html'});
-          res.end(templates('/article/preview.html').call(self, article));
+          res.end(options.templates('/article/preview.html').call(self, article));
 
         });
 
