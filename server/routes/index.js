@@ -72,24 +72,16 @@ module.exports = function(conf, content) {
         return templates('/index.html').call(this);
       })
     },
-    '/authors': require('./author')(conf, content, templates, respond),
-    '/guides': articleRoutes(conf, content, templates, github, authenticated, respond),
-    '/categories': require('./category')(conf, content, templates, github, authenticated, articleRoutes, respond),
-    '/levels': require('./level')(conf, content, templates, articleRoutes, github, authenticated, respond),
-    '/update/': {
-      post: respond(function() {
-        var that = this;
-        postReceiveHook(this.req, content, function(composition) {
-          that.res.writeHead(200, { 'Content-Type': 'text/html' });
-          that.res.end(composition);
-        });
-      })
-    },
-    '/auth': require('./auth')(conf, respond),
-    '/profile': require('./profile')(conf, authenticated, templates, github, respond),
-    '/contact': require('./contact')(conf, authenticated, templates, respond),
-    '/faq': require('./faq')(conf, templates, respond),
-    '/about': require('./about')(conf, templates, respond)
+    '/guides':     articleRoutes(conf, content, templates, github, authenticated, respond),
+    '/authors':    require('./author')   (conf, content, templates, respond),
+    '/categories': require('./category') (conf, content, templates, github, authenticated, articleRoutes, respond),
+    '/levels':     require('./level')    (conf, content, templates, articleRoutes, github, authenticated, respond),
+    '/videos':     require('./videos')   (conf, content, templates, respond),
+    '/auth':       require('./auth')     (conf, respond),
+    '/profile':    require('./profile')  (conf, authenticated, templates, github, respond),
+    '/contact':    require('./contact')  (conf, authenticated, templates, respond),
+    '/faq':        require('./faq')      (conf, templates, respond),
+    '/about':      require('./about')    (conf, templates, respond)
   };
 
   return routes;

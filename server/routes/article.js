@@ -24,11 +24,13 @@ module.exports = function(conf, content, templates, github, authenticated, respo
     post: authenticated(function() {
       articleRequest.create.call(this, this.req.body);
     }),
+
     '/new': {
       get: respond(function(name) {
         return templates('/article/new.html').call(this);
       })
     },
+
     '/preview': {
       post: respond(function() {
         var self = this;
@@ -60,6 +62,7 @@ module.exports = function(conf, content, templates, github, authenticated, respo
 
       })
     },
+
     '/suggestion': {
       get: respond(function() {
         return templates('/article/request.html').call(this);
@@ -68,6 +71,7 @@ module.exports = function(conf, content, templates, github, authenticated, respo
         articleSuggestion.call(this, this.req.body);
       })
     },
+
     '/:name/star': {
       post: respond(function(firstLevel, name) {
         if (! name) {
@@ -80,6 +84,7 @@ module.exports = function(conf, content, templates, github, authenticated, respo
         });
       })
     },
+
     '/:name/fork': {
       post: respond(function(firstLevel, name) {
         if (! firstLevel) {
@@ -92,6 +97,7 @@ module.exports = function(conf, content, templates, github, authenticated, respo
         });
       })
     },
+
     '/:name/comment': {
       get: respond(function(cat, name) {
         if (! prefix) {
@@ -135,6 +141,7 @@ module.exports = function(conf, content, templates, github, authenticated, respo
         }
       })
     },
+
     '/:name': {
       get: respond(function(firstLevel, name) {
         var res = this.res;
@@ -148,23 +155,23 @@ module.exports = function(conf, content, templates, github, authenticated, respo
               var url = '/categories/' + cat.id + '/guides/' + encodeURIComponent(article.name);
               res.writeHead(301, {Location: url});
               res.end();
-              return;
             }
           });
+        } else {
+          findArticle.call(this, name, function(article) {
+            var cat, level;
+            var prefixURL = prefix + '/';
+            if (prefix === '/categories') {
+              cat = content.index.searchCategory(firstLevel);
+              prefixURL += encodeURIComponent(cat.id);
+            } else if (prefix === '/levels' ) {
+              level = firstLevel;
+              prefixURL += encodeURIComponent(level);
+            }
+            res.writeHead(200, {'Content-Type': 'text/html'});
+            res.end(templates('/article/index.html').call(this, article, prefixURL, cat, level));
+          });
         }
-        findArticle.call(this, name, function(article) {
-          var cat, level;
-          var prefixURL = prefix + '/';
-          if (prefix === '/categories') {
-            cat = content.index.searchCategory(firstLevel);
-            prefixURL += encodeURIComponent(cat.id);
-          } else if (prefix === '/levels' ) {
-            level = firstLevel;
-            prefixURL += encodeURIComponent(level);
-          }
-          res.writeHead(200, {'Content-Type': 'text/html'});
-          res.end(templates('/article/index.html').call(this, article, prefixURL, cat, level));
-        });
       })
     }
   };
