@@ -29,6 +29,10 @@ module.exports = function(html, templates, conf, bind, Map, content) {
     var data = {
       'breadcrumb-element': [
         {
+          'breadcrumb-name': 'Authors',
+          'breadcrumb-url' : '/authors'
+        },
+        {
           'breadcrumb-name': author.meta.name,
           'breadcrumb-url' : '/authors/' + encodeURIComponent(author.meta.name)
         }
