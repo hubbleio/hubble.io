@@ -4,14 +4,14 @@ var githubAuth     = require('../github_auth'),
     ArticleSuggestion = require('../article_suggestion')
     ;
 
-module.exports = function(conf, content, templates, github, authenticated, respond, prefix) {
+module.exports = function(options, prefix) {
 
-  var articleRequest    = ArticleRequest(conf),
-      articleSuggestion = ArticleSuggestion(conf)
+  var articleRequest    = ArticleRequest(options.conf),
+      articleSuggestion = ArticleSuggestion(options.conf)
       ;
 
   function findArticle(name, next) {
-    var article = content.index.byName[name];
+    var article = options.content.index.byName[name];
     if (! article) {
       this.res.writeHead(404);
       this.res.end('Not Found');
@@ -21,18 +21,18 @@ module.exports = function(conf, content, templates, github, authenticated, respo
   }
 
   return {
-    post: authenticated(function() {
+    post: options.authenticated(function() {
       articleRequest.create.call(this, this.req.body);
     }),
 
     '/new': {
-      get: respond(function(name) {
-        return templates('/article/new.html').call(this);
+      get: options.respond(function(name) {
+        return options.templates('/article/new.html').call(this);
       })
     },
 
     '/preview': {
-      post: respond(function() {
+      post: options.respond(function() {
         var self = this;
         var res = this.res;
         var postedArticle = this.req.body;
@@ -41,7 +41,7 @@ module.exports = function(conf, content, templates, github, authenticated, respo
           categories.push(postedArticle.category.split(' &gt; '));
         }
 
-        github.markdownToMarkup(postedArticle.content, function(err, markup) {
+        options.github.markdownToMarkup(postedArticle.content, function(err, markup) {
           if (err) {
             res.writeHead(500);
             return res.end(err.stack);
@@ -56,7 +56,7 @@ module.exports = function(conf, content, templates, github, authenticated, respo
           };
 
           res.writeHead(200, {'Content-Type': 'text/html'});
-          res.end(templates('/article/preview.html').call(self, article));
+          res.end(options.templates('/article/preview.html').call(self, article));
 
         });
 
@@ -64,42 +64,42 @@ module.exports = function(conf, content, templates, github, authenticated, respo
     },
 
     '/suggestion': {
-      get: respond(function() {
-        return templates('/article/request.html').call(this);
+      get: options.respond(function() {
+        return options.templates('/article/request.html').call(this);
       }),
-      post: respond(function() {
+      post: options.respond(function() {
         articleSuggestion.call(this, this.req.body);
       })
     },
 
     '/:name/star': {
-      post: respond(function(firstLevel, name) {
+      post: options.respond(function(firstLevel, name) {
         if (! name) {
           name = firstLevel;
           firstLevel = undefined;
         }
 
         findArticle.call(this, name, function(article) {
-          github.star.call(this, article);
+          options.github.star.call(this, article);
         });
       })
     },
 
     '/:name/fork': {
-      post: respond(function(firstLevel, name) {
+      post: options.respond(function(firstLevel, name) {
         if (! firstLevel) {
           name = firstLevel;
           firstLevel = undefined;
         }
 
         findArticle.call(this, name, function(article) {
-          github.fork.call(this, article);
+          options.github.fork.call(this, article);
         });
       })
     },
 
     '/:name/comment': {
-      get: respond(function(cat, name) {
+      get: options.respond(function(cat, name) {
         if (! prefix) {
           name = cat;
           cat = undefined;
@@ -107,11 +107,11 @@ module.exports = function(conf, content, templates, github, authenticated, respo
 
         var res = this.res;
         var repo = findRepo.call(this, name);
-        if (! repo) { return; }
+        if (! repo) return;
         var discussion = this.req.query.discussion;
         return assets['discussions/new_comment.html'].compose(repo, discussion);
       }),
-      post: respond(function(cat, name) {
+      post: options.respond(function(cat, name) {
         if (! prefix) {
           name = cat;
           cat = undefined;
@@ -128,22 +128,16 @@ module.exports = function(conf, content, templates, github, authenticated, respo
             res.writeHead(500);
             return res.end(err.message);
           }
-          content.downloadComments(repo, function(err) {
-            content.composeRepo(assets, repo);
+          options.content.downloadComments(repo, function(err) {
+            options.content.composeRepo(assets, repo);
             res.end();
           });
-        }
-        
-        if (! body.discussion) {
-          comments.create.call(this, repo, done);
-        } else {
-          comments.reply.call(this, repo, body.discussion, body.body, done);
         }
       })
     },
 
     '/:name': {
-      get: respond(function(firstLevel, name) {
+      get: options.respond(function(firstLevel, name) {
         var res = this.res;
         if (! prefix) {
           name = firstLevel;
@@ -151,7 +145,7 @@ module.exports = function(conf, content, templates, github, authenticated, respo
           findArticle.call(this, name, function(article) {
             if (article.meta.categories.length) {
               var cat = article.meta.categories[0];
-              cat = content.index.searchCategory(cat);
+              cat = options.content.index.searchCategory(cat);
               var url = '/categories/' + cat.id + '/guides/' + encodeURIComponent(article.name);
               res.writeHead(301, {Location: url});
               res.end();
@@ -162,14 +156,14 @@ module.exports = function(conf, content, templates, github, authenticated, respo
             var cat, level;
             var prefixURL = prefix + '/';
             if (prefix === '/categories') {
-              cat = content.index.searchCategory(firstLevel);
+              cat = options.content.index.searchCategory(firstLevel);
               prefixURL += encodeURIComponent(cat.id);
             } else if (prefix === '/levels' ) {
               level = firstLevel;
               prefixURL += encodeURIComponent(level);
             }
             res.writeHead(200, {'Content-Type': 'text/html'});
-            res.end(templates('/article/index.html').call(this, article, prefixURL, cat, level));
+            res.end(options.templates('/article/index.html').call(this, article, prefixURL, cat, level));
           });
         }
       })

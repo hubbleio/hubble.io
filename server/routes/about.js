@@ -1,9 +1,9 @@
-module.exports = function(conf, templates, respond) {
+module.exports = function(options) {
 
   return {
 
-    get: respond(function() {
-      return templates('/about.html').call(this);
+    get: options.respond(function() {
+      return options.templates('/about.html').call(this);
     })
 
   };

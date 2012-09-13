@@ -1,12 +1,12 @@
 ArticleRequest = require('../article_request');
 
-module.exports = function(conf, authenticated, templates, github, respond) {
+module.exports = function(options) {
 
-  var articleRequest = ArticleRequest(conf);
+  var articleRequest = ArticleRequest(options.conf);
 
   return {
     
-    get: authenticated(function() {
+    get: options.authenticated(function() {
       var self = this;
       var res = this.res;
       articleRequest.getAllForUser(this.req.session.user, function(err, articleRequests) {
@@ -16,10 +16,10 @@ module.exports = function(conf, authenticated, templates, github, respond) {
           return res.end(err.stack);
         }
         res.writeHead(200, {'Content-Type': 'text/html'});
-        res.end(templates('/profile/index.html').call(self, articleRequests));
+        res.end(options.templates('/profile/index.html').call(self, articleRequests));
       });
     }),
 
-    '/article-requests': require('./article_request')(conf, authenticated, templates, articleRequest, github, respond)
+    '/article-requests': require('./article_request')(options)
   };
 };

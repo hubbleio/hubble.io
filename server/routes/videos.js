@@ -1,11 +1,11 @@
-module.exports = function(conf, content, templates, respond) {
+module.exports = function(options) {
 
   return  {
 
     '/': {
 
-      get: respond(function() {
-        return templates('/videos.html').call(this, content.index.videos);
+      get: options.respond(function() {
+        return options.templates('/videos.html').call(this, options.content.index.videos);
       })
     }
   };

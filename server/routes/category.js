@@ -1,12 +1,12 @@
-module.exports = function(conf, content, templates, github, authenticated, articleRoutes, respond) {
+module.exports = function(options) {
 
   return  {
 
     '/([\\w|\\s|-]+)': {
 
-      get: respond(function(categoryName) {
+      get: options.respond(function(categoryName) {
         var categoryParts = categoryName.split('--'),
-            children = content.index.byCategory,
+            children = options.content.index.byCategory,
             category
             ;
 
@@ -22,10 +22,10 @@ module.exports = function(conf, content, templates, github, authenticated, artic
           this.res.end('Not found');
           return;
         }
-        return templates('/category/index.html').call(this, category);
+        return options.templates('/category/index.html').call(this, category);
       }),
 
-      '/guides': articleRoutes(conf, content, templates, github, authenticated, respond, '/categories')
+      '/guides': options.articleRoutes(options, '/categories')
     }
   };
 

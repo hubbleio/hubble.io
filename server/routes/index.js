@@ -3,13 +3,6 @@ var Templates       = require('../../lib/cascading_templates'),
     Github          = require('../../lib/github')
     ;
 
-    /*
-    personalize     = require('../personalize');
-    postReceiveHook = require('./postreceivehook'),
-    githubAuth      = require('./auth/github'),
-    */
-
-
 function findRepo(name) {
   var repo = content.getRepo(name);
   if (! repo) {
@@ -32,7 +25,7 @@ module.exports = function(conf, content) {
       } else {
         if (this.req.method !== 'GET' || this.req.headers['x-requested-with'] === 'XMLHttpRequest') {
           this.res.writeHead(403);
-          this.res.end('Forbidden');          
+          this.res.end('Forbidden');
         } else {
           this.res.writeHead(303, {Location: '/auth/github?redir=' + encodeURIComponent(this.req.url)});
           this.res.end();
@@ -66,22 +59,32 @@ module.exports = function(conf, content) {
 
   var articleRoutes = require('./article');
 
+  var options = {
+    conf:          conf,
+    content:       content,
+    templates:     templates,
+    github:        github,
+    authenticated: authenticated,
+    respond:       respond,
+    articleRoutes: articleRoutes
+  };
+
   var routes = {
     '/': {
       get: respond(function() {
         return templates('/index.html').call(this);
       })
     },
-    '/guides':     articleRoutes(conf, content, templates, github, authenticated, respond),
-    '/authors':    require('./author')   (conf, content, templates, respond),
-    '/categories': require('./category') (conf, content, templates, github, authenticated, articleRoutes, respond),
-    '/levels':     require('./level')    (conf, content, templates, articleRoutes, github, authenticated, respond),
-    '/videos':     require('./videos')   (conf, content, templates, respond),
-    '/auth':       require('./auth')     (conf, respond),
-    '/profile':    require('./profile')  (conf, authenticated, templates, github, respond),
-    '/contact':    require('./contact')  (conf, authenticated, templates, respond),
-    '/faq':        require('./faq')      (conf, templates, respond),
-    '/about':      require('./about')    (conf, templates, respond)
+    '/guides':     articleRoutes(options),
+    '/authors':    require('./author')   (options),
+    '/categories': require('./category') (options),
+    '/levels':     require('./level')    (options),
+    '/videos':     require('./videos')   (options),
+    '/auth':       require('./auth')     (options),
+    '/profile':    require('./profile')  (options),
+    '/contact':    require('./contact')  (options),
+    '/faq':        require('./faq')      (options),
+    '/about':      require('./about')    (options)
   };
 
   return routes;

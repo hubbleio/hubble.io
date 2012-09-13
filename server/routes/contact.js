@@ -1,16 +1,16 @@
 Contact = require('../contact');
 
-module.exports = function(conf, authenticated, templates, respond) {
+module.exports = function(options) {
 
-  var contact = Contact(conf);
+  var contact = Contact(options.conf);
 
   return {
 
-    get: respond(function() {
-      return templates('/contact.html').call(this);
+    get: options.respond(function() {
+      return options.templates('/contact.html').call(this);
     }),
 
-    post: respond(function() {
+    post: options.respond(function() {
       contact.call(this, this.req.body);
     })
 

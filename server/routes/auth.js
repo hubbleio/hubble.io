@@ -1,23 +1,23 @@
 var githubAuth = require('../github_auth');
 
-module.exports = function(conf, respond) {
+module.exports = function(options) {
   return {
     '/logout': {
-      get: respond(function() {
-        githubAuth(conf.auth.github, this.req, this.res).logout();
+      get: options.respond(function() {
+        githubAuth(options.conf.auth.github, this.req, this.res).logout();
       })
     },
     '/github/callback': {
-      get: respond(function() {
-        githubAuth(conf.auth.github, this.req, this.res).end();
+      get: options.respond(function() {
+        githubAuth(options.conf.auth.github, this.req, this.res).end();
       }),
-      post: respond(function() {
-        githubAuth(conf.auth.github, this.req, this.res).end();
+      post: options.respond(function() {
+        githubAuth(options.conf.auth.github, this.req, this.res).end();
       })
     },
     '/github': {
-      get: respond(function() {
-        githubAuth(conf.auth.github, this.req, this.res).begin();
+      get: options.respond(function() {
+        githubAuth(options.conf.auth.github, this.req, this.res).begin();
       })
     }
   };
