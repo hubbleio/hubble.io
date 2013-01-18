@@ -43,7 +43,8 @@
     "sendgrid-web": "0.0.x",
     "redis": "0.8.x",
     "flatware-cookie-parser": "0.1.x",
-    "flatware-session": "0.1.x"
+    "flatware-session": "0.1.x",
+    "clone": "0.1.x"
   },
   "devDependencies": {
     "tap": "0.3.x"
