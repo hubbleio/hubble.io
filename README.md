@@ -34,9 +34,9 @@ And create a start script:
 var HubbleIO = require('hubble.io');
 var options = {
   "orgname": "nodedocs",
-  "title": "NodeGuides",
-  "tagline": "Node.js guides for developers",
-  "description": "Node Guides and FAQ are designed to make you immediately productive with Node.js, to help you understand how all pieces fit together",
+  "title": "NodeDocs",
+  "tagline": "Node.js docs for developers",
+  "description": "NodeDocs and FAQ are designed to make you immediately productive with Node.js, to help you understand how all pieces fit together",
   "content": {
     "home": {
       "beginner": "Are you starting your journey with Node? This section of guides is for you!",
@@ -46,9 +46,9 @@ var options = {
   },
   "auth": {
     "github": {
-      "callback_uri": "http://localhost:8080/auth/github/callback", 
-      "client_id": "157331436a37e82e3ef8",
-      "secret": "09a42e0a664ab06cfa0c41aeb2c7aa436422eb00"
+      "callback_uri": "http://localhost:8080/auth/github/callback",
+      "client_id": "-----github-client-id-here-----",
+      "secret": "-----github-client-secret-here-----"
     }
   },
   "db": {
@@ -76,7 +76,7 @@ var options = {
   ]
 };
 
-console.log('options:', options); 
+console.log('options:', options);
 
 var server = HubbleIO(options);
 
