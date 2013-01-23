@@ -2507,11 +2507,11 @@ input[type="submit"].btn.btn-mini {
 }
 
 .large-brand .logo {
-  height: 58px;
-  width: 58px;
+  height: 107px;
+  width: 340px;
   margin-right: 25px;
   float: left;
-  background: url(../img/nodeguides.png) no-repeat;
+  background: url(../img/nodedocs_logo.png) no-repeat;
 }
 
 .navbar {
