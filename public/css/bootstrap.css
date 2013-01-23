@@ -2,11 +2,11 @@
 
 	Bootstrap v2.0.3
 	Copyright 2012 Twitter, Inc
- 
- 	Customized for NodeGuides
+
+ 	Customized for NodeDocs
   Code by Karolina Szczur
   @nodejitsu
- 
+
 	1. Basics
 		1.1 Base styling
 		1.2 Grid
@@ -27,10 +27,10 @@
 		2.5 Article
 
 */
- 
- 
- 
-/* 1. Basics 
+
+
+
+/* 1. Basics
 ==============================================================================
 ------------------------------------------------------------------------------*/
 
@@ -2507,11 +2507,11 @@ input[type="submit"].btn.btn-mini {
 }
 
 .large-brand .logo {
-  height: 58px;
-  width: 58px;
+  height: 107px;
+  width: 340px;
   margin-right: 25px;
   float: left;
-  background: url(../img/nodeguides.png) no-repeat;
+  background: url(../img/nodedocs_logo.png) no-repeat;
 }
 
 .navbar {
@@ -2897,7 +2897,7 @@ input[type="submit"].btn.btn-mini {
 }
 
 #categories ul {
-  float: left; 
+  float: left;
   min-height: 150px;
   min-width: 200px;
   max-width: 200px;
@@ -3676,7 +3676,7 @@ footer .navbar li:first-child {
 }
 
 
-/* 2. Site specific 
+/* 2. Site specific
 ==============================================================================
 ------------------------------------------------------------------------------*/
 
@@ -3865,7 +3865,7 @@ footer .navbar li:first-child {
 	padding: 20px;
 }
 
-.span4.member.nomargin, 
+.span4.member.nomargin,
 .span4.contributor.nomargin {
 	margin-left: 0;
 }
@@ -3896,11 +3896,11 @@ footer .navbar li:first-child {
 
 .contributor .all-articles li {
   margin-bottom: 5px;
-  line-height: 16px; 
+  line-height: 16px;
 }
 
 .contributor .all-articles li a {
-    line-height: 16px; 
+    line-height: 16px;
 }
 
 .contributor ul.all-articles, .contributor ul.some-articles {
@@ -3995,7 +3995,7 @@ section.contributors-listing {
 .level-articles .buttons {
   float: right;
 }
- 
+
 .level-overview,
 .article {
 	overflow: auto;
@@ -4029,7 +4029,7 @@ section.contributors-listing {
 }
 
 .article-short {
-	float: left; 
+	float: left;
 	max-width: 410px;
 }
 
