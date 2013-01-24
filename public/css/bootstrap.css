@@ -3860,6 +3860,10 @@ footer .navbar li:first-child {
 
 /* 2.2 About
 ------------------------------------------------------------------------------*/
+.member {
+  max-width: 230px;
+  margin: 10px;
+}
 
 .span4[role="complementary"] img {
 	padding: 20px;
@@ -3881,6 +3885,7 @@ footer .navbar li:first-child {
 	background: #ededed;
 }
 
+.member,
 .member img,
 .member .meta,
 .member li,
