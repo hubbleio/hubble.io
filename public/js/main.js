@@ -15,8 +15,6 @@ $(function() {
     }
   });
 
-	$(".collapse").collapse();
-
   //
   // Modal dialogues
   //
@@ -58,7 +56,7 @@ $(function() {
         contentEl.html('<p>Loading...</p>');
         contentEl.addClass('loading');
         var url = button.attr('href') || (document.location.pathname + '/star');
-        
+
         $.post(url, function(content) {
           var url;
           try {
